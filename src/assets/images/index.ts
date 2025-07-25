@@ -14,4 +14,5 @@ export default {
 
   defaultHome: require('./simple-home.png'),
 
+  no_notifications: require('./no-notifications.png'),
 };

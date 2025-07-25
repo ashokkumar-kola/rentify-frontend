@@ -7,40 +7,46 @@ import {
   Platform,
 } from 'react-native';
 
-import FA from 'react-native-vector-icons/FontAwesome';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Colors, Fonts } from '../../constants';
+import Icons from '../../constants/Icons';
 
-const Icons: Record<string, string> = {
-  Home: 'home',
-  // ExploreProperties: 'search',
-  Filters: 'search',
-  AddProperty: 'plus-square',
-  Wishlist: 'heart',
-  Profile: 'user',
+const TAB_LABELS = {
+  HomeStack: 'Home',
+  ExploreStack: 'Explore',
+  AddProperty: 'Add',
+  Wishlist: 'Wishlist',
+  ProfileStack: 'Profile',
 };
 
-const ActiveIcons: Record<string, string> = {
-  Home: 'home',
-  // ExploreProperties: 'home-search',
-  Filters: 'home-search',
+const TabIcons: Record<string, string> = {
+  HomeStack: 'home',
+  ExploreStack: 'search',
+  AddProperty: 'plus-square',
+  Wishlist: 'heart',
+  ProfileStack: 'user',
+};
+
+const ActiveTabIcons: Record<string, string> = {
+  HomeStack: 'home',
+  ExploreStack: 'home-search',
   AddProperty: 'home-plus',
   Wishlist: 'home-heart',
-  Profile: 'account-circle',
+  ProfileStack: 'account-circle',
 };
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
-  const hiddenRoutes = ['Filters', 'AddProperty', 'Wishlist', 'Profile'];
+  const hiddenRoutes: string | any[] = ['ExploreStack']; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack'];
   const currentRouteName = state.routes[state.index].name;
 
   if (hiddenRoutes.includes(currentRouteName)) {
-    return null;  // Hide tab bar on these screens
+    return null;
   }
 
   return (
     <View style={styles.tabContainer}>
       {state.routes.map((route: any, index: number) => {
         const { options } = descriptors[route.key];
-        const label = route.name;
+        const label = TAB_LABELS[route.name];
         const isFocused = state.index === index;
 
         const onPress = () => {
@@ -56,9 +62,9 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 
         let iconName: string;
         if (isFocused) {
-          iconName = ActiveIcons[route.name] || 'circle';
+          iconName = ActiveTabIcons[route.name] || 'circle';
         } else {
-          iconName = Icons[route.name] || 'circle';
+          iconName = TabIcons[route.name] || 'circle';
         }
 
         return (
@@ -69,17 +75,10 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
             activeOpacity={0.8}
           >
             {isFocused ? (
-              <MCI
-                name={iconName}
-                color="#fff"
-                size={28}
+              <Icons.MI name={iconName} color={Colors.white} size={28}
               />
             ) : (
-              <FA
-                name={iconName}
-                color="#fff"
-                size={24}
-              />
+              <Icons.FA name={iconName} color={Colors.white} size={24} />
             )}
 
             <Text style={[styles.label, isFocused && styles.focusedLabel]}>
@@ -95,9 +94,9 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#4C74FF',
+    backgroundColor: Colors.primary,
     justifyContent: 'space-around',
-    paddingBottom: Platform.OS === 'ios' ? 30 : 15,
+    paddingBottom: Platform.OS === 'ios' ? 16 : 8,
     paddingTop: 10,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
@@ -105,11 +104,11 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 6,
+    // elevation: 8,
+    // shadowColor: Colors.black,
+    // shadowOffset: { width: 0, height: -4 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 6,
   },
   tab: {
     alignItems: 'center',
@@ -117,11 +116,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#ddd',
+    color: Colors.white200,
     marginTop: 4,
+    fontFamily: Fonts.Regular,
   },
   focusedLabel: {
-    color: '#fff',
+    color: Colors.white,
     fontWeight: '600',
   },
 });

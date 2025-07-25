@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.white100,
     borderRadius: 18,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 4,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,

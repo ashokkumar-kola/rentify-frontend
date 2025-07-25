@@ -1,5 +1,7 @@
 import api from '../api/apiClient';
 
+import { FilterPropertiesParams } from '../types/Property';
+
 // All Properties
 export const fetchAllProperties = async () => {
     const response = await api.get('/properties');
@@ -9,7 +11,6 @@ export const fetchAllProperties = async () => {
 // New Arrivals
 export const fetchNewArrivals = async () => {
     const response = await api.get('/properties/filter?sort_by=createdAt&sort_order=desc');
-    console.log(response);
     return response.data?.data || [];
 };
 
@@ -26,22 +27,57 @@ export const fetchFeaturedProperties = async () => {
 };
 
 // Filtered Properties
-export const fetchFilteredProperties = async (filters: any) => {
-    const params = new URLSearchParams();
+export const filterProperties = async (params: FilterPropertiesParams) => {
+  const response = await api.get('/properties/filter', {
+    params,
+  });
+  return response.data?.data;
+};
 
-    if (filters.searchQuery) {params.append('search', filters.searchQuery);}
-    if (filters.propertyTypes?.length) {params.append('propertyTypes', filters.propertyTypes.join(','));}
-    if (filters.bedrooms !== 'Any') {params.append('bedrooms', filters.bedrooms);}
-    if (filters.bathrooms !== 'Any') {params.append('bathrooms', filters.bathrooms);}
-    if (filters.amenities?.length) {params.append('amenities', filters.amenities.join(','));}
-    if (filters.priceRange) {
-      params.append('minPrice', filters.priceRange[0].toString());
-      params.append('maxPrice', filters.priceRange[1].toString());
-    }
-    if (filters.furnishing !== 'Any') {params.append('furnishing', filters.furnishing);}
-    if (filters.sortBy) {params.append('sortBy', filters.sortBy);}
-    if (filters.petPolicy !== 'Any') {params.append('petPolicy', filters.petPolicy);}
+// Property Details
+export const fetchPropertyDetails = async (id: string) => {
+    const response = await api.get(`/properties/${id}`);
+    return response.data?.data || {};
+};
 
-    const response = await api.get(`/properties/filter?${params.toString()}`);
+// Flats
+export const flatProperties = async () => {
+    const response = await api.get('/properties/filter?property_type=flat');
     return response.data?.data || [];
 };
+
+
+// Independent Houses
+export const independentHouseProperties = async () => {
+    const response = await api.get('/properties/filter?property_type=independent house');
+    return response.data?.data || [];
+};
+
+
+export const getMyProperties = async (userId: any) => {
+  const response = await api.get(`/properties/${userId}/my-properties`);
+  return response.data?.data;
+};
+
+
+
+// export const fetchFilteredProperties = async (filters: any) => {
+//     const params = new URLSearchParams();
+
+//     if (filters.searchQuery) {params.append('search', filters.searchQuery);}
+
+//     if (filters.propertyTypes?.length) {params.append('propertyTypes', filters.propertyTypes.join(','));}
+//     if (filters.bedrooms !== 'Any') {params.append('bedrooms', filters.bedrooms);}
+//     if (filters.bathrooms !== 'Any') {params.append('bathrooms', filters.bathrooms);}
+//     if (filters.amenities?.length) {params.append('amenities', filters.amenities.join(','));}
+//     if (filters.priceRange) {
+//       params.append('minPrice', filters.priceRange[0].toString());
+//       params.append('maxPrice', filters.priceRange[1].toString());
+//     }
+//     if (filters.furnishing !== 'Any') {params.append('furnishing', filters.furnishing);}
+//     if (filters.sortBy) {params.append('sortBy', filters.sortBy);}
+//     if (filters.petPolicy !== 'Any') {params.append('petPolicy', filters.petPolicy);}
+
+//     const response = await api.get(`/properties/filter?${params.toString()}`);
+//     return response.data?.data || [];
+// };

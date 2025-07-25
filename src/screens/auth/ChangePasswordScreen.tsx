@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const ChangePasswordScreen = () => {
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigation/types';
+
+type ChangePasswordScreenProps = NativeStackScreenProps<AuthStackParamList, 'ChangePassword'>;
+
+const ChangePasswordScreen: React.FC<ChangePasswordScreenProps> = ({ navigation }) => {
   return (
     <View>
       <Text>ChangePasswordScreen</Text>

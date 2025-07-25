@@ -1,7 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
-import { useIsFocused } from '@react-navigation/native';
-
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -15,13 +12,9 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { api } from '../../api/apiClient';
 import AppText from '../../components/AppTheme/AppText';
 import styles from './styles';
 
-import useAuthForm from '../../hooks/useAuthForm';
-import useAlert from '../../hooks/useAlert';
-import { validateRegisterForm } from '../../utils/validators';
 import { Colors } from '../../constants';
 import images from '../../assets/images';
 
@@ -30,73 +23,31 @@ import FormButton from '../../components/CustomForms/FormButton';
 import ToggleSwitch from '../../components/CustomButtons/ToggleSwitch';
 import CustomAlert from '../../components/Common/CustomAlert';
 
-type RegisterScreenProps = {
-  navigation: any;
-};
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { AuthStackParamList } from '../../navigation/types';
+
+import useRegister from '../../hooks/authHooks/useRegister';
+
+type RegisterScreenProps = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
 const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
-  const isFocused = useIsFocused();
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const { alertState, showAlert, hideAlert } = useAlert();
 
   const {
-    formData,
+    fullName,
+    setFullName,
+    email,
+    setEmail,
+    password,
+    setPassword,
     errors,
     loading,
-    setLoading,
-    handleChange,
-    validateForm,
-  } = useAuthForm(
-    {
-      full_name: '',
-      email: '',
-      password: '',
-    },
-    validateRegisterForm
-  );
-
-  const handleRegister = async () => {
-    console.log(!validateForm());
-    if (!validateForm()) {return;}
-
-    console.log(formData);
-    setLoading(true);
-    try {
-        console.log('Registering with data:', formData);
-      const response = await api.post('/auth/register', {
-        full_name: formData.full_name,
-        email: formData.email,
-        password: formData.password,
-      });
-      console.log('Register response:', response.data.success);
-
-      if (response.status === 201 && isFocused) {
-        showAlert('Registration Successful', 'Your account has been created successfully', {
-          confirmText: 'Continue to Login',
-          onConfirm: () => navigation.navigate('Login'),
-        });
-      }
-    } catch (error: any) {
-      if (isFocused) {
-        let errorMessage = 'Registration failed. Please try again.';
-        if (error.response) {
-          if (error.response.status === 400) {
-            errorMessage = 'Email already exists';
-          } else if (error.response.data?.message) {
-            errorMessage = error.response.data.message;
-          }
-        }
-        showAlert('Registration Error', errorMessage, {
-          confirmText: 'Try Again',
-          onConfirm: () => navigation.replace('Register'),
-        });
-      }
-    } finally {
-      if (isFocused) {
-        setLoading(false);
-      }
-    }
-  };
+    alertVisible,
+    alertTitle,
+    alertMessage,
+    setAlertVisible,
+    handleRegister,
+  } = useRegister();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -111,7 +62,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
               size={36}
               color={Colors.primary}
               style={styles.backButton}
-              onPress={() => navigation.navigate('Main')}
+              onPress={() => navigation.navigate('AppDrawer')}
             />
             <Image
               source={images.logo}
@@ -121,10 +72,7 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
             <Text style={styles.tagline}>LIVE YOUR DREAM HOME</Text>
           </View>
 
-          <LinearGradient
-            colors={[Colors.white100, Colors.white200, Colors.primary, Colors.blue500]}
-            style={styles.container}
-          >
+          <>
             <View style={styles.card}>
               <Text style={styles.welcome}>Welcome!</Text>
               <Text style={styles.subText}>Sign up and create your dream home.</Text>
@@ -132,36 +80,36 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
               <FormInput
                 iconName="user"
                 iconSize={32}
-                placeholder="Enter your fullname"
-                value={formData.full_name}
-                onChangeText={(text: any) => handleChange('full_name', text)}
-                error={errors.full_name ?? undefined}
+                placeholder="Enter fullname"
+                value={fullName}
+                onChangeText={setFullName}
+                error={errors.fullName}
               />
 
               <FormInput
                 iconName="envelope"
-                placeholder="Enter your email"
+                placeholder="Enter email"
                 keyboardType="email-address"
-                value={formData.email}
-                onChangeText={(text: any) => handleChange('email', text)}
-                error={errors.email ?? undefined}
+                value={email}
+                onChangeText={setEmail}
+                error={errors.email}
               />
 
               <FormInput
                 iconName="lock"
                 iconSize={32}
-                placeholder="Enter your password"
-                value={formData.password}
-                onChangeText={(text: any) => handleChange('password', text)}
+                placeholder="Enter password"
+                value={password}
+                onChangeText={setPassword}
                 secureTextEntry={!passwordVisible}
                 rightIcon={passwordVisible ? 'visibility-off' : 'visibility'}
                 onRightIconPress={() => setPasswordVisible(!passwordVisible)}
-                error={errors.password ?? undefined}
+                error={errors.password}
               />
 
               <FormButton
                 title="Sign up"
-                onPress={handleRegister}
+                onPress={() => handleRegister(navigation)}
                 loading={loading}
                 style={{ marginTop: 24 }}
               />
@@ -183,19 +131,18 @@ const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
                 <ToggleSwitch />
               </View>
             </View>
-          </LinearGradient>
+          </>
 
           <CustomAlert
-            visible={alertState.visible}
-            title={alertState.title}
-            message={alertState.message}
-            confirmText={alertState.confirmText}
-            onConfirm={
-              alertState.onConfirm
-                ? (_event) => { alertState.onConfirm && alertState.onConfirm(); }
-                : undefined
-            }
-            onClose={hideAlert}
+            visible={alertVisible}
+            title={alertTitle}
+            message={alertMessage}
+            confirmText="Continue to Login"
+            onConfirm={() => {
+              setAlertVisible(false);
+              navigation.navigate('Login');
+            }}
+            onClose={() => setAlertVisible(false)}
           />
         </KeyboardAvoidingView>
       </ScrollView>

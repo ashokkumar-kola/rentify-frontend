@@ -8,6 +8,9 @@ import {
   SafeAreaView,
 } from 'react-native';
 
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
 import images from '../../assets/images';
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../constants/Colors';
@@ -15,7 +18,13 @@ import { Colors } from '../../constants/Colors';
 import AppText from '../../components/AppTheme/AppText';
 import styles from './styles';
 
-const OnBoardingScreen3 = ({ navigation }: { navigation: any }) => {
+import { RootStackParamList } from '../../navigation/types';
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'AppDrawer'>;
+
+const OnBoardingScreen3 = () => {
+    const navigation = useNavigation<NavigationProp>();
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -51,7 +60,7 @@ const OnBoardingScreen3 = ({ navigation }: { navigation: any }) => {
             >
                 <TouchableOpacity
                     // style={styles.nextButton}
-                    onPress={() => navigation.replace('Main')}
+                    onPress={() => navigation.replace('AppDrawer')}
                     accessibilityLabel="Explore homes now"
                 >
                     <AppText style={styles.nextText}>Explore Homes</AppText>

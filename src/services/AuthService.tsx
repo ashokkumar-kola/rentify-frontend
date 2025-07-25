@@ -1,34 +1,27 @@
 import api from '../api/apiClient';
 
-import { handleApiError } from './errorHandler';
-
 export type LoginPayload = {
   email: string;
   password: string;
 };
 
 export type RegisterPayload = {
-  fullName: string;
+  full_name: string;
   email: string;
   password: string;
-  phoneNumber?: string;
+  // phoneNumber?: string;
 };
 
 // Login
 export const login = async (payload: LoginPayload) => {
-  try {
-    const response = await api.post('/login', payload);
-    return response.data?.data || {};
-  } catch (error) {
-    handleApiError(error, 'Login failed');
-  }
+  const response = await api.post('/auth/login', payload);
+  return response.data?.data || {};
 };
 
 // Register
 export const register = async (payload: RegisterPayload) => {
-    const response = await api.post('/register', payload);
+    const response = await api.post('/auth/register', payload);
     return response.data?.data || {};
-
 };
 
 // Logout

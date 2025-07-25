@@ -18,8 +18,9 @@ export type AuthStackParamList = {
 
 export type MainTabParamList = {
   HomeStack: undefined;
-  SearchStack: undefined;
-  AddProperty: undefined;
+  ExploreStack: undefined;
+  // AddProperty: undefined;
+  MyProperties: undefined
   Wishlist: undefined;
   ProfileStack: undefined;
 };
@@ -35,6 +36,13 @@ export type HomeStackParamList = {
     Notifications: undefined;
 }
 
+export type ExploreStackParamList = {
+  Properties: undefined;
+  Filters: { filters: any };
+  PropertyDetails: { propertyId: string };
+  PropertyMapView: { coordinates?: { lat: number; lng: number } };
+};
+
 export type AppDrawerParamList = {
   MainTabs: undefined;
   Settings: undefined;
@@ -49,18 +57,19 @@ export type AdminStackParamList = {
 };
 
 export type MyPropertiesStackParamList = {
-  MyPropertiesScreen: undefined;
-  EditPropertyScreen: { propertyId: string };
-  PropertyApplicationsScreen: { propertyId: string };
+  MyProperties: undefined;
+  AddProperty: undefined;
+  EditProperty: { propertyId: string };
+  PropertyApplications: { propertyId: string };
 };
 
 export type MyRentalsStackParamList = {
-  MyRentalsScreen: undefined;
-  MyRentalApplicationsScreen: undefined;
-  ApplicationDetailsScreen: { applicationId: string };
+  MyRentals: undefined;
+  MyRentalApplications: undefined;
+  ApplicationDetails: { applicationId: string };
 };
 
 export type PaymentsStackParamList = {
-  MyPaymentsScreen: undefined;
-  PaymentDetailsScreen: { paymentId: string };
+  MyPayments: undefined;
+  PaymentDetails: { paymentId: string };
 };

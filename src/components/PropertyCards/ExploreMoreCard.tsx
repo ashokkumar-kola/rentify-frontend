@@ -2,10 +2,12 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Colors, TextSizes } from '../../constants';
 import images from '../../assets/images';
+
 import { useNavigation } from '@react-navigation/native';
+import type { ExploreStackParamList } from '../../navigation/types';
 
 const ExploreMoreCard = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<ExploreStackParamList>();
 
   return (
     <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('Properties')}>

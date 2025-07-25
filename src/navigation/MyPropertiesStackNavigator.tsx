@@ -1,9 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import MyPropertiesScreen from '../screens/propertyManagement/MyPropertiesScreen';
-import EditPropertyScreen from '../screens/propertyManagement/EditPropertyScreen';
-import PropertyApplicationsScreen from '../screens/propertyManagement/PropertyApplicationsScreen';
+import MyPropertiesScreen from '../screens/properties/MyPropertiesScreen';
+import EditPropertyScreen from '../screens/properties/EditPropertyScreen';
+import AddPropertyScreen from '../screens/properties/AddPropertyScreen';
+import PropertyApplicationsScreen from '../screens/properties/PropertyApplicationsScreen';
 
 import { MyPropertiesStackParamList } from './types';
 
@@ -11,10 +12,13 @@ const Stack = createNativeStackNavigator<MyPropertiesStackParamList>();
 
 const MyPropertiesStackNavigator = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="MyPropertiesScreen" component={MyPropertiesScreen} />
-      <Stack.Screen name="EditPropertyScreen" component={EditPropertyScreen} />
-      <Stack.Screen name="PropertyApplicationsScreen" component={PropertyApplicationsScreen} />
+    <Stack.Navigator
+      screenOptions={{ headerShown: true }}
+    >
+      <Stack.Screen name="MyProperties" component={MyPropertiesScreen} />
+      <Stack.Screen name="AddProperty" component={AddPropertyScreen} />
+      <Stack.Screen name="EditProperty" component={EditPropertyScreen} />
+      <Stack.Screen name="PropertyApplications" component={PropertyApplicationsScreen} />
     </Stack.Navigator>
   );
 };

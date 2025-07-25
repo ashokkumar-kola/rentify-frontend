@@ -10,19 +10,17 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import { useNavigation } from '@react-navigation/native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { api } from '../../api/apiClient'; // your axios instance
 import PropertyCard from '../../components/PropertyCards/PropertyCard';
 import { Colors } from '../../constants';
 
-const MyPropertiesScreen = ({route}) => {
+const MyPropertiesScreen = ({navigation, route}: any) => {
   console.log('MyPropertiesScreen rendered');
 
   const { userId } = route.params || undefined;
   console.log('User ID:', userId);
 
-  const navigation = useNavigation<any>();
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
 

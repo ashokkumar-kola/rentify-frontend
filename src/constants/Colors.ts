@@ -15,6 +15,7 @@ export const Colors = {
     black200: '#333333',
 
     // ⚪ White Variants
+    backgroundLight: '#F7F7F7',
     white: '#ffffff',
     white100: '#fafafa',
     white200: '#f5f5f5',
@@ -24,6 +25,7 @@ export const Colors = {
     whiteTransparentOverlay: '#ffffffcc',
 
     // ⚙️ Greys
+    backgroundDark: '#121212',
     grey50: '#f9f9f9',
     grey100: '#f0f0f0',
     grey200: '#d9d9d9',

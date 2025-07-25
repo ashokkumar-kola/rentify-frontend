@@ -6,7 +6,7 @@ import BottomTabNavigator from './BottomTabNavigator';
 import ProfileScreen from '../screens/user/ProfileScreen';
 import MyPropertiesScreen from '../screens/user/MyPropertiesScreen';
 import CustomDrawer from '../components/CustomNavBars/CustomDrawer';
-import WishlistScreen from '../screens/user/WishlistScreen';
+import WishlistScreen from '../screens/properties/WishlistScreen';
 
 // import MyRentalApplicationsScreen from '../screens/Rentals/MyRentalApplicationsScreen';
 // import MyPaymentsScreen from '../screens/Payments/MyPaymentsScreen';

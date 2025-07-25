@@ -5,7 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import DrawerNavigator from './DrawerNavigator';
 
 // Onboard Screens
-import SplashScreen from '../screens/Splash/SplashScreen';
+import SplashScreen from '../screens/splash/SplashScreen';
 
 import Onboarding1Screen from '../screens/onboarding/Onboarding1Screen';
 import Onboarding2Screen from '../screens/onboarding/Onboarding2Screen';
@@ -27,8 +27,8 @@ import EditProfileScreen from '../screens/user/EditProfileScreen';
 // import PropertyApplicationsScreen from '../screens/Properties/PropertyApplicationsScreen';
 // import PropertyTenantsScreen from '../screens/Properties/PropertyTenantsScreen';
 
-import PropertiesScreen from '../screens/properties/PropertiesScreen';
-import MyPropertiesScreen from '../screens/properties/PropertiesScreen';
+import PropertiesScreen from '../screens/properties/PropertiesScreen2';
+import MyPropertiesScreen from '../screens/properties/PropertiesScreen2';
 import ExplorePropertiesScreen from '../screens/properties/ExplorePropertiesScreen';
 // import PropertyDetailsScreen from '../screens/properties/PropertyDetailsScreen';
 

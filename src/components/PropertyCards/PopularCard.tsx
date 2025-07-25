@@ -20,7 +20,7 @@ import { Colors, Fonts } from '../../constants';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-import { formatLocation } from '../../utils/formatLocation';
+import { formatLocation } from '../../utils/propertyUtilis/formatLocation';
 
 const screenWidth = Dimensions.get('window').width;
 

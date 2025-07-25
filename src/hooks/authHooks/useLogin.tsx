@@ -9,9 +9,7 @@ interface LoginErrors {
   password?: string;
 }
 
-type RootStackParamList = {
-  Home: undefined;
-};
+import { RootStackParamList } from '../../navigation/types';
 
 const useLogin = () => {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -51,7 +49,7 @@ const useLogin = () => {
       const { token, user } = await login({ email, password });
 
       await AsyncStorage.setItem('authToken', token);
-      navigation.navigate('Home');
+      navigation.navigate('AppDrawer');
     } catch (error: any) {
       let errorMessage = 'Login failed. Please try again.';
 

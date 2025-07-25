@@ -185,6 +185,24 @@ const styles = StyleSheet.create({
     //     marginBottom: 10,
     //     marginLeft: 40,
     // },
+
+    // Forgot Password Screen
+    sendCodeButton: {
+        width: 220,
+        backgroundColor: Colors.white100,
+        paddingVertical: 12,
+        borderRadius: 26,
+        alignSelf: 'center',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    sendCodeButtonText: {
+        color: Colors.primary,
+        // fontWeight: 'bold',
+        fontSize: 16,
+        fontFamily: 'Poppins-SemiBold',
+    },
 });
 
 export default styles;
+
