@@ -46,9 +46,9 @@ const styles = StyleSheet.create({
     welcome: {
         fontSize: TextSizes['2xl'],
         color: Colors.white100,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         textAlign: 'center',
-        fontFamily: 'Poppins-SemiBold',
+        // fontFamily: 'Poppins-SemiBold',
     },
     subText: {
         color: Colors.white100,
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
     or: {
         marginHorizontal: 16,
         color: Colors.white100,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
     },
     googleButton: {
         backgroundColor: '#34A853',
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     googleText: {
         color: Colors.white100,
         fontSize: TextSizes.base,
-        fontWeight: 'bold',
+        // fontWeight: 'bold',
         fontFamily: 'Poppins-SemiBold',
     },
     signContainer: {
@@ -201,6 +201,10 @@ const styles = StyleSheet.create({
         // fontWeight: 'bold',
         fontSize: 16,
         fontFamily: 'Poppins-SemiBold',
+    },
+
+    eyeIcon: {
+        color: Colors.primary,
     },
 });
 

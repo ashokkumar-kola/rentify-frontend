@@ -3,8 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import PropertiesScreen from '../screens/explore/PropertiesScreen';
 import FilterScreen from '../screens/explore/FilterScreen';
-import PropertyDetailsScreen from '../screens/explore/PropertyDetailsScreen';
-import PropertyMapViewScreen from '../screens/explore/PropertyMapViewScreen';
+import PropertyDetailsScreen from '../screens/properties/PropertyDetailsScreen';
+import PropertyMapViewScreen from '../screens/properties/PropertyMapScreen';
 
 import { ExploreStackParamList } from './types';
 

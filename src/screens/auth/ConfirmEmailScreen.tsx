@@ -1,19 +1,16 @@
-// screens/auth/ForgotPasswordScreen.tsx
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   View,
-  Text,
   TextInput,
   TouchableOpacity,
   Image,
-  Alert,
-  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../../navigation/types';
-import useForgotPassword from '../../hooks/authHooks/useForgotPassword';
+import useConfirmEmail from '../../hooks/authHooks/useConfirmEmail';
 
 import AppText from '../../components/AppTheme/AppText';
 import { Colors } from '../../constants';
@@ -21,27 +18,22 @@ import Icons from '../../constants/Icons';
 import images from '../../assets/images';
 import styles from './styles';
 
-type Props = NativeStackScreenProps<AuthStackParamList, 'ForgotPassword'>;
+type ConfirmEmailProps = NativeStackScreenProps<AuthStackParamList, 'ConfirmEmail'>;
 
-const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
+const ConfirmEmailScreen: React.FC<ConfirmEmailProps> = ({ navigation, route }) => {
   const {
-    email,
-    setEmail,
-    error,
+    otp,
+    setOtp,
     loading,
-    message,
-    setMessage,
-    handleForgotPassword,
-  } = useForgotPassword();
+    alertVisible,
+    alertMessage,
+    handleConfirmEmail,
+  } = useConfirmEmail();
 
-  const handleSendCode = async () => {
-    const result = await handleForgotPassword();
+  const handleSubmit = async () => {
+    const result = await handleConfirmEmail(route.params.email);
     if (result.success) {
-      navigation.navigate('ConfirmEmail', { email });
-    } else if (message) {
-      Alert.alert('Error', message, [
-        { text: 'OK', onPress: () => setMessage('') },
-      ]);
+      navigation.navigate('ResetPassword', { email: route.params.email });
     }
   };
 
@@ -51,46 +43,50 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
       <View style={styles.wrapper}>
+        {/* Header */}
         <View style={styles.logoContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
             <Icons.MI name="arrow-back" size={28} color={Colors.primary} />
           </TouchableOpacity>
           <Image source={images.logo} style={styles.logo} resizeMode="contain" />
-          <Text style={styles.tagline}>LIVE YOUR DREAM HOME</Text>
+          <AppText style={styles.tagline}>LIVE YOUR DREAM HOME</AppText>
         </View>
 
         <View style={styles.logoContainer}>
-          <Text style={styles.tagline}>Forgot Password</Text>
+          <AppText style={styles.tagline}>Confirm Email</AppText>
         </View>
 
         <View style={styles.card}>
-          <AppText style={styles.welcome}>Verify Email</AppText>
-          <Text style={styles.subText}>
-            Enter your email and we’ll send you a 6-digit verification code.
-          </Text>
+          <AppText style={styles.welcome}>Enter Verification Code</AppText>
+          <AppText style={styles.subText}>
+            Enter the 6-digit code sent to{' '}
+            <AppText weight="Bold" >{route.params.email}</AppText>
+          </AppText>
 
           <View style={styles.inputContainer}>
             <TextInput
-              style={[styles.input, error ? { borderColor: Colors.error } : {}]}
-              placeholder="Enter email"
+              style={[styles.input, alertVisible ? { borderColor: Colors.warning } : {}]}
+              placeholder="Enter OTP"
               placeholderTextColor={Colors.grey200}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
+              keyboardType="numeric"
+              maxLength={6}
+              value={otp}
+              onChangeText={setOtp}
             />
-            {error ? <Text style={styles.errorText}>{error}</Text> : null}
+            {alertVisible && (
+              <AppText style={styles.errorText}>{alertMessage}</AppText>
+            )}
           </View>
 
           <TouchableOpacity
             style={styles.sendCodeButton}
-            onPress={handleSendCode}
+            onPress={handleSubmit}
             disabled={loading}
           >
             {loading ? (
               <ActivityIndicator color={Colors.white} />
             ) : (
-              <Text style={styles.sendCodeButtonText}>Send Code</Text>
+              <AppText style={styles.sendCodeButtonText}>Verify Code</AppText>
             )}
           </TouchableOpacity>
         </View>
@@ -99,4 +95,4 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation }) => {
   );
 };
 
-export default ForgotPasswordScreen;
+export default ConfirmEmailScreen;

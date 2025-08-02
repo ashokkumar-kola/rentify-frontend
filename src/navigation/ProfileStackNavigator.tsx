@@ -1,10 +1,10 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ProfileScreen from '../screens/profile/ProfileScreen';
-import EditProfileScreen from '../screens/profile/EditProfileScreen';
-import ChangePasswordScreen from '../screens/profile/ChangePasswordScreen';
-import KYCVerificationScreen from '../screens/profile/KYCVerificationScreen';
+import ProfileScreen from '../screens/account/ProfileScreen';
+import EditProfileScreen from '../screens/account/EditProfileScreen';
+import ChangePasswordScreen from '../screens/account/ChangePasswordScreen';
+import KYCVerificationScreen from '../screens/account/KYCVerificationScreen';
 
 import MyPropertiesStackNavigator from './MyPropertiesStackNavigator';
 import MyRentalsStackNavigator from './MyRentalsStackNavigator';

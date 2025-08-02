@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 
-import { api } from '../api/apiClient';
+import { fetchPropertyEnums } from '../services/metaDataService';
 
 import { EnumsData } from '../types/Enums';
 
@@ -27,9 +27,8 @@ export const EnumsProvider = ({ children }: { children: ReactNode }) => {
     setLoading(true);
     setError(null);
     try {
-      const res = await api.get('/meta/property-enums');
-      const { data } = res.data;
-      setEnums(data);
+      const propertyEnums = await fetchPropertyEnums();
+      setEnums(propertyEnums);
 
       console.log(enums);
     } catch (err: any) {
@@ -41,7 +40,7 @@ export const EnumsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     fetchEnums();
-  }, [fetchEnums]);
+  }, []);
 
   return (
     <EnumsContext.Provider value={{ enums, loading, error, refetch: fetchEnums }}>

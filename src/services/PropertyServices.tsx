@@ -1,6 +1,6 @@
 import api from '../api/apiClient';
 
-import { FilterPropertiesParams } from '../types/Property';
+import type { FilterPropertiesParams, Property } from '../types/Property';
 
 // All Properties
 export const fetchAllProperties = async () => {
@@ -81,3 +81,15 @@ export const getMyProperties = async (userId: any) => {
 //     const response = await api.get(`/properties/filter?${params.toString()}`);
 //     return response.data?.data || [];
 // };
+
+
+
+
+export const addProperty = async (propertyData: Property) => {
+    const response = await api.post('/properties', propertyData, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+    return response.data.data;
+};

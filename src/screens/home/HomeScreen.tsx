@@ -8,6 +8,7 @@ import React, {
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TouchableOpacity,
   ActivityIndicator,
@@ -250,6 +251,17 @@ const styles = StyleSheet.create({
   },
   loadingIndicator: {
     marginTop: 40,
+  },
+  image: {
+    width: '90%',
+    height: 220,
+    borderRadius: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 6,
+    backgroundColor: '#fff',
   },
 });
 

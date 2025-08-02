@@ -120,7 +120,7 @@ const PropertyDetailsScreen: React.FC = () => {
         <TouchableOpacity
           style={styles.contactButton}
           onPress={() => {
-            // TODO: Open contact modal here.
+            // Open contact modal
             console.log('Contact owner pressed');
           }}
         >

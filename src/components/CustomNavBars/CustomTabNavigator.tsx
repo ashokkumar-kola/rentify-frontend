@@ -13,7 +13,7 @@ import Icons from '../../constants/Icons';
 const TAB_LABELS = {
   HomeStack: 'Home',
   ExploreStack: 'Explore',
-  AddProperty: 'Add',
+  MyProperties: 'MyProperties',
   Wishlist: 'Wishlist',
   ProfileStack: 'Profile',
 };
@@ -35,7 +35,7 @@ const ActiveTabIcons: Record<string, string> = {
 };
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
-  const hiddenRoutes: string | any[] = ['ExploreStack']; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack'];
+  const hiddenRoutes: string | any[] = ['ExploreStack', 'MyProperties']; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack'];
   const currentRouteName = state.routes[state.index].name;
 
   if (hiddenRoutes.includes(currentRouteName)) {
@@ -75,10 +75,10 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
             activeOpacity={0.8}
           >
             {isFocused ? (
-              <Icons.MI name={iconName} color={Colors.white} size={28}
+              <Icons.MI name={iconName} color={Colors.primary} size={18}
               />
             ) : (
-              <Icons.FA name={iconName} color={Colors.white} size={24} />
+              <Icons.FA name={iconName} color={Colors.grey400} size={18} />
             )}
 
             <Text style={[styles.label, isFocused && styles.focusedLabel]}>
@@ -94,7 +94,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 const styles = StyleSheet.create({
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.white100,
     justifyContent: 'space-around',
     paddingBottom: Platform.OS === 'ios' ? 16 : 8,
     paddingTop: 10,
@@ -104,6 +104,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    // borderWidth: 2,
+    // borderColor: Colors.primary,
     // elevation: 8,
     // shadowColor: Colors.black,
     // shadowOffset: { width: 0, height: -4 },
@@ -116,12 +118,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: Colors.white200,
+    color: Colors.grey400,
     marginTop: 4,
     fontFamily: Fonts.Regular,
   },
   focusedLabel: {
-    color: Colors.white,
+    color: Colors.primary,
     fontWeight: '600',
   },
 });

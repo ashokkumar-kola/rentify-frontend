@@ -8,12 +8,12 @@ import {
   SafeAreaView,
 } from 'react-native';
 
+import AppText from '../../components/AppTheme/AppText';
+import styles from './styles';
+
 import LinearGradient from 'react-native-linear-gradient';
 import { Colors } from '../../constants/Colors';
 import images from '../../assets/images';
-
-import AppText from '../../components/AppTheme/AppText';
-import styles from './styles';
 
 const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
   return (
@@ -21,8 +21,8 @@ const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
       {/* Skip button top-right */}
       <TouchableOpacity
         style={styles.skipButton}
-        onPress={() => navigation.replace('Login')}
-        accessibilityLabel="Skip to home"
+        onPress={() => navigation.replace('AuthStack')}
+        accessibilityLabel="Skip to Home"
       >
         <AppText style={styles.skipText}>Skip</AppText>
       </TouchableOpacity>
@@ -58,7 +58,7 @@ const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
         <LinearGradient
             colors={[Colors.blue100, Colors.blue300]}
             style={styles.nextButton}
-            start={{ x: 0, y: 1 }}
+            start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
         >
             <TouchableOpacity

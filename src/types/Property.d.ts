@@ -13,8 +13,8 @@ export type PropertyFacing =
   | 'north-east' | 'north-west' | 'south-east' | 'south-west';
 
 export type GeoLocation = {
-  lat?: number;
-  lng?: number;
+  lat?: number | null;
+  lng?: number | null;
 };
 
 export type Location = {
@@ -30,25 +30,25 @@ export type Location = {
 };
 
 export type Property = {
-  id: string;
-  landlord_id: string | null;
+  id?: string;
+  landlord_id?: string | null;
 
   title: string;
-  price: number | null;
-  deposit: number | null;
+  price: string |  number;
+  deposit: string | number;
 
-  location: Location | null;
+  location: Location;
 
-  property_type: PropertyType | null;
-  floor_no: number;
-  total_floors: number;
-  bedrooms: number;
-  bathrooms: number;
+  property_type: PropertyType;
+  floor_no: string | number;
+  total_floors: string | number;
+  bedrooms: string | number;
+  bathrooms:  string | number;
 
-  area: number | null;
-  carpet_area: number | null;
+  area: string | number;
+  carpet_area: string | number;
 
-  images: string[];
+  // images: string[];
 
   status: PropertyStatus;
 
@@ -60,13 +60,13 @@ export type Property = {
 
   facing: PropertyFacing | null;
 
-  built_year: number | null;
+  built_year: string | number | null;
 
-  video_url: string | null;
+  // video_url: string | null;
 
-  is_deleted: boolean;
-  createdAt: string | null; // ISO string
-  updatedAt: string | null; // ISO string
+  // is_deleted: boolean;
+  // createdAt: string | null; // ISO string
+  // updatedAt: string | null; // ISO string
 };
 
 
@@ -113,6 +113,46 @@ export interface FeatureItemProps {
   icon: string;
   text: string;
 }
+
+
+export type Property = {
+  title: string;
+  price: number;
+  deposit: number;
+  property_type: string;
+  // floor_no: number;
+  // total_floors: number;
+  bedrooms: number;
+  bathrooms: number;
+  // area?: number;
+  // carpet_area?: number;
+  // furnishing?: string;
+  // amenities?: string[];
+  // facing?: string;
+  // built_year?: number;
+  // description?: string;
+  // video_url?: string;
+};
+
+
+export type FormProperty = {
+  title: string;
+  price: string;
+  deposit: string;
+  property_type: string;
+  // floor_no: string;
+  // total_floors: string;
+  bedrooms: string;
+  bathrooms: string;
+  // area: string;
+  // carpet_area: string;
+  // furnishing: string;
+  // amenities: string[];
+  // facing: string;
+  // built_year: string;
+  // description: string;
+  // video_url: string;
+};
 
 
 

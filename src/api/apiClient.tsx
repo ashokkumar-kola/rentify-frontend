@@ -1,10 +1,10 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+// const API_BASE_URL = 'http://localhost:3000/api';
 // const API_BASE_URL = 'http://10.0.2.2:3000/api';
 // const API_BASE_URL = 'http://192.168.1.229:3000/api';
-// const API_BASE_URL = 'http://192.168.0.105:3000/api';
+const API_BASE_URL = 'http://192.168.0.105:3000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -15,7 +15,7 @@ const api = axios.create({
   },
 });
 
-// Attach the token for every request automatically
+// Request interceptor: Attach the token for every request automatically
 api.interceptors.request.use(
   async (config) => {
     const token = await AsyncStorage.getItem('authToken');

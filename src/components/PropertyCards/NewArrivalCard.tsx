@@ -6,15 +6,20 @@ import {
   StyleSheet,
   TouchableOpacity,
   Dimensions,
+  ScrollView,
 } from 'react-native';
 
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+const { width } = Dimensions.get('window');
+
 import { Colors, Fonts } from '../../constants';
 import images from '../../assets/images';
 
 import type { Location, Property } from '../../types/Property';
+
+import PropertyImageSlider from '../../components/PropertyUtils/PropertyImageSlider';
 
 import AppText from '../Common/AppText';
 
@@ -23,6 +28,7 @@ const screenWidth = Dimensions.get('window').width;
 type Props = {
   property: Property;
 };
+
 
 const NewArrivalCard: React.FC<Props> = ({ property }) => {
   const {
@@ -33,7 +39,14 @@ const NewArrivalCard: React.FC<Props> = ({ property }) => {
     bedrooms,
     bathrooms,
     area,
+    images: property_images,
   } = property as Property & { location: Location };
+
+  // const hasImages = property_images && property_images.length > 0;
+  // const imageList = hasImages ? property_images : [images.defaultHome];
+  const hasImages = property_images && Array.isArray(property_images) && property_images.length > 0;
+  const imageList = hasImages ? property_images : [images.defaultHome];
+  // console.log(imageList);
 
   return (
     <View style={styles.card}>
@@ -41,17 +54,35 @@ const NewArrivalCard: React.FC<Props> = ({ property }) => {
         <Text style={styles.ribbonText}>New</Text>
       </View>
 
-      <View style={styles.imageContainer}>
-        <Image
-          source={images.defaultHome}
-          style={styles.propertyImage}
-          resizeMode="cover"
-        />
+      <PropertyImageSlider imageList={imageList} />
+
+       {/* <View style={styles.imageContainer}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          {imageList.map((img, index) => (
+            <Image
+              key={index}
+              source={typeof img === 'string' ? { uri: img } : img}
+              style={styles.propertyImage}
+              resizeMode="cover"
+            />
+          ))}
+          <Image
+            source={{
+              uri: 'https://res.cloudinary.com/dlrnlsds4/image/upload/v1753681969/image1_evwwlu.webp',
+            }}
+            style={styles.propertyImage}
+            resizeMode="cover"
+          />
+        </ScrollView>
 
         <TouchableOpacity style={styles.heartIcon}>
           <Ionicons name="heart-outline" size={20} color="#fff" />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       <View style={styles.content}>
         <View style={styles.headerRow}>
@@ -128,18 +159,26 @@ const styles = StyleSheet.create({
     position: 'relative',
     height: 160,
     backgroundColor: Colors.grey100,
+    borderRadius: 16,
+    overflow: 'hidden',
+  },
+  scrollContent: {
+    paddingHorizontal: 4,
+    paddingVertical: 4,
   },
   propertyImage: {
-    width: '100%',
+    width: width * 0.6,
     height: '100%',
+    borderRadius: 16,
+    marginRight: 12,
   },
   heartIcon: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#00000070',
-    borderRadius: 18,
+    top: 16,
+    right: 16,
+    backgroundColor: 'rgba(0,0,0,0.4)',
     padding: 6,
+    borderRadius: 20,
   },
   content: {
     padding: 14,

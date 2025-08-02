@@ -6,29 +6,32 @@ export type RootStackParamList = {
   AdminStack: undefined;
 };
 
+export type OnboardingStackParamList = {
+  Onboarding1: undefined;
+  Onboarding2: undefined;
+  Onboarding3: undefined;
+};
+
 export type AuthStackParamList = {
   Login: undefined;
   Register: undefined;
   ForgotPassword: undefined;
-  VerifyEmail: undefined;
-  ChangePassword: undefined;
-//   VerifyEmail: { email: string };
-//   ChangePassword: { token: string };
+  ConfirmEmail: {email: string};
+  ResetPassword: {email: string};
+};
+
+export type AppDrawerParamList = {
+  MainTabs: undefined;
+  Settings: undefined;
+  SupportStack: undefined;
 };
 
 export type MainTabParamList = {
   HomeStack: undefined;
   ExploreStack: undefined;
-  // AddProperty: undefined;
   MyProperties: undefined
   Wishlist: undefined;
   ProfileStack: undefined;
-};
-
-export type OnboardingStackParamList = {
-  Onboarding1: undefined;
-  Onboarding2: undefined;
-  Onboarding3: undefined;
 };
 
 export type HomeStackParamList = {
@@ -43,10 +46,14 @@ export type ExploreStackParamList = {
   PropertyMapView: { coordinates?: { lat: number; lng: number } };
 };
 
-export type AppDrawerParamList = {
-  MainTabs: undefined;
-  Settings: undefined;
-  SupportStack: undefined;
+export type ProfileStackParamList = {
+  Profile: undefined;
+  EditProfile: undefined;
+  ChangePassword: undefined;
+  KYCVerification: undefined;
+  MyPropertiesStack: undefined;
+  MyRentalsStack: undefined;
+  PaymentsStack: undefined;
 };
 
 export type AdminStackParamList = {

@@ -1,15 +1,18 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 // import { SafeAreaProvider } from 'react-native-safe-area-context';
+// import { EnumsProvider } from './src/context/EnumsContext';
 
 import RootStackNavigator from './src/navigation/RootNavigator';
 
 const App = () => {
   return (
     // <SafeAreaProvider>
-      <NavigationContainer>
-        <RootStackNavigator />
-      </NavigationContainer>
+      // <EnumsProvider>
+        <NavigationContainer>
+          <RootStackNavigator />
+        </NavigationContainer>
+      // </EnumsProvider>
     // </SafeAreaProvider>
   );
 };
@@ -33,7 +36,7 @@ export default App;
 // const App = () => {
 //   return (
 //     <NavigationContainer>
-//       <AppNavigator />  
+//       <AppNavigator />
 //     </NavigationContainer>
 //   );
 // };

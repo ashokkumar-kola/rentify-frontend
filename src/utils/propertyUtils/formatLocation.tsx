@@ -7,6 +7,10 @@ export const formatLocation = (location: Location | string): string => {
   return [street, locality, nearby, city, district, state, zip].filter(Boolean).join(', ');
 };
 
+
+
+
+
 // export const formatLocation = (location: Location): string => {
 //   if (!location) {return '';}
 
