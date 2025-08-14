@@ -1,32 +1,32 @@
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const API_BASE_URL = 'http://localhost:3000/api';
-// const API_BASE_URL = 'http://10.0.2.2:3000/api';
-// const API_BASE_URL = 'http://192.168.1.229:3000/api';
-const API_BASE_URL = 'http://192.168.0.105:3000/api';
+const API_BASE_URL = 'http://localhost:3000/api';
+// const API_BASE_URL = 'http://10.0.2.2:3000/api'; // Emulator
+// const API_BASE_URL = 'http://192.168.1.229:3000/api'; // YTP
+// const API_BASE_URL = 'http://192.168.0.105:3000/api'; // PG
+// const API_BASE_URL = 'http://192.168.1.9:3000/api'; // GP
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 10000,
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
+	baseURL: API_BASE_URL,
+	timeout: 10000,
+	headers: {
+		'Content-Type': 'application/json',
+		Accept: 'application/json',
+	},
 });
 
-// Request interceptor: Attach the token for every request automatically
 api.interceptors.request.use(
-  async (config) => {
-    const token = await AsyncStorage.getItem('authToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
+	async (config) => {
+		const token = await AsyncStorage.getItem('authToken');
+		if (token) {
+			config.headers.Authorization = `Bearer ${token}`;
+		}
+		return config;
+	},
+	(error) => {
+		return Promise.reject(error);
+	}
 );
 
 export default api;
@@ -49,7 +49,6 @@ export default api;
 //     return Promise.reject(error);
 //   }
 // );
-
 
 // // tokenStore.ts
 // let authToken = '';

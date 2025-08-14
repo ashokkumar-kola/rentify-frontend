@@ -1,446 +1,208 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useCallback } from 'react';
+import {
+	View,
+	ScrollView,
+	TouchableOpacity,
+	TextInput,
+	Alert,
+} from 'react-native';
 
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, TextInput, ActivityIndicator, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+import { useFilters } from '../../contexts/FilterContext';
 
 import { Slider } from '@miblanchard/react-native-slider';
-import { useNavigation } from '@react-navigation/native';
-
-import Ionicons from 'react-native-vector-icons/Ionicons';
-
-import SearchBar from '../../components/Common/SearchBar';
+import { Picker } from '@react-native-picker/picker';
 import MultiSelectButton from '../../components/Common/MultiSelectButton';
-import CheckboxGrid from '../../components/Common/CheckboxGrid';
+// import CheckboxGrid from '../../components/Common/CheckboxGrid';
 
-import { api } from '../../api/apiClient';
+import AppText from '../../components/AppTheme/AppText';
+
+import styles from './styles';
 import { Colors } from '../../constants';
+import Icons from '../../constants/Icons';
+
 import { propertyTypes, amenitiesList } from '../../constants/Filters';
 
-const FiltersScreen = () => {
-  const navigation = useNavigation();
+// import { useNavigation } from '@react-navigation/native';
+// import SearchBar from '../../components/Common/SearchBar';
+// import useFilterProperties from '../../hooks/propertyHooks/useFilterProperties';
 
-  const [loading, setLoading] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<string[]>([]);
-  const [selectedBedrooms, setSelectedBedrooms] = useState('Any');
-  const [selectedBathrooms, setSelectedBathrooms] = useState('Any');
-  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState([0, 100000]);
-  const [selectedFurnishing, setSelectedFurnishing] = useState('Any');
-  const [selectedSortBy, setSelectedSortBy] = useState('Relevance');
-  const [selectedPetPolicy, setSelectedPetPolicy] = useState('Any');
+const bedroomOptions = [
+  { label: 'Any', value: null },
+  { label: '1', value: 1 },
+  { label: '2', value: 2 },
+  { label: '3', value: 3 },
+  { label: '4+', value: 4 }, // 4 means 4 or more
+] as const;
 
-  const toggleSelection = (list: string[], item: string, setter: (items: string[]) => void) => {
-    setter(list.includes(item) ? list.filter(i => i !== item) : [...list, item]);
-  };
+const bathroomOptions = [
+  { label: 'Any', value: null },
+  { label: '1', value: 1 },
+  { label: '2', value: 2 },
+  { label: '3', value: 3 },
+  { label: '4+', value: 4 },
+] as const;
 
-  const resetFilters = () => {
-    setSearchQuery('');
-    setSelectedPropertyTypes([]);
-    setSelectedBedrooms('Any');
-    setSelectedBathrooms('Any');
-    setSelectedAmenities([]);
-    setPriceRange([0, 100000]);
-    setSelectedFurnishing('Any');
-    setSelectedSortBy('Relevance');
-    setSelectedPetPolicy('Any');
-  };
+const amenitiesOptions = [
+  { label: 'Any', value: null },
+  ...amenitiesList.map((item) => ({ label: item, value: item })),
+];
 
-  const applyFilters = async () => {
-    setLoading(true);
-    try {
-      // Prepare filter parameters
-      const params = {
-        location: searchQuery || undefined,
-        property_type: selectedPropertyTypes.length > 0 ? selectedPropertyTypes.join(',') : undefined,
-        bedrooms: selectedBedrooms !== 'Any' ? selectedBedrooms : undefined,
-        bathrooms: selectedBathrooms !== 'Any' ? selectedBathrooms : undefined,
-        amenities: selectedAmenities.length > 0 ? selectedAmenities.join(',') : undefined,
-        min_price: priceRange[0],
-        max_price: priceRange[1],
-        furnishing: selectedFurnishing !== 'Any' ? selectedFurnishing : undefined,
-        sortBy: selectedSortBy !== 'Relevance' ? selectedSortBy : undefined,
-        // petPolicy: selectedPetPolicy !== 'Any' ? selectedPetPolicy : undefined,
-      };
+const furnishingOptions = [
+  { label: 'Any', value: null },
+  { label: 'Furnished', value: 'furnished' },
+  { label: 'Unfurnished', value: 'unfurnished' },
+  { label: 'Partially', value: 'partially' },
+];
 
-      // Remove undefined parameters
-      // Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
-      (Object.keys(params) as (keyof typeof params)[]).forEach(key => {
-        if (params[key] === undefined) {
-          delete params[key];
-        }
-      });
-      console.log('Filter Parameters : ', params);
 
-      // Make API call
-      const response = await api.get('/properties', { params });
-      // console.log('Filter API response:', response.data);
+const FilterScreen: React.FC = ({ navigation }: any) => {
+	const { filters, setFilters, resetFilters } = useFilters();
 
-      // Navigate to results screen with the filtered data
-      // navigation.navigate('FilteredProperties', { properties: response.data.data });
-      navigation.navigate('ExploreProperties', { properties: response.data.data });
+	const applyFilters = useCallback(async () => {
+		if (filters.min_price > filters.max_price) {
+			Alert.alert('Invalid Range', 'Min price cannot exceed max price.');
+			return;
+		}
+		navigation.navigate('Properties');
+	}, [filters, navigation]);
 
-    } catch (error) {
-      Alert.alert(
-        'Error',
-        'Failed to fetch properties. Please try again.',
-        [{ text: 'OK' }]
-      );
-      console.error('Filter API error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={Colors.grey700} style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search by location or property name"
-          placeholderTextColor={Colors.grey400}
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-      </View>
+	// Reset all filters
+	const handleReset = () => {
+		resetFilters();
+	};
 
-      <ScrollView style={styles.scrollContainer}>
-        <Text style={styles.sectionTitle}>Property Type</Text>
-        <CheckboxGrid
-          options={propertyTypes}
-          selected={selectedPropertyTypes}
-          onToggle={item => toggleSelection(selectedPropertyTypes, item, setSelectedPropertyTypes)}
-        />
+	return (
+		<SafeAreaView style={styles.safeArea}>
+			<ScrollView style={styles.scrollContainer}>
+				{/* Search By Location */}
+				<View style={styles.searchContainer}>
+					<Icons.MI name="search" size={20} color={Colors.primary} style={styles.searchIcon} />
+					<TextInput
+						style={styles.searchInput}
+						placeholder="Search by location or property name"
+						placeholderTextColor={Colors.grey600}
+						value={filters.location}
+						onChangeText={(text) => setFilters({ location: text })}
+					/>
+				</View>
 
-        <View style={styles.divider} />
+				{/* Property Type */}
+				<AppText weight="Medium" style={styles.sectionTitle}>Property Type</AppText>
+				{/* <CheckboxGrid
+					options={propertyTypes}
+					selected={selectedPropertyTypes}
+					onToggle={(item) =>
+						toggleSelection(
+							selectedPropertyTypes,
+							item,
+							setSelectedPropertyTypes
+						)
+					}
+				/> */}
+				<View style={styles.pickerWrapper}>
+					<Picker
+						selectedValue={filters.property_type}
+						onValueChange={(value) => setFilters({ property_type: value })}
+					>
+						<Picker.Item label="Select Property type" value={filters.property_type} color={Colors.black} />
+							{propertyTypes.map((type) => (
+							<Picker.Item key={type} label={type} value={type} />
+						))}
+					</Picker>
+				</View>
 
-        <Text style={styles.sectionTitle}>Price Range (per month)</Text>
-        <View style={styles.priceContainer}>
-          <Text style={styles.priceText}>${priceRange[0]} - ${priceRange[1]}</Text>
-          <Slider
-            minimumValue={0}
-            maximumValue={100000}
-            step={100}
-            value={priceRange}
-            onValueChange={value => setPriceRange(value as number[])}
-            minimumTrackTintColor={Colors.primary}
-            maximumTrackTintColor={Colors.grey100}
-            thumbTintColor={Colors.primary}
-            containerStyle={styles.sliderContainer}
-          />
-        </View>
+				<View style={styles.divider} />
 
-        <View style={styles.divider} />
+				{/* Price Range */}
+				<AppText weight="Medium" style={styles.sectionTitle}>Price Range (per month)</AppText>
+				<View style={styles.priceContainer}>
+					<AppText style={styles.priceText}>
+						${filters.min_price} - ${filters.max_price}
+					</AppText>
+					<Slider
+						minimumValue={0}
+						maximumValue={100000}
+						step={100}
+						value={[filters.min_price, filters.max_price]}
+						onValueChange={([min, max]) => setFilters({ min_price: min, max_price: max })}
+						minimumTrackTintColor={Colors.primary}
+						maximumTrackTintColor={Colors.grey400}
+						thumbTintColor={Colors.primary}
+						containerStyle={styles.sliderContainer}
+					/>
+				</View>
 
-        <Text style={styles.sectionTitle}>Bedrooms</Text>
-        <MultiSelectButton
-          options={['Any', '1', '2', '3', '4+']}
-          selected={selectedBedrooms}
-          onSelect={setSelectedBedrooms}
-          buttonStyle={styles.filterButton}
-          selectedButtonStyle={styles.selectedFilterButton}
-          textStyle={styles.filterButtonText}
-          selectedTextStyle={styles.selectedFilterButtonText}
-        />
+				<View style={styles.divider} />
 
-        <View style={styles.divider} />
+				{/* Bedrooms */}
+				<AppText weight="Medium" style={styles.sectionTitle}>Bedrooms</AppText>
+				<MultiSelectButton<number | null>
+					options={bedroomOptions}
+					selected={filters.bedrooms ?? [null]}
+					onSelect={(selected) =>
+					setFilters({ bedrooms: selected.includes(null) ? null : selected as number[] })
+					}
+				/>
 
-        <Text style={styles.sectionTitle}>Bathrooms</Text>
-        <MultiSelectButton
-          options={['Any', '1', '2', '3', '4+']}
-          selected={selectedBathrooms}
-          onSelect={setSelectedBathrooms}
-          buttonStyle={styles.filterButton}
-          selectedButtonStyle={styles.selectedFilterButton}
-          textStyle={styles.filterButtonText}
-          selectedTextStyle={styles.selectedFilterButtonText}
-        />
+				<View style={styles.divider} />
 
-        <View style={styles.divider} />
+				{/* Bathrooms */}
+				<AppText weight="Medium" style={styles.sectionTitle}>Bathrooms</AppText>
+				<MultiSelectButton<number | null>
+					options={bathroomOptions}
+					selected={filters.bathrooms ?? [null]}
+					onSelect={(selected) =>
+					setFilters({ bathrooms: selected.includes(null) ? null : selected as number[] })
+					}
+				/>
 
-        <Text style={styles.sectionTitle}>Furnishing</Text>
-        <MultiSelectButton
-          options={['Any', 'Furnished', 'Unfurnished', 'Partially']}
-          selected={selectedFurnishing}
-          onSelect={setSelectedFurnishing}
-          buttonStyle={styles.filterButton}
-          selectedButtonStyle={styles.selectedFilterButton}
-          textStyle={styles.filterButtonText}
-          selectedTextStyle={styles.selectedFilterButtonText}
-        />
+				<View style={styles.divider} />
 
-        <View style={styles.divider} />
+				{/* Amenities */}
+				<AppText weight="Medium" style={styles.sectionTitle}>Amenities</AppText>
+				<MultiSelectButton<string | null>
+					options={amenitiesOptions}
+					selected={filters.amenities ?? [null]}
+					onSelect={(newSelected) =>
+					setFilters({ amenities: newSelected.includes(null) ? null : newSelected as string[] })
+					}
+				/>
 
-        <Text style={styles.sectionTitle}>Pet Policy</Text>
-        <MultiSelectButton
-          options={['Any', 'Allowed', 'Not Allowed', 'Cats Only', 'Dogs Only']}
-          selected={selectedPetPolicy}
-          onSelect={setSelectedPetPolicy}
-          buttonStyle={styles.filterButton}
-          selectedButtonStyle={styles.selectedFilterButton}
-          textStyle={styles.filterButtonText}
-          selectedTextStyle={styles.selectedFilterButtonText}
-        />
+				{/* Furnishing */}
+				<AppText style={styles.sectionTitle}>Furnishing</AppText>
+					<MultiSelectButton<string | null>
+					options={furnishingOptions}
+					selected={filters.furnishing === null ? [null] : [filters.furnishing]}
+					onSelect={(newSelected) =>
+						setFilters({
+						furnishing: newSelected.includes(null) ? null : (newSelected[0] ?? null),
+						})
+					}
+				/>
 
-        <View style={styles.divider} />
 
-        <Text style={styles.sectionTitle}>Sort By</Text>
-        <MultiSelectButton
-          options={['Relevance', 'Price: Low to High', 'Price: High to Low', 'Newest', 'Most Popular']}
-          selected={selectedSortBy}
-          onSelect={setSelectedSortBy}
-          buttonStyle={styles.filterButton}
-          selectedButtonStyle={styles.selectedFilterButton}
-          textStyle={styles.filterButtonText}
-          selectedTextStyle={styles.selectedFilterButtonText}
-        />
-
-        <View style={styles.divider} />
-
-        <Text style={styles.sectionTitle}>Amenities</Text>
-        <CheckboxGrid
-          options={amenitiesList}
-          selected={selectedAmenities}
-          onToggle={item => toggleSelection(selectedAmenities, item, setSelectedAmenities)}
-          checkboxStyle={styles.checkbox}
-          selectedCheckboxStyle={styles.selectedCheckbox}
-          textStyle={styles.amenityText}
-        />
-      </ScrollView>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={resetFilters}
-          style={styles.resetButton}
-          disabled={loading}
-        >
-          <Text style={styles.resetText}>Reset All</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={applyFilters}
-          style={styles.applyButton}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <>
-              <Text style={styles.applyText}>Show Results</Text>
-              <Ionicons name="arrow-forward" size={18} color="white" style={styles.applyIcon} />
-            </>
-          )}
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+			{/* </ScrollView> */}
+			<View style={styles.buttonContainer}>
+				<TouchableOpacity
+					onPress={handleReset}
+					style={styles.resetButton}
+				>
+					<AppText style={styles.resetText}>Reset All</AppText>
+				</TouchableOpacity>
+				<TouchableOpacity
+					onPress={applyFilters}
+					style={styles.applyButton}
+				>
+					<AppText style={styles.applyText}>Show Results</AppText>
+					<Icons.MI name="arrow-forward" size={18} color={Colors.white} style={styles.applyIcon} />
+				</TouchableOpacity>
+			</View>
+			</ScrollView>
+		</SafeAreaView>
+	);
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white100,
-    paddingHorizontal: 16,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    borderRadius: 10,
-    paddingHorizontal: 16,
-    marginVertical: 16,
-    height: 50,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-  },
-  searchIcon: {
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    height: '100%',
-    fontSize: 16,
-    color: '#101010',
-  },
-  scrollContainer: {
-    flex: 1,
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: Colors.grey900,
-    marginVertical: 12,
-    marginLeft: 4,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: Colors.grey200,
-    marginVertical: 8,
-  },
-  priceContainer: {
-    backgroundColor: 'white',
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 8,
-  },
-  priceText: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: Colors.grey900,
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  sliderContainer: {
-    marginHorizontal: 4,
-  },
-  filterButton: {
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: Colors.grey200,
-    borderRadius: 8,
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    marginRight: 8,
-    marginBottom: 8,
-  },
-  selectedFilterButton: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
-  },
-  filterButtonText: {
-    color: Colors.grey900,
-    fontSize: 14,
-  },
-  selectedFilterButtonText: {
-    color: 'white',
-  },
-  checkbox: {
-    width: 22,
-    height: 22,
-    borderWidth: 1,
-    borderColor: Colors.grey200,
-    borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 10,
-  },
-  selectedCheckbox: {
-    backgroundColor: Colors.primary,
-    borderColor: Colors.primary,
-  },
-  amenityText: {
-    fontSize: 14,
-    color: Colors.grey900,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 12,
-    backgroundColor: 'white',
-    borderTopWidth: 1,
-    borderTopColor: Colors.grey200,
-  },
-  resetButton: {
-    flex: 1,
-    marginRight: 8,
-    backgroundColor: Colors.white100,
-    borderColor: Colors.grey200,
-    borderWidth: 1,
-    padding: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  applyButton: {
-    flex: 2,
-    marginLeft: 8,
-    backgroundColor: Colors.primary,
-    padding: 14,
-    borderRadius: 8,
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  resetText: {
-    color: Colors.black100,
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  applyText: {
-    color: 'white',
-    fontWeight: '600',
-    fontSize: 16,
-    marginRight: 8,
-  },
-  applyIcon: {
-    marginLeft: 4,
-  },
-});
-
-export default FiltersScreen;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // useLayoutEffect(() => {
-  //   navigation.getParent()?.setOptions({
-  //     tabBarStyle: { display: 'none' },
-  //   });
-
-  //   return () => {
-  //     navigation.getParent()?.setOptions({
-  //       tabBarStyle: undefined,  // Reset to default
-  //     });
-  //   };
-  // }, [navigation]);
-
-  // useEffect(() => {
-  //   const parent = navigation.getParent(); // This gets the Tab navigator
-  //   parent?.setOptions({
-  //     tabBarStyle: { display: 'none' },
-  //   });
-
-  //   return () => {
-  //     parent?.setOptions({
-  //       tabBarStyle: { display: 'flex' }, // or restore your default style here
-  //     });
-  //   };
-  // }, [navigation]);
+export default FilterScreen;

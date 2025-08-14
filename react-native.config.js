@@ -1,16 +1,26 @@
-export const reactNativeConfig = {
-  project: {
-    android: {
-      // config here
-    },
-    ios: {
-      // config here
-    },
-  },
-  assets: ['./assets/fonts'],
+module.exports = {
+	project: {
+		android: {
+			// config here
+		},
+		ios: {
+			// config here
+		},
+	},
+	assets: ["./assets/fonts"],
 };
 
-
+// export const reactNativeConfig = {
+//   project: {
+//     android: {
+//       // config here
+//     },
+//     ios: {
+//       // config here
+//     },
+//   },
+//   assets: ['./assets/fonts'],
+// };
 
 // export {
 //   project: {
@@ -23,6 +33,5 @@ export const reactNativeConfig = {
 //   },
 //   assets: ['./assets/fonts'],
 // };
-
 
 // npx react-native-asset

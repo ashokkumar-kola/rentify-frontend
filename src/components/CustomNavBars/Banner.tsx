@@ -1,91 +1,108 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  StatusBar,
-  Platform,
-  SafeAreaView,
-} from 'react-native';
+	View,
+	StyleSheet,
+	ImageBackground,
+	Animated,
+	// Text,
+} from "react-native";
 
-import { useNavigation, NavigationProp } from '@react-navigation/native';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import LinearGradient from 'react-native-linear-gradient';
-
-import TopNavBar from './TopNavBar';
-import SearchBar from '../Common/SearchBar';
-
-import { Colors, TextSizes, Spacing } from '../../constants';
-import images from '../../assets/images';
-
-import { RootStackParamList } from '../../navigation/AppNavigator';
+import LinearGradient from "react-native-linear-gradient";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { Colors, Spacing, TextSizes } from "../../constants";
+import images from "../../assets/images";
+import AppText from "../../components/AppTheme/AppText";
+import SearchBar from "../Common/SearchBar";
 
 const Banner = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+	const [fadeAnim] = useState(new Animated.Value(0));
+	const [slideAnim] = useState(new Animated.Value(20));
 
-  return (
-    // <ImageBackground
-    //   source={images.banner}
-    //   style={styles.bannerImage}
-    //   resizeMode="cover"
-    // >
-      <View>
-      {/* Overlay for readability */}
-      {/* <LinearGradient
-        colors={['rgba(0,0,0,0.2)', 'rgba(0,0,0,0.5)']}
-        style={styles.overlay}
-      /> */}
+	useEffect(() => {
+		Animated.parallel([
+			Animated.timing(fadeAnim, {
+				toValue: 1,
+				duration: 400,
+				useNativeDriver: true,
+			}),
+			Animated.timing(slideAnim, {
+				toValue: 0,
+				duration: 400,
+				useNativeDriver: true,
+			}),
+		]).start();
+	}, [fadeAnim, slideAnim]);
 
-      {/* Main content */}
-      {/* <SafeAreaView style={styles.container}> */}
-        {/* Top Navigation */}
-        <TopNavBar />
+	return (
+		<ImageBackground
+			source={images.banner}
+			style={styles.bannerImage}
+			resizeMode="cover"
+		>
+			{/* <LinearGradient colors={['rgba(255,255,255,0)', 'rgba(255,255,255,0)']} style={styles.overlay} /> */}
+			<Animated.View
+				style={[
+					styles.contentWrapper,
+					{
+						opacity: fadeAnim,
+						transform: [{ translateY: slideAnim }],
+					},
+				]}
+			>
+				<View style={styles.sloganWrapper}>
+					<FontAwesome
+						name="quote-left"
+						size={14}
+						color={Colors.white200}
+					/>
+					<AppText style={styles.sloganText}>
+						Find Your Space. Live Your Dream.
+					</AppText>
+					<FontAwesome
+						name="quote-right"
+						size={14}
+						color={Colors.white200}
+					/>
+				</View>
 
-        {/* Slogan */}
-        <View style={styles.sloganWrapper}>
-          <FontAwesome name="quote-left" size={16} color={Colors.white200} />
-          <Text style={styles.sloganText}>Find Your Space. Live Your Dream.</Text>
-          <FontAwesome name="quote-right" size={16} color={Colors.white200} />
-        </View>
-
-        {/* Search Bar */}
-        <SearchBar />
-      {/* </SafeAreaView> */}
-      </View>
-    // </ImageBackground>
-  );
+				<SearchBar />
+			</Animated.View>
+		</ImageBackground>
+	);
 };
 
 export default Banner;
 
 const styles = StyleSheet.create({
-  bannerImage: {
-    width: '100%',
-    height: 260,
-    position: 'relative',
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'transparent',
-  },
-  container: {
-    flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    paddingBottom: Spacing.lg,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
-  },
-  sloganWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: Spacing.sm,
-    gap: 4,
-  },
-  sloganText: {
-    fontSize: TextSizes.xl,
-    fontWeight: 'bold',
-    color: Colors.textWhite,
-    textAlign: 'center',
-  },
+	bannerImage: {
+		width: "100%",
+		height: 260,
+		position: "relative",
+		// top: 0,
+	},
+	overlay: {
+		...StyleSheet.absoluteFillObject,
+	},
+	contentWrapper: {
+		flex: 1,
+		justifyContent: "flex-end",
+		alignItems: "center",
+		paddingBottom: Spacing.xl,
+	},
+	sloganWrapper: {
+		flexDirection: "row",
+		alignItems: "flex-start",
+		gap: 6,
+		marginBottom: Spacing.lg,
+		backgroundColor: "rgba(0,0,0,0.6)",
+		paddingHorizontal: Spacing.md,
+		paddingVertical: Spacing.sm,
+		borderRadius: 12,
+	},
+	sloganText: {
+		fontSize: TextSizes.base,
+		fontWeight: "600",
+		color: Colors.textWhite,
+		textAlign: "center",
+	},
 });

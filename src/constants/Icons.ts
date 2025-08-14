@@ -1,9 +1,9 @@
-import FA from 'react-native-vector-icons/FontAwesome';
-import FA5 from 'react-native-vector-icons/FontAwesome5';
-import MI from 'react-native-vector-icons/MaterialIcons';
-import MCI from 'react-native-vector-icons/MaterialCommunityIcons';
+import FA from "react-native-vector-icons/FontAwesome";
+import FA5 from "react-native-vector-icons/FontAwesome5";
+import MI from "react-native-vector-icons/MaterialIcons";
+import MCI from "react-native-vector-icons/MaterialCommunityIcons";
 // import MDI from 'react-native-vector-icons/MaterialDesignIcons';
-import II from 'react-native-vector-icons/Ionicons';
+import II from "react-native-vector-icons/Ionicons";
 
 // import AntDesign from 'react-native-vector-icons/AntDesign';
 // import Feather from 'react-native-vector-icons/Feather';
@@ -15,22 +15,22 @@ import II from 'react-native-vector-icons/Ionicons';
 // import Zocial from 'react-native-vector-icons/Zocial';
 
 const Icons = {
-  FA,
-  FA5,
-  MI,
-  MCI,
-  // MDI,
-  II,
+	FA,
+	FA5,
+	MI,
+	MCI,
+	// MDI,
+	II,
 
-  // AntDesign,
-  // Feather,
-  // Entypo,
-  // MaterialCommunityIcons,
-  // EvilIcons,
-  // Foundation,
-  // Octicons,
-  // SimpleLineIcons,
-  // Zocial,
+	// AntDesign,
+	// Feather,
+	// Entypo,
+	// MaterialCommunityIcons,
+	// EvilIcons,
+	// Foundation,
+	// Octicons,
+	// SimpleLineIcons,
+	// Zocial,
 };
 
 export default Icons;

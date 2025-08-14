@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const SubmitApplicationScreen = () => {
-  return (
-    <View>
-      <Text>SubmitApplicationScreen</Text>
-    </View>
-  )
-}
+	return (
+		<View>
+			<Text>SubmitApplicationScreen</Text>
+		</View>
+	);
+};
 
-export default SubmitApplicationScreen
+export default SubmitApplicationScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

@@ -1,178 +1,224 @@
 export type PropertyType =
-  | 'flat' | 'apartment' | 'studio' | 'villa' | 'independent house' | 'row house'
-  | 'bungalow' | 'penthouse' | 'duplex' | 'plot' | 'land' | 'commercial space'
-  | 'office space' | 'co-working space' | 'retail space' | 'warehouse'
-  | 'industrial shed' | 'farmhouse' | 'hostel' | 'PG' | 'serviced apartment' | 'hotel room';
+	| 'flat'
+	| 'apartment'
+	| 'studio'
+	| 'villa'
+	| 'independent house'
+	| 'row house'
+	| 'bungalow'
+	| 'penthouse'
+	| 'duplex'
+	| 'plot'
+	| 'land'
+	| 'commercial space'
+	| 'office space'
+	| 'co-working space'
+	| 'retail space'
+	| 'warehouse'
+	| 'industrial shed'
+	| 'farmhouse'
+	| 'hostel'
+	| 'PG'
+	| 'serviced apartment'
+	| 'hotel room';
 
 export type FurnishingType = 'furnished' | 'unfurnished' | 'partially';
 
 export type PropertyStatus = 'available' | 'rented' | 'pending' | 'inactive';
 
 export type PropertyFacing =
-  | 'north' | 'south' | 'east' | 'west'
-  | 'north-east' | 'north-west' | 'south-east' | 'south-west';
+	| 'north'
+	| 'south'
+	| 'east'
+	| 'west'
+	| 'north-east'
+	| 'north-west'
+	| 'south-east'
+	| 'south-west';
 
 export type GeoLocation = {
-  lat?: number | null;
-  lng?: number | null;
+	lat?: number | null;
+	lng?: number | null;
 };
 
 export type Location = {
-  nearby?: string;
-  street?: string;
-  locality?: string;
-  city?: string;
-  district?: string;
-  state?: string;
-  country?: string;
-  zip?: string;
-  geo: GeoLocation;
+	nearby?: string;
+	street?: string;
+	locality?: string;
+	city?: string;
+	district?: string;
+	state?: string;
+	country?: string;
+	zip?: string;
+	geo: GeoLocation;
 };
 
 export type Property = {
-  id?: string;
-  landlord_id?: string | null;
+	id?: string;
+	landlord_id?: string | null;
 
-  title: string;
-  price: string |  number;
-  deposit: string | number;
+	title: string;
+	price: string | number;
+	deposit: string | number;
 
-  location: Location;
+	location: Location;
 
-  property_type: PropertyType;
-  floor_no: string | number;
-  total_floors: string | number;
-  bedrooms: string | number;
-  bathrooms:  string | number;
+	property_type: PropertyType;
+	floor_no: string | number;
+	total_floors: string | number;
+	bedrooms: string | number;
+	bathrooms: string | number;
 
-  area: string | number;
-  carpet_area: string | number;
+	area: string | number;
+	carpet_area: string | number;
 
-  // images: string[];
+	images: string[];
 
-  status: PropertyStatus;
+	status: PropertyStatus;
 
-  description: string;
+	description: string;
 
-  furnishing: FurnishingType;
+	furnishing: FurnishingType;
 
-  amenities: string[];
+	amenities: string[];
 
-  facing: PropertyFacing | null;
+	facing: PropertyFacing | null;
 
-  built_year: string | number | null;
+	built_year: string | number | null;
 
-  // video_url: string | null;
+	// video_url: string | null;
 
-  // is_deleted: boolean;
-  // createdAt: string | null; // ISO string
-  // updatedAt: string | null; // ISO string
+	// is_deleted: boolean;
+	// createdAt: string | null; // ISO string
+	// updatedAt: string | null; // ISO string
 };
 
-
+export type PropertyWithLocation = Property & {
+	location: Location;
+};
 
 export interface FilterPropertiesParams {
-  location?: string;
-  min_price?: number;
-  max_price?: number;
-  property_type?: string;
-  bedrooms?: number;
-  bathrooms?: number;
-  area?: number;
-  furnishing?: string;
-  amenities?: string[];
-  min_size?: number;
-  max_size?: number;
-  status?: string;
-  is_verified?: boolean;
-  is_popular?: boolean;
-  is_featured?: boolean;
-  sort_by?: string;
-  sort_order?: 'asc' | 'desc';
-  page?: number;
-  limit?: number;
+	location?: string;
+	min_price?: number;
+	max_price?: number;
+	property_type?: string;
+	bedrooms?: number;
+	bathrooms?: number;
+	area?: number;
+	furnishing?: string;
+	amenities?: string[];
+	min_size?: number;
+	max_size?: number;
+	status?: string;
+	is_verified?: boolean;
+	is_popular?: boolean;
+	is_featured?: boolean;
+	sort_by?: string;
+	sort_order?: 'asc' | 'desc';
+	page?: number;
+	limit?: number;
 }
 
 export interface Location {
-  street?: string;
-  locality?: string;
-  nearby?: string;
-  city?: string;
-  district?: string;
-  state?: string;
-  zip?: string;
+	street?: string;
+	locality?: string;
+	nearby?: string;
+	city?: string;
+	district?: string;
+	state?: string;
+	zip?: string;
 }
 
 export interface Tag {
-  label: string;
-  color: string;
-  icon: string;
+	label: string;
+	color: string;
+	icon: string;
 }
 
 export interface FeatureItemProps {
-  icon: string;
-  text: string;
+	icon: string;
+	text: string;
 }
 
-
 export type Property = {
-  title: string;
-  price: number;
-  deposit: number;
-  property_type: string;
-  // floor_no: number;
-  // total_floors: number;
-  bedrooms: number;
-  bathrooms: number;
-  // area?: number;
-  // carpet_area?: number;
-  // furnishing?: string;
-  // amenities?: string[];
-  // facing?: string;
-  // built_year?: number;
-  // description?: string;
-  // video_url?: string;
+	title: string;
+	price: number;
+	deposit: number;
+	property_type: string;
+	// floor_no: number;
+	// total_floors: number;
+	bedrooms: number;
+	bathrooms: number;
+	// area?: number;
+	// carpet_area?: number;
+	// furnishing?: string;
+	// amenities?: string[];
+	// facing?: string;
+	// built_year?: number;
+	// description?: string;
+	// video_url?: string;
 };
-
 
 export type FormProperty = {
-  title: string;
-  price: string;
-  deposit: string;
-  property_type: string;
-  // floor_no: string;
-  // total_floors: string;
-  bedrooms: string;
-  bathrooms: string;
-  // area: string;
-  // carpet_area: string;
-  // furnishing: string;
-  // amenities: string[];
-  // facing: string;
-  // built_year: string;
-  // description: string;
-  // video_url: string;
+	title: string;
+	price: string;
+	deposit: string;
+	property_type: string;
+	// floor_no: string;
+	// total_floors: string;
+	bedrooms: string;
+	bathrooms: string;
+	// area: string;
+	// carpet_area: string;
+	// furnishing: string;
+	// amenities: string[];
+	// facing: string;
+	// built_year: string;
+	// description: string;
+	// video_url: string;
 };
 
+// interface Landlord {
+//   _id: string;
+//   full_name: string;
+//   email: string;
+// }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// interface Property {
+//   id: string;
+//   title: string;
+//   price: number;
+//   deposit: number;
+//   location: {
+//     city: string;
+//     district: string;
+//     geo: { lat: number | null; lng: number | null };
+//     locality: string;
+//     nearby: string;
+//     state: string;
+//     street: string;
+//     zip: string;
+//   };
+//   bedrooms: number;
+//   bathrooms: number;
+//   area: number;
+//   carpet_area: number | null;
+//   built_year: number | null;
+//   facing: string;
+//   floor_no: number;
+//   total_floors: number;
+//   furnishing: string;
+//   property_type: string;
+//   status: string;
+//   description: string;
+//   amenities: string[];
+//   images: string[];
+//   video_url: string | null;
+//   landlord_id: Landlord;
+//   createdAt: string;
+//   updatedAt: string;
+//   is_deleted: boolean;
+// }
 
 // export enum PropertyType {
 //   Flat = 'flat',
@@ -222,3 +268,31 @@ export type FormProperty = {
 //   SouthEast = 'south-east',
 //   SouthWest = 'south-west',
 // }
+
+
+interface FilterParams {
+  location?: string;
+  property_type?: string;
+  bedrooms?: number;
+  bathrooms?: number;
+  min_price?: number;
+  max_price?: number;
+  min_size?: number;
+  max_size?: number;
+  furnishing?: string;
+  amenities?: string[];
+  facing?: string;
+  status?: string;
+  is_verified?: boolean;
+  is_popular?: boolean;
+  is_featured?: boolean;
+  floor_no?: number;
+  total_floors?: number;
+  min_built_year?: number;
+  max_built_year?: number;
+  available_from?: string;
+  sort_by?: string;
+  sort_order?: 'asc' | 'desc';
+  page?: number;
+  limit?: number;
+}

@@ -1,4 +1,4 @@
-import api from '../api/apiClient';
+import api from "../api/apiClient";
 
 // import { handleApiError } from './errorHandler';
 
@@ -16,12 +16,17 @@ import api from '../api/apiClient';
 // }
 
 export const getMyProperties = async (userId: any) => {
-  const response = await api.get(`/properties/${userId}/my-properties`);
-  return response.data?.data || {};
+	const response = await api.get(`/properties/${userId}/my-properties`);
+	return response.data?.data || {};
 };
 
 // Notifications
 export const getNotifications = async () => {
-  const response = await api.get('/notifications');
-  return response.data?.data || {};
+	const response = await api.get("/notifications");
+	return response.data?.data || {};
+};
+
+export const getMyProfile = async () => {
+	const response = await api.get("/users/profile");
+	return response.data || {};
 };

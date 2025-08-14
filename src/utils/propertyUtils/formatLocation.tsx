@@ -1,15 +1,17 @@
-import { Location } from '../../types/Property';
+import { Location } from "../../types/Property";
 
 export const formatLocation = (location: Location | string): string => {
-  if (typeof location === 'string') {return location;}
-  if (!location || typeof location !== 'object') {return '';}
-  const { street, locality, nearby, city, district, state, zip } = location;
-  return [street, locality, nearby, city, district, state, zip].filter(Boolean).join(', ');
+	if (typeof location === "string") {
+		return location;
+	}
+	if (!location || typeof location !== "object") {
+		return "";
+	}
+	const { street, locality, nearby, city, district, state, zip } = location;
+	return [street, locality, nearby, city, district, state, zip]
+		.filter(Boolean)
+		.join(", ");
 };
-
-
-
-
 
 // export const formatLocation = (location: Location): string => {
 //   if (!location) {return '';}

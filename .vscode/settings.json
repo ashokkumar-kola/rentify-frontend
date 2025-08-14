@@ -1,25 +1,44 @@
 {
-  "editor.rulers": [80],
-  "files.exclude": {
-        "**/.git": true,
-        "**/node_modules": true,
-        "**/build": true
-  },
-  "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": "explicit"
-  },
-  "flow.useNPMPackagedFlow": true,
-  "javascript.validate.enable": false,
-  "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "typescript",
-        "typescriptreact"
-  ],
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "cSpell.words": [
-        "Entypo",
-        "Pressable",
-        "Rentify"
-    ]
+	"editor.rulers": [80],
+	"files.exclude": {
+		"**/.git": true,
+		"**/node_modules": true,
+		"**/build": true
+	},
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": "explicit"
+	},
+	"flow.useNPMPackagedFlow": true,
+	"javascript.validate.enable": false,
+	"eslint.validate": [
+		"javascript",
+		"javascriptreact",
+		"typescript",
+		"typescriptreact"
+	],
+	"typescript.tsdk": "node_modules/typescript/lib",
+	"cSpell.words": [
+		"Entypo",
+		"Favourites",
+		"miblanchard",
+		"Pressable",
+		"Rentify"
+	],
+	
+	"editor.insertSpaces": false,
+	"editor.tabSize": 4,
+	"editor.detectIndentation": false,
+	"editor.formatOnSave": true,
+	"[javascript]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4
+	},
+	"[typescript]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4
+	},
+	"[json]": {
+		"editor.insertSpaces": false,
+		"editor.tabSize": 4
+	}
 }

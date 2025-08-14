@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const MessagesScreen = () => {
-  return (
-    <View>
-      <Text>MessagesScreen</Text>
-    </View>
-  );
+	return (
+		<View>
+			<Text>MessagesScreen</Text>
+		</View>
+	);
 };
 
 export default MessagesScreen;

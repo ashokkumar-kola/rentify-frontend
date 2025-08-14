@@ -1,268 +1,353 @@
 import React, {
-  useEffect,
-  useLayoutEffect,
-  useState,
-  useCallback,
+	useEffect,
+	useLayoutEffect,
+	useState,
+	useCallback,
 } from 'react';
 
 import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
+	View,
+	Text,
+	Image,
+	StyleSheet,
+	TouchableOpacity,
+	ActivityIndicator,
+	FlatList,
+	ScrollView,
+	StatusBar,
+	Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import Icon from 'react-native-vector-icons/Feather';
-
-import { DrawerNavigationProp } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
-import { DrawerParamList } from '../../navigation/DrawerNavigator';
-
+import styles from './styles';
 import { Colors } from '../../constants';
+import Icons from '../../constants/Icons';
 import type { Property } from '../../types/Property';
+import AppText from '../../components/AppTheme/AppText';
 
-import ScreenTemplate from '../../components/Common/ScreenTemplate';
-import Banner from '../../components/CustomNavBars/Banner';
-import Header from '../../components/CustomNavBars/Header';
+import TopNavBar from '../../components/CustomNavBars/TopNavBar';
+// import Banner from '../../components/CustomNavBars/Banner';
+// import Header from '../../components/CustomNavBars/Header';
 
+import { useAuth } from '../../contexts/AuthContext';
+
+import SearchBar from '../../components/Common/SearchBar';
 import PropertyLoadingCard from '../../components/PropertyCards/PropertyLoadingCard';
 import NewArrivalsCard from '../../components/PropertyCards/NewArrivalCard';
 import PopularCard from '../../components/PropertyCards/PopularCard';
-import FeaturedPropertyCard from '../../components/PropertyCards/FeaturedPropertyCard';
-import ExploreMoreCard from '../../components/PropertyCards/ExploreMoreCard';
-
+import FeaturedCard from '../../components/PropertyCards/FeaturedCard';
+import ExploreMorePropertiesCard from '../../components/PropertyCards/ExploreMorePropertiesCard';
+import ContinueLastSearchCard from '../../components/PropertyCards/ContinueLastSearchCard';
 
 import { useNewArrivals } from '../../hooks/propertyHooks/useNewArrivals';
 import { usePopularProperties } from '../../hooks/propertyHooks/usePopularProperties';
 import { useFeaturedProperties } from '../../hooks/propertyHooks/useFeaturedProperties';
 
-// import api from '../../api/apiClient';
-import { decodeJwt } from '../../utils/jwt';
+import { getDecodedToken } from '../../utils/getDecodedToken';
 
-type User = {
-  _id: string;
-  full_name: string;
-  email: string;
-  token: string;
+const HomeScreen = ({ navigation }: any) => {
+	const { user, isLoggedIn } = useAuth();
+
+	const [token, setToken] = useState<any>(null);
+
+	useEffect(() => {
+		const fetchToken = async () => {
+			const decoded = await getDecodedToken();
+			setToken(decoded);
+			console.log(decoded);
+		};
+		fetchToken();
+	}, []);
+
+	const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
+
+	const { newArrivals, loading: newArrivalsLoading } = useNewArrivals();
+	const { popularProperties, loading: popularPropertiesLoading } =
+		usePopularProperties();
+	const { featuredProperties, loading: featuredPropertiesLoading } =
+		useFeaturedProperties();
+
+	useEffect(() => {
+		if (isLoggedIn && user) {
+			// console.log('User:', user);
+		}
+	}, [isLoggedIn, user]);
+
+	const handlePress = () => {
+		navigation.navigate('Properties');
+	};
+
+	const toggleWishlist = async (propertyId: string) => {
+		const isAlready = wishlist[propertyId];
+		try {
+			if (isAlready) {
+				// await WishlistService.remove(propertyId);
+			} else {
+				// await WishlistService.add(propertyId);
+			}
+
+			setWishlist((prev) => ({
+				...prev,
+				[propertyId]: !isAlready,
+			}));
+		} catch (err) {
+			Alert.alert('Error', 'Something went wrong.');
+		}
+	};
+
+	const renderNewArrivalItem = ({ item }: { item: Property }) => (
+		<NewArrivalsCard
+			property={item}
+			isWishlisted={wishlist[item.id]}
+			onWishlistToggle={() => toggleWishlist(item.id)}
+			onPress={() =>
+				navigation.navigate('AppDrawer', {
+					screen: 'MainTabs',
+					params: {
+						screen: 'ExploreStack',
+						params: {
+							screen: 'PropertyDetails',
+							params: {
+								propertyId: item.id,
+							},
+						},
+					},
+				})
+			}
+		/>
+	);
+
+	const renderPopularItem = ({ item }: { item: Property }) => (
+		<PopularCard
+			property={item}
+			isWishlisted={wishlist[item.id]}
+			onWishlistToggle={() => toggleWishlist(item.id)}
+			onPress={() =>
+				navigation.navigate('AppDrawer', {
+					screen: 'MainTabs',
+					params: {
+						screen: 'ExploreStack',
+						params: {
+							screen: 'PropertyDetails',
+							params: {
+								propertyId: item.id,
+							},
+						},
+					},
+				})
+			}
+		/>
+	);
+
+	const renderFeaturedItem = ({ item }: { item: Property }) => (
+		<FeaturedCard
+			property={item}
+			isWishlisted={wishlist[item.id]}
+			onWishlistToggle={() => toggleWishlist(item.id)}
+			onPress={() =>
+				navigation.navigate('AppDrawer', {
+					screen: 'MainTabs',
+					params: {
+						screen: 'ExploreStack',
+						params: {
+							screen: 'PropertyDetails',
+							params: {
+								propertyId: item.id,
+							},
+						},
+					},
+				})
+			}
+		/>
+	);
+
+	return (
+		<SafeAreaView style={styles.safeArea}>
+			{/* Status Bar */}
+			<StatusBar
+				barStyle="light-content"
+				backgroundColor={Colors.primary}
+			/>
+
+			{/* Top Navigation Bar */}
+			<TopNavBar />
+
+			{/* Scroll View */}
+			<ScrollView
+				contentContainerStyle={styles.scrollContainer}
+				showsVerticalScrollIndicator={false}
+			>
+				{/* Banner */}
+				{/* <Banner /> */}
+				<View style={styles.bannerContainer}>
+					<View style={styles.sloganWrapper}>
+						<Icons.FA
+							name="quote-left"
+							size={16}
+							color={Colors.primary}
+						/>
+						<AppText weight="SemiBold" style={styles.sloganText}>
+							Find Your Space. Live Your Dream.
+						</AppText>
+						<Icons.FA
+							name="quote-right"
+							size={16}
+							color={Colors.primary}
+						/>
+					</View>
+					<SearchBar />
+				</View>
+
+				<View style={styles.main}>
+					{/* Last Search  lastSearch */}
+					{/* {user && ( */}
+					<ContinueLastSearchCard
+						userEmail={user?.email}
+						// lastSearch={lastSearch}
+						onPress={() => {}}
+					/>
+					{/* )} */}
+
+					{/* New Arrivals Properties */}
+					<Text style={styles.sectionTitle}>New Arrivals</Text>
+					{newArrivalsLoading ? (
+						<View style={styles.propertySection}>
+							<FlatList
+								data={[1, 2]}
+								horizontal
+								keyExtractor={(item) => item.toString()}
+								renderItem={() => <PropertyLoadingCard />}
+								contentContainerStyle={styles.flatListContainer}
+								showsHorizontalScrollIndicator={false}
+							/>
+						</View>
+					) : (
+						<>
+							{newArrivals.length > 0 && (
+								<View style={styles.propertySection}>
+									<FlatList
+										data={newArrivals}
+										horizontal
+										keyExtractor={(item, index) =>
+											item.id ?? `property-${index}`
+										}
+										renderItem={renderNewArrivalItem}
+										contentContainerStyle={
+											styles.flatListContainer
+										}
+										showsHorizontalScrollIndicator={false}
+									/>
+								</View>
+							)}
+						</>
+					)}
+
+					{/* Popular Properties */}
+					<Text style={styles.sectionTitle}>Popular Properties</Text>
+					{popularPropertiesLoading ? (
+						<View style={styles.propertySection}>
+							<FlatList
+								data={[1, 2]}
+								horizontal
+								keyExtractor={(item) => item.toString()}
+								renderItem={() => <PropertyLoadingCard />}
+								contentContainerStyle={styles.flatListContainer}
+								showsHorizontalScrollIndicator={false}
+							/>
+						</View>
+					) : (
+						<>
+							{popularProperties.length > 0 && (
+								<View style={styles.propertySection}>
+									<FlatList
+										data={popularProperties}
+										horizontal
+										keyExtractor={(item, index) =>
+											item.id ?? `property-${index}`
+										}
+										renderItem={renderPopularItem}
+										contentContainerStyle={
+											styles.flatListContainer
+										}
+										showsHorizontalScrollIndicator={false}
+									/>
+								</View>
+							)}
+						</>
+					)}
+
+					{/* Featured Properties */}
+					<Text style={styles.sectionTitle}>Featured Properties</Text>
+					{featuredPropertiesLoading ? (
+						<View style={styles.propertySection}>
+							<FlatList
+								data={[1, 2]}
+								horizontal
+								keyExtractor={(item) => item.toString()}
+								renderItem={() => <PropertyLoadingCard />}
+								contentContainerStyle={styles.flatListContainer}
+								showsHorizontalScrollIndicator={false}
+							/>
+						</View>
+					) : (
+						<>
+							{featuredProperties.length > 0 && (
+								<View style={styles.propertySection}>
+									<FlatList
+										data={featuredProperties}
+										horizontal
+										keyExtractor={(item, index) =>
+											item.id ?? `property-${index}`
+										}
+										renderItem={renderFeaturedItem}
+										contentContainerStyle={
+											styles.flatListContainer
+										}
+										showsHorizontalScrollIndicator={false}
+									/>
+								</View>
+							)}
+						</>
+					)}
+
+					<ExploreMorePropertiesCard
+						onPress={() => {
+							handlePress;
+						}}
+					/>
+				</View>
+			</ScrollView>
+		</SafeAreaView>
+	);
 };
-
-const HeaderLeft: React.FC<{ onPress: () => void }> = ({ onPress }) => (
-  <TouchableOpacity onPress={onPress} style={styles.headerLeft}>
-    <Icon name="menu" size={24} color="#000" />
-  </TouchableOpacity>
-);
-
-const HomeScreen = () => {
-  const navigation = useNavigation<DrawerNavigationProp<DrawerParamList>>();
-
-  const [user, setUser] = useState<User | null>(null);
-
-  const { newArrivals, loading: newArrivalsLoading } = useNewArrivals();
-  const { popularProperties, loading: popularPropertiesLoading } = usePopularProperties();
-  const { featuredProperties, loading: featuredPropertiesLoading } = useFeaturedProperties();
-
-  const handleOpenDrawer = useCallback(() => {
-    navigation.openDrawer();
-  }, [navigation]);
-
-  const HeaderLeftComponent = useCallback(() => {
-    return <HeaderLeft onPress={handleOpenDrawer} />;
-  }, [handleOpenDrawer]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({ headerLeft: HeaderLeftComponent });
-  }, [navigation, HeaderLeftComponent]);
-
-  const getAuthUser = useCallback(async () => {
-    try {
-      const userToken = await AsyncStorage.getItem('authToken');
-      // console.log('User Token: ', userToken);
-      if (userToken) {
-        // const parsed: User = JSON.parse(userToken);
-        const decoded = decodeJwt(userToken);
-        setUser(decoded);
-        // console.log(user);
-      }
-    } catch (err) {
-      console.error('Error fetching user from AsyncStorage:', err);
-    }
-  }, []); // user
-
-  useEffect(() => {
-    getAuthUser();
-  }, [getAuthUser]);
-
-  const renderNewArrivalItem = ({ item }: { item: Property }) => (
-    <NewArrivalsCard property={item} />
-  );
-
-  const renderPopularItem = ({ item }: { item: Property }) => (
-    <PopularCard property={item} />
-  );
-
-  const renderFeaturedItem = ({ item }: { item: Property }) => (
-    <FeaturedPropertyCard property={item} />
-  );
-
-  return (
-
-      <ScrollView
-        contentContainerStyle={styles.scrollContainer}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* <Banner /> */}
-        <Header />
-
-        <View style={styles.main}>
-        {user && (
-          <Text style={styles.greetingText}>Welcome, {user.email} 👋</Text>
-        )}
-
-        {/* New Arrivals Properties */}
-        <Text style={styles.sectionTitle}>New Arrivals</Text>
-        {newArrivalsLoading ? (
-          <View style={styles.propertySection}>
-            <FlatList
-              data={[1, 2]}
-              horizontal
-              keyExtractor={(item) => item.toString()}
-              renderItem={() => <PropertyLoadingCard />}
-              contentContainerStyle={styles.flatListContainer}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        ) : (
-          <>
-            {newArrivals.length > 0 && (
-              <View style={styles.propertySection}>
-                <FlatList
-                  data={newArrivals}
-                  horizontal
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderNewArrivalItem}
-                  contentContainerStyle={styles.flatListContainer}
-                  showsHorizontalScrollIndicator={false}
-                />
-              </View>
-            )}
-          </>
-        )}
-
-        {/* Popular Properties */}
-        <Text style={styles.sectionTitle}>Popular Properties</Text>
-        {popularPropertiesLoading ? (
-          <View style={styles.propertySection}>
-            <FlatList
-              data={[1, 2]}
-              horizontal
-              keyExtractor={(item) => item.toString()}
-              renderItem={() => <PropertyLoadingCard />}
-              contentContainerStyle={styles.flatListContainer}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        ) : (
-          <>
-            {popularProperties.length > 0 && (
-              <View style={styles.propertySection}>
-                <FlatList
-                  data={popularProperties}
-                  horizontal
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderPopularItem}
-                  contentContainerStyle={styles.flatListContainer}
-                  showsHorizontalScrollIndicator={false}
-                />
-              </View>
-            )}
-          </>
-        )}
-
-        {/* Featured Properties */}
-        <Text style={styles.sectionTitle}>Featured Properties</Text>
-        {featuredPropertiesLoading ? (
-          <View style={styles.propertySection}>
-            <FlatList
-              data={[1, 2]}
-              horizontal
-              keyExtractor={(item) => item.toString()}
-              renderItem={() => <PropertyLoadingCard />}
-              contentContainerStyle={styles.flatListContainer}
-              showsHorizontalScrollIndicator={false}
-            />
-          </View>
-        ) : (
-          <>
-            {featuredProperties.length > 0 && (
-              <View style={styles.propertySection}>
-                <FlatList
-                  data={featuredProperties}
-                  horizontal
-                  keyExtractor={(item) => item.id}
-                  renderItem={renderFeaturedItem}
-                  contentContainerStyle={styles.flatListContainer}
-                  showsHorizontalScrollIndicator={false}
-                />
-              </View>
-            )}
-          </>
-        )}
-
-        <ExploreMoreCard />
-        </View>
-      </ScrollView>
-
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollContainer: {
-    paddingBottom: 80,
-  },
-  headerLeft: {
-    marginLeft: 16,
-  },
-  greetingText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#333',
-    marginHorizontal: 16,
-    marginTop: 12,
-    marginBottom: 8,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#333',
-    marginHorizontal: 16,
-    marginVertical: 10,
-  },
-  propertySection: {
-    marginBottom: 20,
-  },
-  flatListContainer: {
-    paddingLeft: 16,
-    paddingRight: 8,
-  },
-  loadingIndicator: {
-    marginTop: 40,
-  },
-  image: {
-    width: '90%',
-    height: 220,
-    borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
-    elevation: 6,
-    backgroundColor: '#fff',
-  },
-});
 
 export default HomeScreen;
+
+// const HeaderLeft: React.FC<{ onPress: () => void }> = ({ onPress }) => (
+//   <TouchableOpacity onPress={onPress} style={styles.headerLeft}>
+//     <Icon name="menu" size={24} color="#000" />
+//   </TouchableOpacity>
+// );
+
+// const handleOpenDrawer = useCallback(() => {
+//   navigation.openDrawer();
+// }, [navigation]);
+
+// const HeaderLeftComponent = useCallback(() => {
+//   return <HeaderLeft onPress={handleOpenDrawer} />;
+// }, [handleOpenDrawer]);
+
+// useLayoutEffect(() => {
+//   navigation.setOptions({ headerLeft: HeaderLeftComponent });
+// }, [navigation, HeaderLeftComponent]);
+
+// const [user, setUser] = useState<User | null>(null);
+
+// const getAuthUser = useCallback(async () => {
+//   const decoded = await getDecodedToken();
+//   setUser(decoded);
+// }, []);
+
+// useEffect(() => {
+//   getAuthUser();
+// }, [getAuthUser]);

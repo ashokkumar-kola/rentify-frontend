@@ -1,71 +1,85 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, ScrollView, StatusBar } from 'react-native';
+import React, { useEffect } from "react";
+import {
+	View,
+	Text,
+	StyleSheet,
+	Image,
+	SafeAreaView,
+	ScrollView,
+	StatusBar,
+} from "react-native";
 
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useNavigation } from "@react-navigation/native";
 
-import { RootStackParamList } from '../../navigation/types';
+import { RootStackParamList } from "../../navigation/types";
 
-import images from '../../assets/images';
-import { Colors } from '../../constants';
+import images from "../../assets/images";
+import { Colors } from "../../constants";
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'OnboardingStack'>;
+type NavigationProp = NativeStackNavigationProp<
+	RootStackParamList,
+	"OnboardingStack"
+>;
 
 const SplashScreen = () => {
-  const navigation = useNavigation<NavigationProp>();
+	const navigation = useNavigation<NavigationProp>();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.navigate('OnboardingStack');
-    }, 2000);
+	useEffect(() => {
+		const timer = setTimeout(() => {
+			navigation.navigate("OnboardingStack");
+		}, 2000);
 
-    return () => clearTimeout(timer);
-  }, [navigation]);
+		return () => clearTimeout(timer);
+	}, [navigation]);
 
-  return (
-    <SafeAreaView style={styles.safeArea}>
-        <StatusBar barStyle="dark-content" />
+	return (
+		<SafeAreaView style={styles.safeArea}>
+			<StatusBar barStyle="dark-content" />
 
-        <ScrollView
-            contentContainerStyle={styles.container}
-            showsVerticalScrollIndicator={false}
-        >
-            <View style={styles.container}>
-                <Image source={images.logo} style={styles.logo} resizeMode="contain" />
-                <Text style={styles.tagline}>LIVE YOUR DREAM HOME</Text>
-            </View>
-        </ScrollView>
-    </SafeAreaView>
-  );
+			<ScrollView
+				contentContainerStyle={styles.container}
+				showsVerticalScrollIndicator={false}
+			>
+				<View style={styles.container}>
+					<Image
+						source={images.logo}
+						style={styles.logo}
+						resizeMode="contain"
+					/>
+					<Text style={styles.tagline}>LIVE YOUR DREAM HOME</Text>
+				</View>
+			</ScrollView>
+		</SafeAreaView>
+	);
 };
 
 export default SplashScreen;
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: Colors.backgroundLight,
-  },
-  container: {
-    flex: 1,
-    // backgroundColor: Colors.white,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  logo: {
-    width: 180,
-    height: 60,
-  },
-  tagline: {
-    color: Colors.primary,
-    fontSize: 16,
-    fontWeight: '500',
-    marginTop: 12,
-    letterSpacing: 2,
-    fontFamily: 'Poppins-SemiBold',
-  },
+	safeArea: {
+		flex: 1,
+		backgroundColor: Colors.backgroundLight,
+	},
+	container: {
+		flex: 1,
+		// backgroundColor: Colors.white,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+	logo: {
+		width: 180,
+		height: 60,
+	},
+	tagline: {
+		color: Colors.primary,
+		fontSize: 16,
+		fontWeight: "500",
+		marginTop: 12,
+		letterSpacing: 2,
+		fontFamily: "Poppins-SemiBold",
+	},
 });
-
 
 // import React, { useEffect } from 'react';
 // import { View, Text, StyleSheet, Image } from 'react-native';

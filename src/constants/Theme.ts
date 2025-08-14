@@ -1,13 +1,13 @@
-import { Colors } from './Colors';
-import { TextSizes } from './TextSizes';
-import { Spacing } from './Spacing';
-import { Fonts } from './Fonts';
+import { Colors } from "./Colors";
+import { TextSizes } from "./TextSizes";
+import { Spacing } from "./Spacing";
+import { Fonts } from "./Fonts";
 
 const Theme = {
-  Colors,
-  Spacing,
-  Fonts,
-  TextSizes,
+	Colors,
+	Spacing,
+	Fonts,
+	TextSizes,
 };
 
 export default Theme;

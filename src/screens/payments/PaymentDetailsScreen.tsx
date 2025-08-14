@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const PaymentDetailsScreen = () => {
-  return (
-    <View>
-      <Text>PaymentDetailsScreen</Text>
-    </View>
-  )
-}
+	return (
+		<View>
+			<Text>PaymentDetailsScreen</Text>
+		</View>
+	);
+};
 
-export default PaymentDetailsScreen
+export default PaymentDetailsScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});

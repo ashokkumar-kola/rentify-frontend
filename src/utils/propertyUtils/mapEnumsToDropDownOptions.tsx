@@ -1,16 +1,16 @@
 export const toTitleCase = (str: string): string => {
-  return str
-    .replace(/[_-]/g, ' ')
-    .split(' ')
-    .map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
-    .join(' ');
+	return str
+		.replace(/[_-]/g, " ")
+		.split(" ")
+		.map((s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase())
+		.join(" ");
 };
 
 export const mapEnumToDropdownOptions = (enumArray: string[] = []) => {
-  return enumArray.map((item) => ({
-    label: toTitleCase(item),
-    value: item,
-  }));
+	return enumArray.map((item) => ({
+		label: toTitleCase(item),
+		value: item,
+	}));
 };
 
 // const toTitleCase = (str: string) => {
@@ -21,7 +21,6 @@ export const mapEnumToDropdownOptions = (enumArray: string[] = []) => {
 // };
 
 // export default toTitleCase;
-
 
 // export const mapEnumToDropdownOptions = (enumArray: string[] = []) => {
 //   return enumArray.map((item) => ({

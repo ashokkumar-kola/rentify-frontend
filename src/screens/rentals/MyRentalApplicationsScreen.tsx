@@ -1,14 +1,14 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 const MyRentalApplicationsScreen = () => {
-  return (
-    <View>
-      <Text>MyRentalApplicationsScreen</Text>
-    </View>
-  )
-}
+	return (
+		<View>
+			<Text>MyRentalApplicationsScreen</Text>
+		</View>
+	);
+};
 
-export default MyRentalApplicationsScreen
+export default MyRentalApplicationsScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
