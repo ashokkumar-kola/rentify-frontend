@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, memo } from 'react';
 
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from 'react-native';
 
-import styles from "./styles";
-import AppText from "../Common/AppText";
-import { Colors } from "../../constants";
-import images from "../../assets/images";
-import Icons from "../../constants/Icons";
-import type { PropertyWithLocation } from "../../types/Property";
-import PropertyImageSlider from "../../components/PropertyUtils/PropertyImageSlider";
+import styles from './styles';
+import AppText from '../Common/AppText';
+import { Colors } from '../../constants';
+import images from '../../assets/images';
+import Icons from '../../constants/Icons';
+import type { PropertyWithLocation } from '../../types/Property';
+import PropertyImageSlider from '../../components/PropertyUtils/PropertyImageSlider';
 
 // import { formatLocation } from '../../utils/propertyUtils/formatLocation';
 
@@ -19,7 +19,7 @@ type Props = {
 	isWishlisted?: boolean;
 };
 
-const PropertyCard: React.FC<Props> = ({
+const PropertyCard: React.FC<Props> = memo(({
 	property,
 	onPress,
 	onToggleWishlist,
@@ -95,8 +95,8 @@ const PropertyCard: React.FC<Props> = ({
 									name="location-on"
 									size={12}
 									color={Colors.primary}
-								/>{" "}
-								{location.locality + ", " + location.city}
+								/>{' '}
+								{location.locality + ', ' + location.city}
 							</AppText>
 						</TouchableOpacity>
 					</View>
@@ -144,6 +144,6 @@ const PropertyCard: React.FC<Props> = ({
 			</View>
 		</View>
 	);
-};
+});
 
 export default PropertyCard;

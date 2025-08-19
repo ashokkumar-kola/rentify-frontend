@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from 'react';
 import {
 	View,
 	Text,
@@ -10,17 +10,19 @@ import {
 	TouchableOpacity,
 	Dimensions,
 	Animated,
-} from "react-native";
-import { LinearGradient } from "react-native-linear-gradient";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { Colors, Fonts, Spacing, TextSizes } from "../../constants";
-import images from "../../assets/images";
-import { usePropertyDetails } from "../../hooks/propertyHooks/usePropertyDetails";
-import { useAppNavigation } from "../../navigation/useAppNavigation";
+} from 'react-native';
+import { LinearGradient } from 'react-native-linear-gradient';
+import { Colors, Fonts, Spacing, TextSizes } from '../../constants';
+import Icons from '../../constants/Icons';
+import images from '../../assets/images';
+import { saveLastViewedProperty } from '../../utils/propertyUtils/lastViewed';
+import { usePropertyDetails } from '../../hooks/propertyHooks/usePropertyDetails';
+import { useAppNavigation } from '../../navigation/useAppNavigation';
 
-const { width } = Dimensions.get("window");
+import { similarProperties } from '../../services/PropertyServices';
 
-// Interfaces (unchanged)
+const { width } = Dimensions.get('window');
+
 interface Landlord {
 	_id: string;
 	full_name: string;
@@ -63,10 +65,10 @@ interface Property {
 	is_deleted: boolean;
 }
 
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { ExploreStackParamList } from "../../navigation/types";
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { ExploreStackParamList } from '../../navigation/types';
 
-type Props = NativeStackScreenProps<ExploreStackParamList, "PropertyDetails">;
+type Props = NativeStackScreenProps<ExploreStackParamList, 'PropertyDetails'>;
 
 const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 	const { propertyId } = route.params;
@@ -78,8 +80,13 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 	const [scaleAnim] = useState(new Animated.Value(0.95));
 	const scrollViewRef = useRef<ScrollView>(null);
 
+
+
 	// console.log('PropertyDetailsScreen rendered with propertyId:', route);
 
+	useEffect(() => {
+		saveLastViewedProperty(propertyId);
+	}, [propertyId]);
 	useEffect(() => {
 		Animated.parallel([
 			Animated.timing(fadeAnim, {
@@ -166,19 +173,9 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 						</ScrollView>
 
 						<LinearGradient
-							colors={["rgba(0,0,0,0.5)", "transparent"]}
+							colors={['rgba(0,0,0,0.5)', 'transparent']}
 							style={styles.gradientTop}
 						/>
-						<View style={styles.priceTag}>
-							<Text style={styles.priceTagText}>
-								₹{typedProperty.price?.toLocaleString("en-IN")}
-								/mo
-							</Text>
-							<Text style={styles.depositText}>
-								Deposit: ₹
-								{typedProperty.deposit?.toLocaleString("en-IN")}
-							</Text>
-						</View>
 						{typedProperty.images?.length > 1 && (
 							<View style={styles.dotContainer}>
 								{typedProperty.images.map((_, index) => (
@@ -190,7 +187,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 												backgroundColor:
 													index === currentImageIndex
 														? Colors.primary
-														: Colors.grey400,
+														: Colors.white150,
 											},
 										]}
 									/>
@@ -201,24 +198,34 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 
 					{/* Info Cards */}
 					<View style={styles.card}>
-						<Text style={styles.title}>{typedProperty.title}</Text>
-						<View style={styles.locationRow}>
-							<Icon
-								name="location-on"
-								size={22}
-								color={Colors.primary}
-							/>
-							<Text style={styles.locationText}>
-								{typedProperty.location.locality},{" "}
-								{typedProperty.location.city}
+						<View style={styles.locationDetails}>
+							<Text style={styles.title}>{typedProperty.title}</Text>
+							<View style={styles.locationRow}>
+								<Icons.MI
+									name="location-on"
+									size={18}
+									color={Colors.primary}
+								/>
+								<Text style={styles.locationText}>
+									{typedProperty.location.locality},{' '}
+									{typedProperty.location.city}
+								</Text>
+							</View>
+							<Text style={styles.subLocationText}>
+								{typedProperty.location.street},{' '}
+								{typedProperty.location.district},{' '}
+								{typedProperty.location.state}{' '}
+								{typedProperty.location.zip}
 							</Text>
 						</View>
-						<Text style={styles.subLocationText}>
-							{typedProperty.location.street},{" "}
-							{typedProperty.location.district},{" "}
-							{typedProperty.location.state}{" "}
-							{typedProperty.location.zip}
-						</Text>
+						<View style={styles.priceTag}>
+							<Text style={styles.priceTagText}>
+								Price: ₹{typedProperty.price?.toLocaleString('en-IN')} /month
+							</Text>
+							<Text style={styles.depositText}>
+								Deposit: ₹ {typedProperty.deposit?.toLocaleString('en-IN')} /month
+							</Text>
+						</View>
 					</View>
 
 					<View style={styles.card}>
@@ -281,19 +288,12 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 					</View>
 
 					<View style={styles.card}>
-						<Text style={styles.sectionTitle}>Description</Text>
-						<Text style={styles.description}>
-							{typedProperty.description}
-						</Text>
-					</View>
-
-					<View style={styles.card}>
 						<Text style={styles.sectionTitle}>Amenities</Text>
 						{typedProperty.amenities.length > 0 ? (
 							<View style={styles.amenitiesContainer}>
 								{typedProperty.amenities.map((a, idx) => (
 									<View key={idx} style={styles.amenityItem}>
-										<Icon
+										<Icons.MI
 											name="check-circle-outline"
 											size={20}
 											color={Colors.primary}
@@ -306,7 +306,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 							</View>
 						) : (
 							<View style={styles.noAmenitiesContainer}>
-								<Icon
+								<Icons.MI
 									name="info-outline"
 									size={20}
 									color={Colors.grey600}
@@ -316,6 +316,13 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 								</Text>
 							</View>
 						)}
+					</View>
+
+					<View style={styles.card}>
+						<Text style={styles.sectionTitle}>Description</Text>
+						<Text style={styles.description}>
+							{typedProperty.description}
+						</Text>
 					</View>
 
 					<View style={styles.card}>
@@ -340,7 +347,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 									colors={[Colors.blue100, Colors.primary]}
 									style={styles.videoButtonGradient}
 								>
-									<Icon
+									<Icons.MI
 										name="play-circle-filled"
 										size={24}
 										color={Colors.white}
@@ -353,9 +360,9 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 						</View>
 					)}
 
-					<TouchableOpacity
+					{/* <TouchableOpacity
 						style={styles.contactButton}
-						onPress={() => navigateTo("SupportStack")}
+						onPress={() => navigateTo('SupportStack')}
 					>
 						<LinearGradient
 							colors={[Colors.primary, Colors.blue100]}
@@ -366,9 +373,31 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 								Contact Owner
 							</Text>
 						</LinearGradient>
-					</TouchableOpacity>
+					</TouchableOpacity> */}
 				</Animated.View>
 			</ScrollView>
+
+			<View style={styles.contactInfoContainer}>
+				<TouchableOpacity
+					style={styles.visitButton}
+					onPress={() => navigateTo('SupportStack')}
+				>
+					<Icons.MI name="event" size={18} color={Colors.primary} />
+					<Text style={styles.visitButtonText}>
+						Visit Request
+					</Text>
+				</TouchableOpacity>
+				<TouchableOpacity
+					style={styles.contactButton}
+					onPress={() => navigateTo('SupportStack')}
+				>
+					<Icons.MI name="phone" size={18} color={Colors.white} />
+					<Text style={styles.contactButtonText}>
+						Contact Owner
+					</Text>
+				</TouchableOpacity>
+			</View>
+
 
 			{/* Fullscreen Image Modal */}
 			{selectedImage && (
@@ -377,7 +406,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 						style={styles.modalBackdrop}
 						onPress={closeImageModal}
 					>
-						<Icon name="close" size={30} color={Colors.white} />
+						<Icons.MI name="close" size={30} color={Colors.white} />
 					</TouchableOpacity>
 					<Image
 						source={{ uri: selectedImage }}
@@ -386,6 +415,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 					/>
 				</View>
 			)}
+
 		</SafeAreaView>
 	);
 };
@@ -395,7 +425,7 @@ export default PropertyDetailsScreen;
 // ✅ Reusable Feature component
 const Feature = ({ icon, label }: { icon: string; label: string }) => (
 	<View style={styles.featureItem}>
-		<Icon name={icon} size={28} color={Colors.primary} />
+		<Icons.MI name={icon} size={28} color={Colors.primary} />
 		<Text style={styles.featureText}>{label}</Text>
 	</View>
 );
@@ -411,71 +441,52 @@ const Detail = ({
 	value: string | null;
 }) => (
 	<View style={styles.detailItem}>
-		<Icon name={icon} size={20} color={Colors.primary} />
+		<Icons.MI name={icon} size={20} color={Colors.primary} />
 		<Text style={styles.detailLabel}>{label}</Text>
-		<Text style={styles.detailValue}>{value || "N/A"}</Text>
+		<Text style={styles.detailValue}>{value || 'N/A'}</Text>
 	</View>
 );
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#f3f4f6",
+		backgroundColor: '#f3f4f6',
 	},
 	content: {
-		paddingBottom: Spacing.xl * 2,
+		paddingBottom: Spacing['2xl'],
 	},
 	centered: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-		backgroundColor: "#f3f4f6",
+		justifyContent: 'center',
+		alignItems: 'center',
+		backgroundColor: Colors.white150,
 	},
 	imageContainer: {
-		height: 360,
-		position: "relative",
+		height: 220,
+		position: 'relative',
 		marginBottom: Spacing.xl,
 	},
 	image: {
 		width: width,
-		height: 360,
+		height: 220,
 		borderRadius: 0,
 	},
 	gradientTop: {
-		position: "absolute",
+		position: 'absolute',
 		top: 0,
 		left: 0,
 		right: 0,
 		height: 100,
 	},
-	priceTag: {
-		position: "absolute",
-		bottom: Spacing.lg,
-		left: Spacing.lg,
-		backgroundColor: "rgba(0,0,0,0.7)",
-		paddingHorizontal: Spacing.lg,
-		paddingVertical: Spacing.sm,
-		borderRadius: 20,
-	},
-	priceTagText: {
-		color: Colors.white,
-		fontFamily: Fonts.Bold,
-		fontSize: TextSizes.base,
-	},
-	depositText: {
-		color: Colors.white,
-		fontFamily: Fonts.Medium,
-		fontSize: TextSizes.base,
-		marginTop: 2,
-	},
+
 	dotContainer: {
-		position: "absolute",
+		position: 'absolute',
 		bottom: Spacing.sm,
 		left: 0,
 		right: 0,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	dot: {
 		width: 8,
@@ -485,39 +496,62 @@ const styles = StyleSheet.create({
 	},
 	card: {
 		backgroundColor: Colors.white,
-		borderRadius: 28,
-		marginHorizontal: Spacing.lg,
-		marginBottom: Spacing.lg,
-		padding: Spacing.xl,
-		shadowColor: "#000",
+		borderRadius: 16,
+		marginHorizontal: Spacing.base,
+		marginBottom: Spacing.base,
+		padding: Spacing.base,
+		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 6 },
 		shadowOpacity: 0.08,
-		shadowRadius: 10,
+		shadowRadius: 4,
 		elevation: 5,
-		overflow: "hidden",
+		overflow: 'hidden',
 	},
+
 	title: {
-		fontSize: TextSizes.base,
+		fontSize: TextSizes.md,
 		fontFamily: Fonts.Bold,
 		color: Colors.black,
-		marginBottom: Spacing.sm,
+		// marginBottom: Spacing.sm,
 	},
 	locationRow: {
-		flexDirection: "row",
-		alignItems: "center",
-		marginBottom: Spacing.sm,
+		flexDirection: 'row',
+		alignItems: 'center',
+		// marginBottom: Spacing.sm,
 	},
 	locationText: {
 		fontFamily: Fonts.Medium,
-		fontSize: TextSizes.base,
+		fontSize: TextSizes.md,
 		color: Colors.grey800,
-		marginLeft: Spacing.sm,
+		marginLeft: Spacing.xs,
 	},
 	subLocationText: {
 		fontFamily: Fonts.Regular,
-		fontSize: 14,
+		fontSize: TextSizes.sm,
 		color: Colors.grey600,
 	},
+
+	priceTag: {
+		// position: 'absolute',
+		// bottom: Spacing.lg,
+		// left: Spacing.lg,
+		backgroundColor: 'rgba(0,0,0,0.7)',
+		paddingHorizontal: Spacing.base,
+		paddingVertical: Spacing.sm,
+		borderRadius: 20,
+	},
+	priceTagText: {
+		color: Colors.white,
+		fontFamily: Fonts.Bold,
+		fontSize: TextSizes.md,
+	},
+	depositText: {
+		color: Colors.white,
+		fontFamily: Fonts.Medium,
+		fontSize: TextSizes.md,
+		marginTop: 2,
+	},
+
 	sectionTitle: {
 		fontFamily: Fonts.Bold,
 		fontSize: TextSizes.base,
@@ -525,14 +559,14 @@ const styles = StyleSheet.create({
 		marginBottom: Spacing.md,
 	},
 	featuresContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		gap: Spacing.sm,
 	},
 	featureItem: {
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: "#f9fafb",
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: '#f9fafb',
 		borderRadius: 16,
 		paddingVertical: Spacing.md,
 		flex: 1,
@@ -545,8 +579,8 @@ const styles = StyleSheet.create({
 		marginTop: Spacing.sm,
 	},
 	detailItem: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		paddingVertical: Spacing.sm,
 		borderBottomWidth: 0.6,
 		borderBottomColor: Colors.grey200,
@@ -562,7 +596,7 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.Regular,
 		fontSize: TextSizes.sm,
 		color: Colors.grey700,
-		textAlign: "right",
+		textAlign: 'right',
 		flex: 1,
 	},
 	description: {
@@ -572,17 +606,17 @@ const styles = StyleSheet.create({
 		lineHeight: 26,
 	},
 	amenitiesContainer: {
-		flexDirection: "row",
-		flexWrap: "wrap",
+		flexDirection: 'row',
+		flexWrap: 'wrap',
 		gap: Spacing.sm,
 	},
 	amenityItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#f9fafb",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#f9fafb',
 		borderRadius: 10,
 		padding: Spacing.sm,
-		width: "48%",
+		width: '48%',
 	},
 	amenityText: {
 		fontFamily: Fonts.Regular,
@@ -591,9 +625,9 @@ const styles = StyleSheet.create({
 		marginLeft: Spacing.sm,
 	},
 	noAmenitiesContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#f3f4f6",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#f3f4f6',
 		borderRadius: 10,
 		padding: Spacing.md,
 	},
@@ -605,12 +639,12 @@ const styles = StyleSheet.create({
 	},
 	videoButton: {
 		borderRadius: 14,
-		overflow: "hidden",
+		overflow: 'hidden',
 	},
 	videoButtonGradient: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		paddingVertical: Spacing.md,
 	},
 	videoButtonText: {
@@ -619,26 +653,55 @@ const styles = StyleSheet.create({
 		color: Colors.white,
 		marginLeft: Spacing.sm,
 	},
+	contactInfoContainer: {
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
+		paddingHorizontal: Spacing.base,
+		paddingVertical: Spacing.sm,
+		backgroundColor: Colors.white,
+		borderRadius: 16,
+		borderTopWidth: 1,
+		borderTopColor: Colors.grey200,
+	},
+	visitButton: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		paddingVertical: Spacing.sm,
+		paddingHorizontal: Spacing.base,
+		borderRadius: 8,
+		borderWidth: 1,
+		borderColor: Colors.primary,
+		overflow: 'hidden',
+	},
 	contactButton: {
-		marginHorizontal: Spacing.lg,
-		marginBottom: Spacing.xl,
-		borderRadius: 24,
-		overflow: "hidden",
-		elevation: 6,
-		shadowColor: Colors.primary,
-		shadowOffset: { width: 0, height: 6 },
-		shadowOpacity: 0.2,
-		shadowRadius: 10,
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
+		backgroundColor: Colors.primary,
+		paddingVertical: Spacing.sm,
+		paddingHorizontal: Spacing.base,
+		borderRadius: 8,
+		overflow: 'hidden',
 	},
 	buttonGradient: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		paddingVertical: Spacing.lg,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		paddingVertical: Spacing.sm,
+		paddingHorizontal: Spacing.base,
+		borderRadius: 8,
+	},
+	visitButtonText: {
+		fontFamily: Fonts.SemiBold,
+		fontSize: TextSizes.md,
+		color: Colors.primary,
+		marginLeft: Spacing.sm,
 	},
 	contactButtonText: {
-		fontFamily: Fonts.Bold,
-		fontSize: TextSizes.base,
+		fontFamily: Fonts.SemiBold,
+		fontSize: TextSizes.md,
 		color: Colors.white,
 		marginLeft: Spacing.sm,
 	},
@@ -648,18 +711,18 @@ const styles = StyleSheet.create({
 		color: Colors.error,
 	},
 	modalOverlay: {
-		position: "absolute",
+		position: 'absolute',
 		top: 0,
 		left: 0,
 		right: 0,
 		bottom: 0,
-		backgroundColor: "rgba(0,0,0,0.95)",
-		justifyContent: "center",
-		alignItems: "center",
+		backgroundColor: 'rgba(0,0,0,0.95)',
+		justifyContent: 'center',
+		alignItems: 'center',
 		zIndex: 100,
 	},
 	modalBackdrop: {
-		position: "absolute",
+		position: 'absolute',
 		top: 40,
 		right: 20,
 		zIndex: 101,
@@ -669,4 +732,5 @@ const styles = StyleSheet.create({
 		height: width - Spacing.lg * 2,
 		borderRadius: 20,
 	},
+
 });

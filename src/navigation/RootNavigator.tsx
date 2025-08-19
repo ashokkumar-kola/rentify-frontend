@@ -1,14 +1,15 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useAuth } from "../contexts/AuthContext";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useAuth } from '../contexts/AuthContext';
 
-import SplashScreen from "../screens/splash/SplashScreen";
-import OnboardingStackNavigator from "./OnboardingStackNavigator";
-import AuthStackNavigator from "./AuthStackNavigator";
-import AppDrawerNavigator from "./AppDrawerNavigator";
-import AdminStackNavigator from "./AdminStackNavigator";
+import { SplashScreen } from '../screens';
 
-import { RootStackParamList } from "./types";
+import OnboardingStackNavigator from './OnboardingStackNavigator';
+import AuthStackNavigator from './AuthStackNavigator';
+import AppDrawerNavigator from './DrawerNavigator';
+import AdminStackNavigator from './AdminStackNavigator';
+
+import { RootStackParamList } from './types';
 
 const RootStack = createNativeStackNavigator<RootStackParamList>();
 

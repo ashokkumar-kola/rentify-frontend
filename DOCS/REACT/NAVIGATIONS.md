@@ -84,3 +84,14 @@ params: {
 categoryId: 'some-id',
 },
 });
+
+
+
+
+
+
+Inside screens → Use useNavigation or the navigation prop.
+
+Inside child components → useNavigation is fine (cleaner than prop drilling).
+
+Outside React components (Redux, services, API callbacks, sockets, etc.) → Use a navigation ref.

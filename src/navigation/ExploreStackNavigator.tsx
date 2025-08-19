@@ -28,6 +28,7 @@ const SearchStackNavigator = () => {
 				<Stack.Screen
 					name="PropertyDetails"
 					component={PropertyDetailsScreen}
+					options={{ headerShown: true }}
 				/>
 				<Stack.Screen
 					name="PropertyMapView"

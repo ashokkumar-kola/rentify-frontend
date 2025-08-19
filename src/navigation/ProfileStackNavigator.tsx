@@ -1,24 +1,38 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import ProfileScreen from "../screens/account/ProfileScreen";
-import EditProfileScreen from "../screens/account/EditProfileScreen";
-import ChangePasswordScreen from "../screens/account/ChangePasswordScreen";
-import KYCVerificationScreen from "../screens/account/KYCVerificationScreen";
+import { ProfileScreen, EditProfileScreen, ChangePasswordScreen, KYCVerificationScreen } from '../screens';
 
-import MyPropertiesStackNavigator from "./MyPropertiesStackNavigator";
-import MyRentalsStackNavigator from "./MyRentalsStackNavigator";
-import PaymentsStackNavigator from "./PaymentsStackNavigator";
+import MyPropertiesStackNavigator from './MyPropertiesStackNavigator';
+import MyRentalsStackNavigator from './MyRentalsStackNavigator';
+import PaymentsStackNavigator from './PaymentsStackNavigator';
 
-import { ProfileStackParamList } from "./types";
+import { ProfileStackParamList } from './types';
+import { Colors } from '../constants';
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 const ProfileStackNavigator = () => {
 	return (
-		<Stack.Navigator>
-			<Stack.Screen name="Profile" component={ProfileScreen} />
-			<Stack.Screen name="EditProfile" component={EditProfileScreen} />
+		<Stack.Navigator
+			initialRouteName="Profile"
+			screenOptions={{
+				headerShown: false,
+				// headerStyle: { backgroundColor: Colors.primary},
+				// headerTintColor: Colors.white,
+				// gestureEnabled: true,
+			}}
+			// mode="card"
+			// detachInactiveScreens={true}
+		>
+			<Stack.Screen
+				name="Profile"
+				component={ProfileScreen}
+			/>
+			<Stack.Screen
+				name="EditProfile"
+				component={EditProfileScreen}
+			/>
 			<Stack.Screen
 				name="ChangePassword"
 				component={ChangePasswordScreen}
@@ -30,17 +44,17 @@ const ProfileStackNavigator = () => {
 			<Stack.Screen
 				name="MyPropertiesStack"
 				component={MyPropertiesStackNavigator}
-				options={{ headerShown: false }}
+				// options={{ headerShown: false }}
 			/>
 			<Stack.Screen
 				name="MyRentalsStack"
 				component={MyRentalsStackNavigator}
-				options={{ headerShown: false }}
+				// options={{ headerShown: false }}
 			/>
 			<Stack.Screen
 				name="PaymentsStack"
 				component={PaymentsStackNavigator}
-				options={{ headerShown: false }}
+				// options={{ headerShown: false }}
 			/>
 		</Stack.Navigator>
 	);

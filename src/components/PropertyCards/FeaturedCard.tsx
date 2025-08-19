@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, memo } from 'react';
 
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity } from 'react-native';
 
-import styles from "./styles";
-import AppText from "../Common/AppText";
-import { Colors } from "../../constants";
-import images from "../../assets/images";
-import Icons from "../../constants/Icons";
-import type { PropertyWithLocation } from "../../types/Property";
-import PropertyImageSlider from "../PropertyUtils/PropertyImageSlider";
+import styles from './styles';
+import AppText from '../Common/AppText';
+import { Colors } from '../../constants';
+import images from '../../assets/images';
+import Icons from '../../constants/Icons';
+import type { PropertyWithLocation } from '../../types/Property';
+import PropertyImageSlider from '../PropertyUtils/PropertyImageSlider';
 
 type Props = {
 	property: PropertyWithLocation;
@@ -17,7 +17,7 @@ type Props = {
 	isWishlisted?: boolean;
 };
 
-const FeaturedCard: React.FC<Props> = ({
+const FeaturedCard: React.FC<Props> = memo(({
 	property,
 	onPress,
 	onToggleWishlist,
@@ -93,8 +93,8 @@ const FeaturedCard: React.FC<Props> = ({
 									name="location-on"
 									size={12}
 									color={Colors.primary}
-								/>{" "}
-								{location.locality + ", " + location.city}
+								/>{' '}
+								{location.locality + ', ' + location.city}
 							</AppText>
 						</TouchableOpacity>
 					</View>
@@ -144,6 +144,6 @@ const FeaturedCard: React.FC<Props> = ({
 			</View>
 		</View>
 	);
-};
+});
 
 export default FeaturedCard;

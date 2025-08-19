@@ -1,19 +1,18 @@
-import React from "react";
+import React from 'react';
 
 import {
 	View,
-	Text,
 	Image,
 	TouchableOpacity,
 	SafeAreaView,
-} from "react-native";
+} from 'react-native';
 
-import AppText from "../../components/AppTheme/AppText";
-import styles from "./styles";
+import AppText from '../../components/AppTheme/AppText';
+import styles from './styles';
 
-import LinearGradient from "react-native-linear-gradient";
-import { Colors } from "../../constants/Colors";
-import images from "../../assets/images";
+import LinearGradient from 'react-native-linear-gradient';
+import { Colors } from '../../constants/Colors';
+import images from '../../assets/images';
 
 const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
 	return (
@@ -21,7 +20,7 @@ const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
 			{/* Skip button top-right */}
 			<TouchableOpacity
 				style={styles.skipButton}
-				onPress={() => navigation.replace("AuthStack")}
+				onPress={() => navigation.replace('AuthStack')}
 				accessibilityLabel="Skip to Home"
 			>
 				<AppText style={styles.skipText}>Skip</AppText>
@@ -38,8 +37,8 @@ const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
 
 				{/* <Text style={styles.mainHeading}>Welcome to Rentify</Text> */}
 				<AppText style={styles.mainHeading}>
-					{" "}
-					Welcome to Rentify{" "}
+					{' '}
+					Welcome to Rentify{' '}
 				</AppText>
 
 				<Image
@@ -68,7 +67,7 @@ const OnBoarding1Screen = ({ navigation }: { navigation: any }) => {
 			>
 				<TouchableOpacity
 					// style={styles.nextButton}
-					onPress={() => navigation.navigate("Onboarding2")}
+					onPress={() => navigation.navigate('Onboarding2')}
 					accessibilityLabel="Go to next onboarding screen"
 				>
 					<AppText style={styles.nextText}>Next</AppText>

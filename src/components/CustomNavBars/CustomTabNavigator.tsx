@@ -1,41 +1,41 @@
-import React from "react";
+import React from 'react';
 import {
 	View,
 	TouchableOpacity,
 	Text,
 	StyleSheet,
 	Platform,
-} from "react-native";
+} from 'react-native';
 
-import { Colors, Fonts } from "../../constants";
-import Icons from "../../constants/Icons";
+import { Colors, Fonts } from '../../constants';
+import Icons from '../../constants/Icons';
 
 const TAB_LABELS = {
-	HomeStack: "Home",
-	ExploreStack: "Explore",
-	MyPropertiesStack: "My Properties",
-	Wishlist: "Wishlist",
-	ProfileStack: "Profile",
+	HomeStack: 'Home',
+	ExploreStack: 'Explore',
+	MyPropertiesStack: 'My Properties',
+	Wishlist: 'Wishlist',
+	ProfileStack: 'Profile',
 };
 
 const TabIcons: Record<string, string> = {
-	HomeStack: "home",
-	ExploreStack: "search",
-	MyPropertiesStack: "plus-square",
-	Wishlist: "heart-o",
-	ProfileStack: "user",
+	HomeStack: 'home',
+	ExploreStack: 'search',
+	MyPropertiesStack: 'plus-square',
+	Wishlist: 'heart-o',
+	ProfileStack: 'user',
 };
 
 const ActiveTabIcons: Record<string, string> = {
-	HomeStack: "home",
-	ExploreStack: "maps-home-work",
-	MyPropertiesStack: "add-home-work",
-	Wishlist: "favorite",
-	ProfileStack: "account-circle",
+	HomeStack: 'home',
+	ExploreStack: 'maps-home-work',
+	MyPropertiesStack: 'add-home-work',
+	Wishlist: 'favorite',
+	ProfileStack: 'account-circle',
 };
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
-	const hiddenRoutes: string | any[] = [""]; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack']; 'ExploreStack', 'MyProperties'
+	const hiddenRoutes: string | any[] = ['ExploreStack']; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack']; 'ExploreStack', 'MyProperties'
 	const currentRouteName = state.routes[state.index].name;
 
 	if (hiddenRoutes.includes(currentRouteName)) {
@@ -51,7 +51,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 
 				const onPress = () => {
 					const event = navigation.emit({
-						type: "tabPress",
+						type: 'tabPress',
 						target: route.key,
 						canPreventDefault: true,
 					});
@@ -62,9 +62,9 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 
 				let iconName: string;
 				if (isFocused) {
-					iconName = ActiveTabIcons[route.name] || "circle";
+					iconName = ActiveTabIcons[route.name] || 'circle';
 				} else {
-					iconName = TabIcons[route.name] || "circle";
+					iconName = TabIcons[route.name] || 'circle';
 				}
 
 				// iconName = TabIcons[route.name] || 'circle';
@@ -96,7 +96,7 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 								isFocused && styles.focusedLabel,
 							]}
 						>
-							{label === "AddProperty" ? "Add" : label}
+							{label === 'AddProperty' ? 'Add' : label}
 						</Text>
 					</TouchableOpacity>
 				);
@@ -107,15 +107,15 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 
 const styles = StyleSheet.create({
 	tabContainer: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		alignItems: "center",
+		flexDirection: 'row',
+		justifyContent: 'space-around',
+		alignItems: 'center',
 		backgroundColor: Colors.white,
-		paddingBottom: Platform.OS === "ios" ? 16 : 8,
+		paddingBottom: Platform.OS === 'ios' ? 16 : 8,
 		paddingTop: 10,
 		borderTopLeftRadius: 20,
 		borderTopRightRadius: 20,
-		position: "absolute",
+		position: 'absolute',
 		bottom: 0,
 		left: 0,
 		right: 0,
@@ -128,8 +128,8 @@ const styles = StyleSheet.create({
 		shadowRadius: 6,
 	},
 	tab: {
-		alignItems: "center",
-		justifyContent: "center",
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	label: {
 		fontSize: 10,
@@ -139,6 +139,6 @@ const styles = StyleSheet.create({
 	},
 	focusedLabel: {
 		color: Colors.primary,
-		fontWeight: "600",
+		fontWeight: '600',
 	},
 });

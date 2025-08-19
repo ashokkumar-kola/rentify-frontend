@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback } from 'react';
 
 import {
 	View,
@@ -12,65 +12,33 @@ import {
 	TextInput,
 	Dimensions,
 	SafeAreaView,
-} from "react-native";
+} from 'react-native';
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-// import { useFocusEffect } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import api from "../../api/apiClient";
-import { getMyProfile } from "../../services/UserServices";
-import images from "../../assets/images";
+import { useAuth } from '../../contexts/AuthContext';
 
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import api from '../../api/apiClient';
+import { getMyProfile } from '../../services/UserServices';
+import images from '../../assets/images';
 
-const { width } = Dimensions.get("window");
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
-// const defaultProfileImg = require('../../assets/images/');
-import { getDecodedToken } from "../../utils/getDecodedToken";
-import { Colors } from "../../constants";
+const { width } = Dimensions.get('window');
+
+import { Colors } from '../../constants';
 
 const ProfileScreen = ({ navigation }: { navigation: any }) => {
-	const [user, setUser] = useState<any>(null);
-	const [loading, setLoading] = useState(true);
+	const { user, logout } = useAuth();
+	// const [loading, setLoading] = useState(true);
 	const [otpModalVisible, setOtpModalVisible] = useState(false);
-	const [otpType, setOtpType] = useState<"email" | "phone" | null>(null);
-	const [otpValue, setOtpValue] = useState("");
+	const [otpType, setOtpType] = useState<'email' | 'phone' | null>(null);
+	const [otpValue, setOtpValue] = useState('');
 
-	useEffect(() => {
-		fetchUserData();
-	}, []);
-
-	const fetchUserData = async () => {
-		try {
-			// const userToken = await AsyncStorage.getItem('authToken');
-			// if (!userToken) {return;}
-
-			// const decodedUser = getDecodedToken();
-
-			const response = await getMyProfile();
-			// console.log(response);
-
-			if (response.success) {
-				setUser(response.data);
-				console.log("User data fetched:", response.data);
-			} else {
-				Alert.alert(
-					"Error",
-					response.message || "Failed to fetch user data"
-				);
-			}
-		} catch (error) {
-			console.error("Error fetching user:", error);
-			Alert.alert("Error", "Could not load user data");
-		} finally {
-			setLoading(false);
-		}
-	};
-
-	const handleVerify = async (type: "email" | "phone") => {
+	const handleVerify = async (type: 'email' | 'phone') => {
 		try {
 			const endpoint =
-				type === "email"
+				type === 'email'
 					? `/auth/forgot-password/${user._id}`
 					: `/auth/verify-phone/${user._id}`;
 			const res = await api.post(endpoint);
@@ -78,77 +46,77 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 			if (res.data.success) {
 				setOtpType(type);
 				setOtpModalVisible(true);
-				Alert.alert("OTP Sent", `An OTP has been sent to your ${type}`);
+				Alert.alert('OTP Sent', `An OTP has been sent to your ${type}`);
 			} else {
 				Alert.alert(
-					"Failed",
-					res.data.message || "Verification failed"
+					'Failed',
+					res.data.message || 'Verification failed'
 				);
 			}
 		} catch (err) {
 			console.error(err);
-			Alert.alert("Error", "Verification request failed");
+			Alert.alert('Error', 'Verification request failed');
 		}
 	};
 
 	const handleValidateOtp = async () => {
 		if (!otpValue) {
-			return Alert.alert("Missing OTP", "Please enter the OTP");
+			return Alert.alert('Missing OTP', 'Please enter the OTP');
 		}
 
 		try {
 			const endpoint =
-				otpType === "email"
-					? "/auth/verify-email"
-					: "/auth/verify-phone";
+				otpType === 'email'
+					? '/auth/verify-email'
+					: '/auth/verify-phone';
 			const res = await api.post(endpoint, {
 				email: user.email,
 				otp: otpValue,
 			});
 
 			if (res.data.success) {
-				Alert.alert("Success", `${otpType} verified successfully`);
+				Alert.alert('Success', `${otpType} verified successfully`);
 				setOtpModalVisible(false);
-				setOtpValue("");
+				setOtpValue('');
 				fetchUserData();
 			} else {
-				Alert.alert("Invalid OTP", res.data.message);
+				Alert.alert('Invalid OTP', res.data.message);
 			}
 		} catch (error) {
 			console.error(error);
-			Alert.alert("Error", "OTP validation failed");
+			Alert.alert('Error', 'OTP validation failed');
 		}
 	};
 
 	const handleLogout = async () => {
-		await AsyncStorage.removeItem("authToken");
-		navigation.reset({ index: 0, routes: [{ name: "Login" }] });
+		logout();
+		navigation.reset({ index: 0, routes: [{ name: 'Login' }] });
 	};
 
 	const handleDeleteAccount = async () => {
 		Alert.alert(
-			"Delete Account",
-			"Are you sure you want to delete your account? This action is irreversible.",
+			'Delete Account',
+			'Are you sure you want to delete your account? This action is irreversible.',
 			[
-				{ text: "Cancel", style: "cancel" },
+				{ text: 'Cancel', style: 'cancel' },
 				{
-					text: "Delete",
-					style: "destructive",
+					text: 'Delete',
+					style: 'destructive',
 					onPress: async () => {
 						try {
 							const res = await api.delete(`/users/${user._id}`);
 							if (res.data.success) {
-								await AsyncStorage.removeItem("authToken");
+								await AsyncStorage.removeItem('authToken');
 								navigation.reset({
 									index: 0,
-									routes: [{ name: "Login" }],
+									routes: [{ name: 'Login' }],
 								});
 							} else {
-								Alert.alert("Failed", res.data.message);
+								Alert.alert('Failed', res.data.message);
 							}
 						} catch (err) {
 							console.error(err);
-							Alert.alert("Error", "Failed to delete account");
+							Alert.alert('Error', 'Failed to delete account');
 						}
 					},
 				},
@@ -157,15 +125,15 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 		);
 	};
 
-	if (loading) {
-		return (
-			<ActivityIndicator
-				style={{ flex: 1 }}
-				size="large"
-				color={Colors.primary}
-			/>
-		);
-	}
+	// if (loading) {
+	// 	return (
+	// 		<ActivityIndicator
+	// 			style={{ flex: 1 }}
+	// 			size="large"
+	// 			color={Colors.primary}
+	// 		/>
+	// 	);
+	// }
 
 	return (
 		<SafeAreaView style={styles.container}>
@@ -176,18 +144,18 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 				/>
 				<TouchableOpacity
 					style={styles.editIcon}
-					onPress={() => navigation.navigate("EditProfile")}
+					onPress={() => navigation.navigate('EditProfile')}
 				>
 					<FontAwesome name="pencil" size={16} color="#fff" />
 				</TouchableOpacity>
 				<View style={styles.nameContainer}>
 					<Text style={styles.name}>
-						{user?.full_name || "User Name"}
+						{user?.full_name || 'User Name'}
 					</Text>
 					{user?.verified && <VerifiedBadge />}
 				</View>
 				<View style={styles.roleContainer}>
-					<Text style={styles.role}>{user?.role || "User"}</Text>
+					<Text style={styles.role}>{user?.role || 'User'}</Text>
 					{/* {user?.verified && <VerifiedBadge />} */}
 				</View>
 			</View>
@@ -197,15 +165,15 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 					label={user?.email}
 					type="email"
 					isVerified={user?.is_email_verified}
-					onVerify={() => handleVerify("email")}
+					onVerify={() => handleVerify('email')}
 				/>
 
 				<VerifyRow
 					label={user?.phone_no}
 					type="phone"
 					isVerified={user?.is_phone_verified}
-					onVerify={() => handleVerify("phone")}
-					onAdd={() => navigation.navigate("EditProfile")}
+					onVerify={() => handleVerify('phone')}
+					onAdd={() => navigation.navigate('EditProfile')}
 				/>
 			</View>
 
@@ -213,12 +181,12 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 				<MenuItem
 					icon="user"
 					label="Edit Profile"
-					onPress={() => navigation.navigate("EditProfile")}
+					onPress={() => navigation.navigate('EditProfile')}
 				/>
 				<MenuItem
 					icon="lock"
 					label="Change Password"
-					onPress={() => navigation.navigate("ChangePassword")}
+					onPress={() => navigation.navigate('ChangePassword')}
 				/>
 				<MenuItem
 					icon="trash"
@@ -272,7 +240,7 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 									name="close"
 									size={24}
 									color="#333"
-									style={{ alignSelf: "flex-end" }}
+									style={{ alignSelf: 'flex-end' }}
 								/>
 							</TouchableOpacity>
 
@@ -320,11 +288,11 @@ const ProfileScreen = ({ navigation }: { navigation: any }) => {
 							</TouchableOpacity>
 
 							<Text style={styles.resendText}>
-								Didn't receive code?{" "}
+								Didn't receive code?{' '}
 								<Text
 									style={styles.resendLink}
 									onPress={() =>
-										handleVerify(otpType || "email")
+										handleVerify(otpType || 'email')
 									}
 								>
 									Resend
@@ -354,7 +322,7 @@ const VerifyRow = ({
 }: {
 	label: string;
 	isVerified?: boolean;
-	type: "email" | "phone";
+	type: 'email' | 'phone';
 	onVerify: () => void;
 	onAdd?: () => void;
 }) => (
@@ -377,7 +345,7 @@ const VerifyRow = ({
 const MenuItem = ({
 	icon,
 	label,
-	color = "#333",
+	color = '#333',
 	onPress,
 }: {
 	icon: string;
@@ -397,7 +365,7 @@ const MenuItem = ({
 			name="angle-right"
 			size={20}
 			color="#aaa"
-			style={{ marginLeft: "auto" }}
+			style={{ marginLeft: 'auto' }}
 		/>
 	</TouchableOpacity>
 );
@@ -407,12 +375,12 @@ export default ProfileScreen;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#f1f5f9",
+		backgroundColor: '#f1f5f9',
 	},
 	profileHeader: {
-		alignItems: "center",
+		alignItems: 'center',
 		paddingVertical: 30,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		borderBottomLeftRadius: 24,
 		borderBottomRightRadius: 24,
 		marginBottom: 20,
@@ -423,84 +391,84 @@ const styles = StyleSheet.create({
 		borderRadius: width * 0.12,
 	},
 	editIcon: {
-		position: "absolute",
+		position: 'absolute',
 		right: width * 0.34,
 		top: width * 0.2,
-		backgroundColor: "#2563eb",
+		backgroundColor: '#2563eb',
 		padding: 6,
 		borderRadius: 20,
 		elevation: 2,
 	},
 	nameContainer: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		marginTop: 12,
 	},
 	name: {
 		fontSize: 20,
-		fontWeight: "bold",
+		fontWeight: 'bold',
 		marginRight: 8,
-		color: "#1e293b",
+		color: '#1e293b',
 	},
 	verifiedBadge: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#d1fae5",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#d1fae5',
 		borderRadius: 6,
 		paddingHorizontal: 6,
 		paddingVertical: 2,
 	},
 	verifiedText: {
 		fontSize: 12,
-		color: "#059669",
+		color: '#059669',
 		marginLeft: 4,
 	},
 	verificationContainer: {
 		marginHorizontal: 20,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		borderRadius: 12,
 		padding: 14,
 		elevation: 2,
 	},
 	verifyRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
 		paddingVertical: 10,
 		borderBottomWidth: 1,
-		borderBottomColor: "#e2e8f0",
+		borderBottomColor: '#e2e8f0',
 	},
 	email: {
 		fontSize: 15,
-		color: "#334155",
-		maxWidth: "70%",
+		color: '#334155',
+		maxWidth: '70%',
 	},
 	verifyButton: {
-		backgroundColor: "#2563eb",
+		backgroundColor: '#2563eb',
 		paddingHorizontal: 12,
 		paddingVertical: 6,
 		borderRadius: 8,
 	},
 	verifyText: {
-		color: "#fff",
-		fontWeight: "bold",
+		color: '#fff',
+		fontWeight: 'bold',
 		fontSize: 14,
 	},
 	menu: {
 		marginHorizontal: 20,
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		borderRadius: 12,
 		paddingVertical: 10,
 		elevation: 2,
 		marginTop: 24,
 	},
 	menuItem: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		paddingVertical: 14,
 		paddingHorizontal: 20,
 		borderBottomWidth: 1,
-		borderBottomColor: "#e2e8f0",
+		borderBottomColor: '#e2e8f0',
 	},
 	menuText: {
 		fontSize: 16,
@@ -528,12 +496,12 @@ const styles = StyleSheet.create({
 	//     marginBottom: 12,
 	// },
 	otpInput: {
-		width: "100%",
+		width: '100%',
 		borderWidth: 1,
-		borderColor: "#cbd5e1",
+		borderColor: '#cbd5e1',
 		borderRadius: 8,
 		padding: 10,
-		textAlign: "center",
+		textAlign: 'center',
 		marginBottom: 12,
 		fontSize: 16,
 		letterSpacing: 4,
@@ -550,80 +518,81 @@ const styles = StyleSheet.create({
 	// },
 	modalOverlay: {
 		flex: 1,
-		backgroundColor: "rgba(0, 0, 0, 0.5)",
-		justifyContent: "center",
-		alignItems: "center",
+		backgroundColor: 'rgba(0, 0, 0, 0.5)',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 	modalCard: {
-		width: "85%",
-		backgroundColor: "#fff",
+		width: '85%',
+		backgroundColor: '#fff',
 		borderRadius: 16,
 		paddingVertical: 30,
 		paddingHorizontal: 20,
-		alignItems: "center",
-		shadowColor: "#000",
+		alignItems: 'center',
+		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 4 },
 		shadowOpacity: 0.2,
 		shadowRadius: 6,
 		elevation: 8,
 	},
 	closeButton: {
-		position: "absolute",
+		position: 'absolute',
 		top: 5,
 		right: 10,
 		zIndex: 1,
 	},
 	modalTitle: {
 		fontSize: 20,
-		fontWeight: "700",
+		fontWeight: '700',
 		marginBottom: 8,
-		textAlign: "center",
+		textAlign: 'center',
 	},
 	modalSubtitle: {
 		fontSize: 14,
-		color: "#6b7280",
-		textAlign: "center",
+		color: '#6b7280',
+		textAlign: 'center',
 		marginBottom: 24,
 		lineHeight: 20,
 	},
 	otpInputContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		width: "80%",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '80%',
 		marginBottom: 24,
 	},
 	otpBox: {
 		width: 50,
 		height: 50,
 		borderWidth: 1,
-		borderColor: "#cbd5e1",
+		borderColor: '#cbd5e1',
 		borderRadius: 8,
-		textAlign: "center",
+		textAlign: 'center',
 		fontSize: 20,
-		color: "#111827",
-		backgroundColor: "#f9fafb",
+		color: '#111827',
+		backgroundColor: '#f9fafb',
 	},
 	verifyModelButton: {
-		backgroundColor: "#6366f1",
+		backgroundColor: '#6366f1',
 		paddingVertical: 14,
 		borderRadius: 10,
-		width: "100%",
-		alignItems: "center",
+		width: '100%',
+		alignItems: 'center',
 		marginBottom: 16,
 	},
 	verifyButtonText: {
-		color: "#fff",
+		color: '#fff',
 		fontSize: 16,
-		fontWeight: "600",
+		fontWeight: '600',
 	},
 	resendText: {
 		fontSize: 13,
-		color: "#6b7280",
-		textAlign: "center",
+		color: '#6b7280',
+		textAlign: 'center',
 	},
 	resendLink: {
-		color: "#6366f1",
-		fontWeight: "600",
-		textDecorationLine: "underline",
+		color: '#6366f1',
+		fontWeight: '600',
+		textDecorationLine: 'underline',
 	},
 });
+

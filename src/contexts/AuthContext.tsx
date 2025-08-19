@@ -1,10 +1,11 @@
-import React, { createContext, useState, useEffect, useContext } from 'react';
-import { ActivityIndicator, View } from 'react-native';
+import React, {createContext, useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { fetchProfile } from '../services/AuthService';
 
+import type { User } from '../types/userTypes';
+
 type AuthContextType = {
-	user: any;
+	user: User;
 	token: string | null;
 	isLoggedIn: boolean;
 	login: (token: string, user: any) => Promise<void>;
@@ -79,3 +80,8 @@ export const useAuth = () => {
 	}
 	return context;
 };
+
+
+// axios.defaults.headers.common[
+// 'Authorization'
+// ] = `Bearer ${result.data.token}`;

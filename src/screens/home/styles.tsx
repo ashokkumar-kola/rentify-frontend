@@ -1,8 +1,8 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 // import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../utils/appUtils/dimensions';
 
-import { Colors, TextSizes, Spacing, Fonts } from "../../constants";
+import { Colors, TextSizes, Spacing, Fonts } from '../../constants';
 
 // console.log('Stylesheet for HomeScreen loaded');
 
@@ -18,13 +18,13 @@ const styles = StyleSheet.create({
 
 	// Banner
 	bannerContainer: {
-		alignItems: "center",
+		alignItems: 'center',
 		// justifyContent: 'center',
 		gap: 0,
 	},
 	sloganWrapper: {
-		flexDirection: "row",
-		justifyContent: "center",
+		flexDirection: 'row',
+		justifyContent: 'center',
 		// alignItems: 'center',
 		gap: 8,
 		marginTop: Spacing.base,
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 	sloganText: {
 		fontSize: TextSizes.base,
 		color: Colors.primary,
-		textAlign: "center",
+		textAlign: 'center',
 	},
 
 	// Section Styles

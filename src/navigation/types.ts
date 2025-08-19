@@ -146,7 +146,33 @@ export type RouteParams =
 	| PaymentsStackParamList;
 
 // Type for navigation function
-export type NavigateToParams<T extends AllRoutes> = RouteParams[T];
+export type RouteParamMap = {
+	[key in keyof RootStackParamList]: RootStackParamList[key];
+} & {
+	[key in keyof OnboardingStackParamList]: OnboardingStackParamList[key];
+} & {
+	[key in keyof AuthStackParamList]: AuthStackParamList[key];
+} & {
+	[key in keyof AppDrawerParamList]: AppDrawerParamList[key];
+} & {
+	[key in keyof MainTabParamList]: MainTabParamList[key];
+} & {
+	[key in keyof HomeStackParamList]: HomeStackParamList[key];
+} & {
+	[key in keyof ExploreStackParamList]: ExploreStackParamList[key];
+} & {
+	[key in keyof ProfileStackParamList]: ProfileStackParamList[key];
+} & {
+	[key in keyof AdminStackParamList]: AdminStackParamList[key];
+} & {
+	[key in keyof MyPropertiesStackParamList]: MyPropertiesStackParamList[key];
+} & {
+	[key in keyof MyRentalsStackParamList]: MyRentalsStackParamList[key];
+} & {
+	[key in keyof PaymentsStackParamList]: PaymentsStackParamList[key];
+};
+
+export type NavigateToParams<T extends AllRoutes> = RouteParamMap[T];
 
 // export type RootStackParamList = {
 //   Splash: undefined;

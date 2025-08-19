@@ -18,11 +18,14 @@
 	],
 	"typescript.tsdk": "node_modules/typescript/lib",
 	"cSpell.words": [
+		"ellipsize",
 		"Entypo",
 		"Favourites",
 		"miblanchard",
 		"Pressable",
-		"Rentify"
+		"Rentify",
+		"sqft",
+		"wishlisted"
 	],
 	
 	"editor.insertSpaces": false,

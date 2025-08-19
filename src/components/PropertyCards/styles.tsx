@@ -1,15 +1,15 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
-import { SCREEN_WIDTH, SCREEN_HEIGHT } from "../../utils/appUtils/dimensions";
+import { SCREEN_WIDTH, SCREEN_HEIGHT } from '../../utils/appUtils/dimensions';
 
-import { Colors, TextSizes, Spacing, Fonts } from "../../constants";
+import { Colors, TextSizes, Spacing, Fonts } from '../../constants';
 
 const baseLabelText = {
 	color: Colors.white,
 	fontSize: TextSizes.xs,
 	fontFamily: Fonts.Medium,
-	textTransform: "uppercase",
-	textAlign: "center",
+	textTransform: 'uppercase',
+	textAlign: 'center',
 } as const;
 
 const styles = StyleSheet.create({
@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.1,
 		shadowOffset: { width: 0, height: 2 },
 		shadowRadius: 6,
-		alignSelf: "center",
-		overflow: "hidden",
+		alignSelf: 'center',
+		overflow: 'hidden',
 	},
 
 	newArrivalTag: {
-		position: "absolute",
+		position: 'absolute',
 		top: 8,
 		left: 8,
 		backgroundColor: Colors.warning,
@@ -41,18 +41,18 @@ const styles = StyleSheet.create({
 	},
 	featuredTag: {
 		width: 140,
-		position: "absolute",
+		position: 'absolute',
 		top: 12,
 		left: -40,
 		backgroundColor: Colors.success,
 		paddingVertical: 4,
 		paddingHorizontal: 12,
-		alignItems: "center",
-		transform: [{ rotate: "-45deg" }],
+		alignItems: 'center',
+		transform: [{ rotate: '-45deg' }],
 		zIndex: 10,
 	},
 	popularTag: {
-		position: "absolute",
+		position: 'absolute',
 		left: 0,
 		top: 0,
 		backgroundColor: Colors.primary,
@@ -78,25 +78,25 @@ const styles = StyleSheet.create({
 	},
 
 	imageContainer: {
-		position: "relative",
+		position: 'relative',
 		height: 160,
 		backgroundColor: Colors.grey100,
 		borderRadius: 16,
-		overflow: "hidden",
+		overflow: 'hidden',
 	},
 	propertyImage: {
 		// width: SCREEN_WIDTH * 0.6,
-		width: "100%",
-		height: "100%",
+		width: '100%',
+		height: '100%',
 		// borderRadius: 16,
 		// marginRight: 12,
 	},
 
 	heartIcon: {
-		position: "absolute",
+		position: 'absolute',
 		top: 8,
 		right: 8,
-		backgroundColor: "#00000080",
+		backgroundColor: '#00000080',
 		borderRadius: 20,
 		padding: 6,
 	},
@@ -110,9 +110,9 @@ const styles = StyleSheet.create({
 	},
 
 	headerRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "flex-start",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'flex-start',
 		marginBottom: 8,
 	},
 	titleLocation: {
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
 	},
 
 	priceContainer: {
-		alignItems: "flex-end",
+		alignItems: 'flex-end',
 	},
 	price: {
 		fontFamily: Fonts.Medium,
@@ -152,15 +152,15 @@ const styles = StyleSheet.create({
 	// },
 
 	infoRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 	},
 	infoBox: {
-		alignItems: "center",
+		alignItems: 'center',
 		backgroundColor: Colors.blue50,
 		paddingVertical: 8,
 		borderRadius: 10,
-		width: "31%",
+		width: '31%',
 	},
 	infoText: {
 		fontFamily: Fonts.Regular,

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 
 import {
 	View,
@@ -9,37 +9,37 @@ import {
 	TextInput,
 	ActivityIndicator,
 	Alert,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Slider } from "@miblanchard/react-native-slider";
-import { useNavigation } from "@react-navigation/native";
+import { Slider } from '@miblanchard/react-native-slider';
+import { useNavigation } from '@react-navigation/native';
 
-import Ionicons from "react-native-vector-icons/Ionicons";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import SearchBar from "../../components/Common/SearchBar";
-import MultiSelectButton from "../../components/Common/MultiSelectButton";
-import CheckboxGrid from "../../components/Common/CheckboxGrid";
+import SearchBar from '../../components/Common/SearchBar';
+import MultiSelectButton from '../../components/Common/MultiSelectButton';
+import CheckboxGrid from '../../components/Common/CheckboxGrid';
 
-import { api } from "../../api/apiClient";
-import { Colors } from "../../constants";
-import { propertyTypes, amenitiesList } from "../../constants/Filters";
+import { api } from '../../api/apiClient';
+import { Colors } from '../../constants';
+import { propertyTypes, amenitiesList } from '../../constants/Filters';
 
 const FiltersScreen = () => {
 	const navigation = useNavigation();
 
 	const [loading, setLoading] = useState(false);
-	const [searchQuery, setSearchQuery] = useState("");
+	const [searchQuery, setSearchQuery] = useState('');
 	const [selectedPropertyTypes, setSelectedPropertyTypes] = useState<
 		string[]
 	>([]);
-	const [selectedBedrooms, setSelectedBedrooms] = useState("Any");
-	const [selectedBathrooms, setSelectedBathrooms] = useState("Any");
+	const [selectedBedrooms, setSelectedBedrooms] = useState('Any');
+	const [selectedBathrooms, setSelectedBathrooms] = useState('Any');
 	const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
 	const [priceRange, setPriceRange] = useState([0, 100000]);
-	const [selectedFurnishing, setSelectedFurnishing] = useState("Any");
-	const [selectedSortBy, setSelectedSortBy] = useState("Relevance");
-	const [selectedPetPolicy, setSelectedPetPolicy] = useState("Any");
+	const [selectedFurnishing, setSelectedFurnishing] = useState('Any');
+	const [selectedSortBy, setSelectedSortBy] = useState('Relevance');
+	const [selectedPetPolicy, setSelectedPetPolicy] = useState('Any');
 
 	const toggleSelection = (
 		list: string[],
@@ -54,15 +54,15 @@ const FiltersScreen = () => {
 	};
 
 	const resetFilters = () => {
-		setSearchQuery("");
+		setSearchQuery('');
 		setSelectedPropertyTypes([]);
-		setSelectedBedrooms("Any");
-		setSelectedBathrooms("Any");
+		setSelectedBedrooms('Any');
+		setSelectedBathrooms('Any');
 		setSelectedAmenities([]);
 		setPriceRange([0, 100000]);
-		setSelectedFurnishing("Any");
-		setSelectedSortBy("Relevance");
-		setSelectedPetPolicy("Any");
+		setSelectedFurnishing('Any');
+		setSelectedSortBy('Relevance');
+		setSelectedPetPolicy('Any');
 	};
 
 	const applyFilters = async () => {
@@ -73,24 +73,24 @@ const FiltersScreen = () => {
 				location: searchQuery || undefined,
 				property_type:
 					selectedPropertyTypes.length > 0
-						? selectedPropertyTypes.join(",")
+						? selectedPropertyTypes.join(',')
 						: undefined,
 				bedrooms:
-					selectedBedrooms !== "Any" ? selectedBedrooms : undefined,
+					selectedBedrooms !== 'Any' ? selectedBedrooms : undefined,
 				bathrooms:
-					selectedBathrooms !== "Any" ? selectedBathrooms : undefined,
+					selectedBathrooms !== 'Any' ? selectedBathrooms : undefined,
 				amenities:
 					selectedAmenities.length > 0
-						? selectedAmenities.join(",")
+						? selectedAmenities.join(',')
 						: undefined,
 				min_price: priceRange[0],
 				max_price: priceRange[1],
 				furnishing:
-					selectedFurnishing !== "Any"
+					selectedFurnishing !== 'Any'
 						? selectedFurnishing
 						: undefined,
 				sortBy:
-					selectedSortBy !== "Relevance" ? selectedSortBy : undefined,
+					selectedSortBy !== 'Relevance' ? selectedSortBy : undefined,
 				// petPolicy: selectedPetPolicy !== 'Any' ? selectedPetPolicy : undefined,
 			};
 
@@ -101,24 +101,24 @@ const FiltersScreen = () => {
 					delete params[key];
 				}
 			});
-			console.log("Filter Parameters : ", params);
+			console.log('Filter Parameters : ', params);
 
 			// Make API call
-			const response = await api.get("/properties", { params });
+			const response = await api.get('/properties', { params });
 			// console.log('Filter API response:', response.data);
 
 			// Navigate to results screen with the filtered data
 			// navigation.navigate('FilteredProperties', { properties: response.data.data });
-			navigation.navigate("ExploreProperties", {
+			navigation.navigate('ExploreProperties', {
 				properties: response.data.data,
 			});
 		} catch (error) {
 			Alert.alert(
-				"Error",
-				"Failed to fetch properties. Please try again.",
-				[{ text: "OK" }]
+				'Error',
+				'Failed to fetch properties. Please try again.',
+				[{ text: 'OK' }]
 			);
-			console.error("Filter API error:", error);
+			console.error('Filter API error:', error);
 		} finally {
 			setLoading(false);
 		}
@@ -182,7 +182,7 @@ const FiltersScreen = () => {
 
 				<Text style={styles.sectionTitle}>Bedrooms</Text>
 				<MultiSelectButton
-					options={["Any", "1", "2", "3", "4+"]}
+					options={['Any', '1', '2', '3', '4+']}
 					selected={selectedBedrooms}
 					onSelect={setSelectedBedrooms}
 					buttonStyle={styles.filterButton}
@@ -195,7 +195,7 @@ const FiltersScreen = () => {
 
 				<Text style={styles.sectionTitle}>Bathrooms</Text>
 				<MultiSelectButton
-					options={["Any", "1", "2", "3", "4+"]}
+					options={['Any', '1', '2', '3', '4+']}
 					selected={selectedBathrooms}
 					onSelect={setSelectedBathrooms}
 					buttonStyle={styles.filterButton}
@@ -208,7 +208,7 @@ const FiltersScreen = () => {
 
 				<Text style={styles.sectionTitle}>Furnishing</Text>
 				<MultiSelectButton
-					options={["Any", "Furnished", "Unfurnished", "Partially"]}
+					options={['Any', 'Furnished', 'Unfurnished', 'Partially']}
 					selected={selectedFurnishing}
 					onSelect={setSelectedFurnishing}
 					buttonStyle={styles.filterButton}
@@ -222,11 +222,11 @@ const FiltersScreen = () => {
 				<Text style={styles.sectionTitle}>Pet Policy</Text>
 				<MultiSelectButton
 					options={[
-						"Any",
-						"Allowed",
-						"Not Allowed",
-						"Cats Only",
-						"Dogs Only",
+						'Any',
+						'Allowed',
+						'Not Allowed',
+						'Cats Only',
+						'Dogs Only',
 					]}
 					selected={selectedPetPolicy}
 					onSelect={setSelectedPetPolicy}
@@ -241,11 +241,11 @@ const FiltersScreen = () => {
 				<Text style={styles.sectionTitle}>Sort By</Text>
 				<MultiSelectButton
 					options={[
-						"Relevance",
-						"Price: Low to High",
-						"Price: High to Low",
-						"Newest",
-						"Most Popular",
+						'Relevance',
+						'Price: Low to High',
+						'Price: High to Low',
+						'Newest',
+						'Most Popular',
 					]}
 					selected={selectedSortBy}
 					onSelect={setSelectedSortBy}
@@ -313,15 +313,15 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 16,
 	},
 	searchContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "white",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: 'white',
 		borderRadius: 10,
 		paddingHorizontal: 16,
 		marginVertical: 16,
 		height: 50,
 		elevation: 2,
-		shadowColor: "#000",
+		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.1,
 		shadowRadius: 3,
@@ -331,9 +331,9 @@ const styles = StyleSheet.create({
 	},
 	searchInput: {
 		flex: 1,
-		height: "100%",
+		height: '100%',
 		fontSize: 16,
-		color: "#101010",
+		color: '#101010',
 	},
 	scrollContainer: {
 		flex: 1,
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
 	},
 	sectionTitle: {
 		fontSize: 18,
-		fontWeight: "600",
+		fontWeight: '600',
 		color: Colors.grey900,
 		marginVertical: 12,
 		marginLeft: 4,
@@ -352,23 +352,23 @@ const styles = StyleSheet.create({
 		marginVertical: 8,
 	},
 	priceContainer: {
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderRadius: 10,
 		padding: 16,
 		marginBottom: 8,
 	},
 	priceText: {
 		fontSize: 16,
-		fontWeight: "500",
+		fontWeight: '500',
 		color: Colors.grey900,
-		textAlign: "center",
+		textAlign: 'center',
 		marginBottom: 16,
 	},
 	sliderContainer: {
 		marginHorizontal: 4,
 	},
 	filterButton: {
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderWidth: 1,
 		borderColor: Colors.grey200,
 		borderRadius: 8,
@@ -386,7 +386,7 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 	},
 	selectedFilterButtonText: {
-		color: "white",
+		color: 'white',
 	},
 	checkbox: {
 		width: 22,
@@ -394,8 +394,8 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		borderColor: Colors.grey200,
 		borderRadius: 4,
-		justifyContent: "center",
-		alignItems: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 		marginRight: 10,
 	},
 	selectedCheckbox: {
@@ -407,10 +407,10 @@ const styles = StyleSheet.create({
 		color: Colors.grey900,
 	},
 	buttonContainer: {
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		paddingVertical: 12,
-		backgroundColor: "white",
+		backgroundColor: 'white',
 		borderTopWidth: 1,
 		borderTopColor: Colors.grey200,
 	},
@@ -422,9 +422,9 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		padding: 14,
 		borderRadius: 8,
-		alignItems: "center",
-		justifyContent: "center",
-		flexDirection: "row",
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexDirection: 'row',
 	},
 	applyButton: {
 		flex: 2,
@@ -432,18 +432,18 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.primary,
 		padding: 14,
 		borderRadius: 8,
-		alignItems: "center",
-		justifyContent: "center",
-		flexDirection: "row",
+		alignItems: 'center',
+		justifyContent: 'center',
+		flexDirection: 'row',
 	},
 	resetText: {
 		color: Colors.black100,
-		fontWeight: "600",
+		fontWeight: '600',
 		fontSize: 16,
 	},
 	applyText: {
-		color: "white",
-		fontWeight: "600",
+		color: 'white',
+		fontWeight: '600',
 		fontSize: 16,
 		marginRight: 8,
 	},

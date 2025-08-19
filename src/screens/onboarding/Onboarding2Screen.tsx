@@ -1,20 +1,17 @@
-import React from "react";
+import React from 'react';
 import {
 	View,
-	Text,
-	//   StyleSheet,
 	Image,
 	TouchableOpacity,
-	//   Dimensions,
 	SafeAreaView,
-} from "react-native";
+} from 'react-native';
 
-import AppText from "../../components/AppTheme/AppText";
-import styles from "./styles";
+import AppText from '../../components/AppTheme/AppText';
+import styles from './styles';
 
-import images from "../../assets/images";
-import LinearGradient from "react-native-linear-gradient";
-import { Colors } from "../../constants/Colors";
+import images from '../../assets/images';
+import LinearGradient from 'react-native-linear-gradient';
+import { Colors } from '../../constants/Colors';
 
 const OnBoardingScreen2 = ({ navigation }: { navigation: any }) => {
 	return (
@@ -22,7 +19,7 @@ const OnBoardingScreen2 = ({ navigation }: { navigation: any }) => {
 			{/* Skip button top-right */}
 			<TouchableOpacity
 				style={styles.skipButton}
-				onPress={() => navigation.replace("AuthStack")}
+				onPress={() => navigation.replace('AuthStack')}
 				accessibilityLabel="Skip to Home"
 			>
 				<AppText style={styles.skipText}>Skip</AppText>
@@ -64,7 +61,7 @@ const OnBoardingScreen2 = ({ navigation }: { navigation: any }) => {
 			>
 				<TouchableOpacity
 					// style={styles.nextButton}
-					onPress={() => navigation.navigate("Onboarding3")}
+					onPress={() => navigation.navigate('Onboarding3')}
 					accessibilityLabel="Go to next onboarding screen"
 				>
 					<AppText style={styles.nextText}>Next</AppText>

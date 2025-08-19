@@ -44,28 +44,33 @@ import { usePopularProperties } from '../../hooks/propertyHooks/usePopularProper
 import { useFeaturedProperties } from '../../hooks/propertyHooks/useFeaturedProperties';
 
 import { getDecodedToken } from '../../utils/getDecodedToken';
+import { getLastViewedProperty } from '../../utils/propertyUtils/lastViewed';
 
 const HomeScreen = ({ navigation }: any) => {
 	const { user, isLoggedIn } = useAuth();
-
 	const [token, setToken] = useState<any>(null);
+	const [lastViewed, setLastViewed] = useState<any>(null);
+	const { newArrivals, loading: newArrivalsLoading } = useNewArrivals();
+	const { popularProperties, loading: popularPropertiesLoading } = usePopularProperties();
+	const { featuredProperties, loading: featuredPropertiesLoading } = useFeaturedProperties();
 
 	useEffect(() => {
 		const fetchToken = async () => {
 			const decoded = await getDecodedToken();
 			setToken(decoded);
-			console.log(decoded);
+			// console.log(decoded);
 		};
 		fetchToken();
 	}, []);
 
-	const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
+	useEffect(() => {
+		(async () => {
+			const property = await getLastViewedProperty();
+			setLastViewed(property);
+		})();
+	}, []);
 
-	const { newArrivals, loading: newArrivalsLoading } = useNewArrivals();
-	const { popularProperties, loading: popularPropertiesLoading } =
-		usePopularProperties();
-	const { featuredProperties, loading: featuredPropertiesLoading } =
-		useFeaturedProperties();
+	const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
 
 	useEffect(() => {
 		if (isLoggedIn && user) {
@@ -200,13 +205,27 @@ const HomeScreen = ({ navigation }: any) => {
 
 				<View style={styles.main}>
 					{/* Last Search  lastSearch */}
-					{/* {user && ( */}
-					<ContinueLastSearchCard
-						userEmail={user?.email}
-						// lastSearch={lastSearch}
-						onPress={() => {}}
-					/>
-					{/* )} */}
+					{isLoggedIn && lastViewed && (
+						<ContinueLastSearchCard
+							userEmail={user?.email}
+							// lastSearch={lastSearch}
+							onPress={() =>
+								navigation.navigate('AppDrawer', {
+									screen: 'MainTabs',
+									params: {
+										screen: 'ExploreStack',
+										params: {
+											screen: 'PropertyDetails',
+											params: {
+												propertyId: lastViewed,
+											},
+										},
+									},
+								})
+								// () => navigation.navigate('PropertyDetails', { propertyId: lastViewed })
+							}
+						/>
+					)}
 
 					{/* New Arrivals Properties */}
 					<Text style={styles.sectionTitle}>New Arrivals</Text>

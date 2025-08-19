@@ -1,56 +1,56 @@
-import { useNavigation } from "@react-navigation/native";
-import { NavigationProp } from "@react-navigation/native";
-import { AllRoutes, NavigateToParams, RootStackParamList } from "./types";
+import { useNavigation } from '@react-navigation/native';
+import { NavigationProp } from '@react-navigation/native';
+import { AllRoutes, NavigateToParams, RootStackParamList } from './types';
 
 type AppNavigationProp = NavigationProp<RootStackParamList>;
 
 const stackHierarchy: Record<string, string[]> = {
-	OnboardingStack: ["Onboarding1", "Onboarding2", "Onboarding3"],
+	OnboardingStack: ['Onboarding1', 'Onboarding2', 'Onboarding3'],
 	AuthStack: [
-		"Login",
-		"Register",
-		"ForgotPassword",
-		"ConfirmEmail",
-		"ResetPassword",
+		'Login',
+		'Register',
+		'ForgotPassword',
+		'ConfirmEmail',
+		'ResetPassword',
 	],
-	AppDrawer: ["MainTabs", "Settings", "SupportStack"],
+	AppDrawer: ['MainTabs', 'Settings', 'SupportStack'],
 	MainTabs: [
-		"HomeStack",
-		"ExploreStack",
-		"MyProperties",
-		"Wishlist",
-		"ProfileStack",
+		'HomeStack',
+		'ExploreStack',
+		'MyProperties',
+		'Wishlist',
+		'ProfileStack',
 	],
-	HomeStack: ["Home", "Notifications"],
+	HomeStack: ['Home', 'Notifications'],
 	ExploreStack: [
-		"Properties",
-		"Filters",
-		"PropertyDetails",
-		"PropertyMapView",
+		'Properties',
+		'Filters',
+		'PropertyDetails',
+		'PropertyMapView',
 	],
 	ProfileStack: [
-		"Profile",
-		"EditProfile",
-		"ChangePassword",
-		"KYCVerification",
-		"MyPropertiesStack",
-		"MyRentalsStack",
-		"PaymentsStack",
+		'Profile',
+		'EditProfile',
+		'ChangePassword',
+		'KYCVerification',
+		'MyPropertiesStack',
+		'MyRentalsStack',
+		'PaymentsStack',
 	],
 	AdminStack: [
-		"AdminDashboard",
-		"UserManagement",
-		"UserDetail",
-		"ReportedProperties",
+		'AdminDashboard',
+		'UserManagement',
+		'UserDetail',
+		'ReportedProperties',
 	],
 	MyPropertiesStack: [
-		"MyProperties",
-		"AddProperty",
-		"EditProperty",
-		"PropertyApplications",
+		'MyProperties',
+		'AddProperty',
+		'EditProperty',
+		'PropertyApplications',
 	],
-	MyRentalsStack: ["MyRentals", "MyRentalApplications", "ApplicationDetails"],
-	PaymentsStack: ["MyPayments", "PaymentDetails"],
+	MyRentalsStack: ['MyRentals', 'MyRentalApplications', 'ApplicationDetails'],
+	PaymentsStack: ['MyPayments', 'PaymentDetails'],
 };
 
 export const useAppNavigation = () => {
@@ -80,44 +80,44 @@ export const useAppNavigation = () => {
 		}
 
 		switch (targetStack) {
-			case "OnboardingStack":
-				navigation.navigate("OnboardingStack", { screen, params });
+			case 'OnboardingStack':
+				navigation.navigate('OnboardingStack', { screen, params });
 				break;
-			case "AuthStack":
-				navigation.navigate("AuthStack", { screen, params });
+			case 'AuthStack':
+				navigation.navigate('AuthStack', { screen, params });
 				break;
-			case "AdminStack":
-				navigation.navigate("AdminStack", { screen, params });
+			case 'AdminStack':
+				navigation.navigate('AdminStack', { screen, params });
 				break;
-			case "AppDrawer":
-				if (screen === "Settings" || screen === "SupportStack") {
-					navigation.navigate("AppDrawer", { screen, params });
+			case 'AppDrawer':
+				if (screen === 'Settings' || screen === 'SupportStack') {
+					navigation.navigate('AppDrawer', { screen, params });
 				} else if (stackHierarchy.MainTabs.includes(screen)) {
-					navigation.navigate("AppDrawer", {
-						screen: "MainTabs",
+					navigation.navigate('AppDrawer', {
+						screen: 'MainTabs',
 						params: { screen, params },
 					});
 				} else if (stackHierarchy.HomeStack.includes(screen)) {
-					navigation.navigate("AppDrawer", {
-						screen: "MainTabs",
+					navigation.navigate('AppDrawer', {
+						screen: 'MainTabs',
 						params: {
-							screen: "HomeStack",
+							screen: 'HomeStack',
 							params: { screen, params },
 						},
 					});
 				} else if (stackHierarchy.ExploreStack.includes(screen)) {
-					navigation.navigate("AppDrawer", {
-						screen: "MainTabs",
+					navigation.navigate('AppDrawer', {
+						screen: 'MainTabs',
 						params: {
-							screen: "ExploreStack",
+							screen: 'ExploreStack',
 							params: { screen, params },
 						},
 					});
 				} else if (stackHierarchy.ProfileStack.includes(screen)) {
-					navigation.navigate("AppDrawer", {
-						screen: "MainTabs",
+					navigation.navigate('AppDrawer', {
+						screen: 'MainTabs',
 						params: {
-							screen: "ProfileStack",
+							screen: 'ProfileStack',
 							params: { screen, params },
 						},
 					});
@@ -129,14 +129,14 @@ export const useAppNavigation = () => {
 					const subStack = stackHierarchy.MyPropertiesStack.includes(
 						screen
 					)
-						? "MyPropertiesStack"
+						? 'MyPropertiesStack'
 						: stackHierarchy.MyRentalsStack.includes(screen)
-						? "MyRentalsStack"
-						: "PaymentsStack";
-					navigation.navigate("AppDrawer", {
-						screen: "MainTabs",
+						? 'MyRentalsStack'
+						: 'PaymentsStack';
+					navigation.navigate('AppDrawer', {
+						screen: 'MainTabs',
 						params: {
-							screen: "ProfileStack",
+							screen: 'ProfileStack',
 							params: {
 								screen: subStack,
 								params: { screen, params },

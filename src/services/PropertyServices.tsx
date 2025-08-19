@@ -36,6 +36,46 @@ export const filterProperties = async (params: FilterPropertiesParams) => {
 	return response.data;
 };
 
+// Similar Properties
+export const similarProperties = async (params: FilterPropertiesParams) => {
+	const response = await api.get('/properties/filter', {
+		params,
+	});
+	return response.data;
+};
+
+// Similar by location (nearby, latest 5)
+export const getSimilarByLocation = async (
+	location: string
+) => {
+	return filterProperties({
+		location,
+		sort_by: 'createdAt',
+		sort_order: 'desc',
+		page: 1,
+		limit: 5,
+	});
+};
+
+// Similar by price + bedrooms + bathrooms (latest 5)
+export const getSimilarByFeatures = async (
+	price: number,
+	bedrooms: number,
+	bathrooms: number,
+	range: number = 5000,
+) => {
+	return filterProperties({
+		bedrooms,
+		bathrooms,
+		min_price: Math.max(0, price - range),
+		max_price: price + range,
+		sort_by: 'createdAt',
+		sort_order: 'desc',
+		page: 1,
+		limit: 5,
+	});
+};
+
 // Property Details
 export const fetchPropertyDetails = async (id: string) => {
 	const response = await api.get(`/properties/${id}`);
