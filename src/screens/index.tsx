@@ -1,4 +1,3 @@
-// src/constants/screens.ts
 const SCREENS = {
 	SPLASH: 'Splash',
 
@@ -61,6 +60,7 @@ export { default as KYCVerificationScreen } from './account/KYCVerificationScree
 
 // Explore
 export { default as PropertiesScreen } from './explore/PropertiesScreen';
+export { default as FilterScreen } from './explore/FilterScreen';
 export { default as PropertyDetailsScreen } from './explore/PropertyDetailsScreen';
 export { default as PropertyMapScreen } from './explore/PropertyMapScreen';
 // export { default as ExplorePropertiesScreen } from './explore/ExplorePropertiesScreen';

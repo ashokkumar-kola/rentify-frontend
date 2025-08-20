@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
 		marginBottom: Spacing.md,
 		fontFamily: Fonts.SemiBold,
 		fontSize: TextSizes.base,
-		// marginVertical: 10,
+		// marginTop: 8,
 		color: Colors.black100,
 	},
 

@@ -1,24 +1,24 @@
-import { useState } from "react";
-import { addProperty } from "../../services/PropertyServices";
-import type { Property, Location } from "../../types/Property";
-import { uploadToCloudinary } from "../../utils/propertyUtils/uploadImagesToCloudinary";
-import { getDecodedToken } from "../../utils/getDecodedToken";
-import { Asset } from "react-native-image-picker";
+import { useState } from 'react';
+import { addProperty } from '../../services/PropertyServices';
+import type { Property, Location } from '../../types/Property';
+import { uploadToCloudinary } from '../../utils/propertyUtils/uploadImagesToCloudinary';
+import { getDecodedToken } from '../../utils/getDecodedToken';
+import { Asset } from 'react-native-image-picker';
 
 const initialData: Property = {
-	title: "1BHK Studio in Madhapur",
+	title: '1BHK Studio in Madhapur',
 	price: 15000,
 	deposit: 30000,
-	property_type: "flat",
+	property_type: 'flat',
 	location: {
-		nearby: "Near Hitech City Metro",
-		street: "Image Gardens Rd",
-		locality: "Madhapur",
-		city: "Hyderabad",
-		district: "Ranga Reddy",
-		state: "Telangana",
-		country: "India",
-		zip: "500081",
+		nearby: 'Near Hitech City Metro',
+		street: 'Image Gardens Rd',
+		locality: 'Madhapur',
+		city: 'Hyderabad',
+		district: 'Ranga Reddy',
+		state: 'Telangana',
+		country: 'India',
+		zip: '500081',
 		geo: {
 			lat: null,
 			lng: null,
@@ -29,14 +29,14 @@ const initialData: Property = {
 	bedrooms: 1,
 	bathrooms: 1,
 	area: 450,
-	carpet_area: "",
-	furnishing: "furnished",
+	carpet_area: '',
+	furnishing: 'furnished',
 	amenities: [],
-	status: "pending",
-	facing: "east",
-	built_year: "",
+	status: 'pending',
+	facing: 'east',
+	built_year: '',
 	description:
-		"Compact Apartment Flat ideal for working professionals. Close to IT hub.",
+		'Compact Apartment Flat ideal for working professionals. Close to IT hub.',
 	images: [],
 	// images: Asset[],
 	// video_url: '',
@@ -65,37 +65,37 @@ const useAddProperty = () => {
 	const [data, setData] = useState(initialData);
 	const [errors, setErrors] = useState({});
 	const [loading, setLoading] = useState(false);
-	const [message, setMessage] = useState("");
+	const [message, setMessage] = useState('');
 
 	const decoded = getDecodedToken();
-	console.log("Decoded Token:", decoded);
+	console.log('Decoded Token:', decoded);
 
 	// Handle field changes
 	const handleChange = (key: keyof typeof initialData, value: any) => {
 		setData((prev) => ({ ...prev, [key]: value }));
-		setErrors((prev) => ({ ...prev, [key]: "" }));
+		setErrors((prev) => ({ ...prev, [key]: '' }));
 	};
 
 	// Validate required fields
 	const validate = () => {
 		const newErrors: any = {};
 		if (!data.title?.trim()) {
-			newErrors.title = "Title is required";
+			newErrors.title = 'Title is required';
 		}
 		if (!data.price) {
-			newErrors.price = "Price is required";
+			newErrors.price = 'Price is required';
 		}
 		if (!data.deposit) {
-			newErrors.deposit = "Deposit is required";
+			newErrors.deposit = 'Deposit is required';
 		}
 		if (!data.property_type?.trim()) {
-			newErrors.property_type = "Property type is required";
+			newErrors.property_type = 'Property type is required';
 		}
 		if (!data.bedrooms) {
-			newErrors.bedrooms = "Bedrooms are required";
+			newErrors.bedrooms = 'Bedrooms are required';
 		}
 		if (!data.bathrooms) {
-			newErrors.bathrooms = "Bathrooms are required";
+			newErrors.bathrooms = 'Bathrooms are required';
 		}
 		// console.log('validate :', data);
 		setErrors(newErrors);
@@ -109,7 +109,7 @@ const useAddProperty = () => {
 			const res = await uploadToCloudinary(
 				img,
 				decoded.id,
-				"temp_property"
+				'temp_property'
 			);
 			if (res?.url) {
 				uploadedUrls.push(res.url);
@@ -129,8 +129,8 @@ const useAddProperty = () => {
 		total_floors: Number(form.total_floors),
 		bedrooms: Number(form.bedrooms),
 		bathrooms: Number(form.bathrooms),
-		area: form.area ? Number(form.area) : "",
-		carpet_area: form.carpet_area ? Number(form.carpet_area) : "",
+		area: form.area ? Number(form.area) : '',
+		carpet_area: form.carpet_area ? Number(form.carpet_area) : '',
 		furnishing: form.furnishing,
 		amenities: form.amenities,
 		facing: form.facing,
@@ -167,7 +167,7 @@ const useAddProperty = () => {
 				message: response.message,
 			};
 		} catch (err: any) {
-			const msg = err?.response?.message || "Failed to add property";
+			const msg = err?.response?.message || 'Failed to add property';
 			setMessage(msg);
 			return { success: false, message: msg };
 		} finally {

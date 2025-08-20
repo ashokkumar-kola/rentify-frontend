@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
 	View,
 	TextInput,
@@ -12,17 +12,17 @@ import {
 	Keyboard,
 	Image,
 	TouchableWithoutFeedback,
-} from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Dropdown } from "react-native-element-dropdown";
-import { launchImageLibrary } from "react-native-image-picker";
-import AppText from "../../components/AppTheme/AppText";
-import Icons from "../../constants/Icons";
-import { Colors, Fonts } from "../../constants";
-import usePropertyEnums from "../../hooks/metaHooks/usePropertyEnums";
-import useAddProperty from "../../hooks/propertyHooks/useAddProperty";
-import { mapEnumToDropdownOptions } from "../../utils/propertyUtils/mapEnumsToDropDownOptions";
+import { Dropdown } from 'react-native-element-dropdown';
+import { launchImageLibrary } from 'react-native-image-picker';
+import AppText from '../../components/AppTheme/AppText';
+import Icons from '../../constants/Icons';
+import { Colors, Fonts } from '../../constants';
+import usePropertyEnums from '../../hooks/metaHooks/usePropertyEnums';
+import useAddProperty from '../../hooks/propertyHooks/useAddProperty';
+import { mapEnumToDropdownOptions } from '../../utils/propertyUtils/mapEnumsToDropDownOptions';
 // import ( uploadToCloudinary ) from '../../utils/propertyUtils/uploadImagesToCloudinary';
 
 const AddPropertyScreen = ({ navigation }: any) => {
@@ -43,16 +43,16 @@ const AddPropertyScreen = ({ navigation }: any) => {
 		const result = await handleAddProperty();
 		// console.log('Result',result);
 		if (result.success) {
-			Alert.alert("Success", result.message, [
+			Alert.alert('Success', result.message, [
 				{
-					text: "OK",
-					onPress: () => navigation.navigate("MyProperties"),
+					text: 'OK',
+					onPress: () => navigation.navigate('MyProperties'),
 				},
 			]);
 		} else {
 			Alert.alert(
-				"Error",
-				result.message || "Something went wrong. Please try again."
+				'Error',
+				result.message || 'Something went wrong. Please try again.'
 			);
 		}
 	};
@@ -60,15 +60,15 @@ const AddPropertyScreen = ({ navigation }: any) => {
 	// Safely convert string to number
 	const safeNumber = (val: string) => {
 		const num = parseFloat(val);
-		return isNaN(num) ? "" : num;
+		return isNaN(num) ? '' : num;
 	};
 
 	const handleNumberInput = (
 		val: string,
-		setValue: (value: number | "" | null) => void
+		setValue: (value: number | '' | null) => void
 	) => {
-		if (val === "") {
-			setValue("");
+		if (val === '') {
+			setValue('');
 		} else {
 			const parsed = parseInt(val, 10);
 			if (!isNaN(parsed)) {
@@ -95,14 +95,14 @@ const AddPropertyScreen = ({ navigation }: any) => {
 			? amenities.filter((item) => item !== value)
 			: [...amenities, value];
 
-		handleChange("amenities", updatedAmenities);
+		handleChange('amenities', updatedAmenities);
 	};
 
 	return (
 		<SafeAreaView style={styles.safeArea}>
 			<KeyboardAvoidingView
 				style={styles.safeArea}
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
 				keyboardVerticalOffset={10}
 			>
 				<TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -120,7 +120,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									style={styles.icon}
 								/>
 								<AppText style={styles.label}>
-									Property Title{" "}
+									Property Title{' '}
 									<AppText style={styles.required}>*</AppText>
 								</AppText>
 							</View>
@@ -128,7 +128,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								style={styles.input}
 								value={data.title}
 								onChangeText={(val) =>
-									handleChange("title", val)
+									handleChange('title', val)
 								}
 								placeholder="Enter Title"
 								placeholderTextColor={Colors.grey400}
@@ -146,7 +146,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									style={styles.icon}
 								/>
 								<AppText style={styles.label}>
-									Property Type{" "}
+									Property Type{' '}
 									<AppText style={styles.required}>*</AppText>
 								</AppText>
 							</View>
@@ -163,7 +163,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								itemTextStyle={styles.itemTextStyle}
 								value={data.property_type}
 								onChange={(item) =>
-									handleChange("property_type", item.value)
+									handleChange('property_type', item.value)
 								}
 							/>
 							{/* {errors.property_type && <AppText style={styles.error}>{errors.property_type}</AppText>} */}
@@ -181,7 +181,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 										style={styles.icon}
 									/>
 									<AppText style={styles.label}>
-										Price{" "}
+										Price{' '}
 										<AppText style={styles.required}>
 											*
 										</AppText>
@@ -192,7 +192,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.price?.toString()}
 									onChangeText={(val) =>
-										handleChange("price", safeNumber(val))
+										handleChange('price', safeNumber(val))
 									}
 									placeholder="Enter Price"
 									placeholderTextColor={Colors.grey400}
@@ -210,7 +210,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 										style={styles.icon}
 									/>
 									<AppText style={styles.label}>
-										Deposit{" "}
+										Deposit{' '}
 										<AppText style={styles.required}>
 											*
 										</AppText>
@@ -221,7 +221,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.deposit?.toString()}
 									onChangeText={(val) =>
-										handleChange("deposit", safeNumber(val))
+										handleChange('deposit', safeNumber(val))
 									}
 									placeholder="Enter Deposit"
 									placeholderTextColor={Colors.grey400}
@@ -241,7 +241,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 										style={styles.icon}
 									/>
 									<AppText style={styles.label}>
-										Bedrooms{" "}
+										Bedrooms{' '}
 										<AppText style={styles.required}>
 											*
 										</AppText>
@@ -254,7 +254,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									// onChangeText={(val) => handleChange('bedrooms', parseInt(val, 10))}
 									onChangeText={(val) =>
 										handleNumberInput(val, (parsedVal) =>
-											handleChange("bedrooms", parsedVal)
+											handleChange('bedrooms', parsedVal)
 										)
 									}
 									placeholder="Enter Bedrooms"
@@ -272,7 +272,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 										style={styles.icon}
 									/>
 									<AppText style={styles.label}>
-										Bathrooms{" "}
+										Bathrooms{' '}
 										<AppText style={styles.required}>
 											*
 										</AppText>
@@ -285,7 +285,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									// onChangeText={(val) => handleChange('bathrooms', parseInt(val, 10))}
 									onChangeText={(val) =>
 										handleNumberInput(val, (parsedVal) =>
-											handleChange("bathrooms", parsedVal)
+											handleChange('bathrooms', parsedVal)
 										)
 									}
 									placeholder="Enter Bathrooms"
@@ -319,9 +319,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>Nearby</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.nearby || ""}
+									value={data.location?.nearby || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											nearby: val,
 										})
@@ -342,9 +342,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>Street</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.street || ""}
+									value={data.location?.street || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											street: val,
 										})
@@ -367,9 +367,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>Locality</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.locality || ""}
+									value={data.location?.locality || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											locality: val,
 										})
@@ -388,9 +388,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>City</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.city || ""}
+									value={data.location?.city || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											city: val,
 										})
@@ -413,9 +413,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>District</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.district || ""}
+									value={data.location?.district || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											district: val,
 										})
@@ -436,9 +436,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>State</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.state || ""}
+									value={data.location?.state || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											state: val,
 										})
@@ -461,9 +461,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								{/* <AppText style={styles.label}>Country</AppText> */}
 								<TextInput
 									style={styles.input}
-									value={data.location?.country || ""}
+									value={data.location?.country || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											country: val,
 										})
@@ -485,9 +485,9 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								<TextInput
 									style={styles.input}
 									keyboardType="numeric"
-									value={data.location?.zip || ""}
+									value={data.location?.zip || ''}
 									onChangeText={(val) =>
-										handleChange("location", {
+										handleChange('location', {
 											...data.location,
 											zip: val,
 										})
@@ -519,7 +519,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.floor_no?.toString()}
 									onChangeText={(val) =>
-										handleChange("floor_no", val)
+										handleChange('floor_no', val)
 									}
 									placeholder="Floor"
 									placeholderTextColor={Colors.grey400}
@@ -545,7 +545,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.total_floors?.toString()}
 									onChangeText={(val) =>
-										handleChange("total_floors", val)
+										handleChange('total_floors', val)
 									}
 									placeholder="Total Floors"
 									placeholderTextColor={Colors.grey400}
@@ -574,7 +574,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.area?.toString()}
 									onChangeText={(val) =>
-										handleChange("area", val)
+										handleChange('area', val)
 									}
 									placeholder="Area"
 									placeholderTextColor={Colors.grey400}
@@ -600,7 +600,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.carpet_area?.toString()}
 									onChangeText={(val) =>
-										handleChange("carpet_area", val)
+										handleChange('carpet_area', val)
 									}
 									placeholder="Carpet Area"
 									placeholderTextColor={Colors.grey400}
@@ -637,7 +637,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									itemTextStyle={styles.itemTextStyle}
 									value={data.facing}
 									onChange={(item) =>
-										handleChange("facing", item.value)
+										handleChange('facing', item.value)
 									}
 								/>
 								{/* {errors.facing && <AppText style={styles.error}>{errors.facing}</AppText>} */}
@@ -661,7 +661,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 									keyboardType="numeric"
 									value={data.built_year?.toString()}
 									onChangeText={(val) =>
-										handleChange("built_year", val)
+										handleChange('built_year', val)
 									}
 									placeholder="Built Year"
 									placeholderTextColor={Colors.grey400}
@@ -697,7 +697,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								itemTextStyle={styles.itemTextStyle}
 								value={data.furnishing}
 								onChange={(item) =>
-									handleChange("furnishing", item.value)
+									handleChange('furnishing', item.value)
 								}
 							/>
 							{/* {errors.furnishing && <AppText style={styles.error}>{errors.furnishing}</AppText>} */}
@@ -735,8 +735,8 @@ const AddPropertyScreen = ({ navigation }: any) => {
 											<Icons.MI
 												name={
 													selected
-														? "check-box"
-														: "check-box-outline-blank"
+														? 'check-box'
+														: 'check-box-outline-blank'
 												}
 												size={20}
 												color={
@@ -777,7 +777,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								numberOfLines={4}
 								value={data.description}
 								onChangeText={(val) =>
-									handleChange("description", val)
+									handleChange('description', val)
 								}
 								placeholder="Write a few lines about the property"
 								placeholderTextColor={Colors.grey400}
@@ -804,18 +804,18 @@ const AddPropertyScreen = ({ navigation }: any) => {
 								onPress={() => {
 									launchImageLibrary(
 										{
-											mediaType: "photo",
+											mediaType: 'photo',
 											includeBase64: false,
 											selectionLimit: 5,
 										},
 										(response) => {
 											if (response.didCancel) {
 												console.log(
-													"User cancelled image picker"
+													'User cancelled image picker'
 												);
 											} else if (response.errorMessage) {
 												console.error(
-													"ImagePicker Error: ",
+													'ImagePicker Error: ',
 													response.errorMessage
 												);
 											} else if (
@@ -823,7 +823,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 												response.assets.length > 0
 											) {
 												handleChange(
-													"images",
+													'images',
 													response.assets
 												);
 											}
@@ -904,8 +904,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 60,
 	},
 	sectionHeader: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		marginBottom: 8,
 	},
 	icon: {
@@ -913,7 +913,7 @@ const styles = StyleSheet.create({
 		marginRight: 6,
 	},
 	label: {
-		fontWeight: "500",
+		fontWeight: '500',
 		fontSize: 12,
 		marginBottom: 4,
 		// fontSize: 14,
@@ -921,18 +921,18 @@ const styles = StyleSheet.create({
 		paddingTop: 2,
 	},
 	required: {
-		color: "red",
+		color: 'red',
 	},
 	dropdown: {
 		height: 50,
-		borderColor: "#ccc",
+		borderColor: '#ccc',
 		borderWidth: 1,
 		borderRadius: 8,
 		paddingHorizontal: 10,
 		marginBottom: 10,
 	},
 	placeholder: {
-		color: "#888",
+		color: '#888',
 	},
 	selectedTextStyle: {
 		fontSize: 14,
@@ -944,21 +944,21 @@ const styles = StyleSheet.create({
 	},
 	input: {
 		height: 50,
-		borderColor: "#ccc",
+		borderColor: '#ccc',
 		borderWidth: 1,
 		borderRadius: 8,
 		paddingHorizontal: 10,
 		marginBottom: 10,
-		color: "#000",
+		color: '#000',
 		fontFamily: Fonts.Regular,
 	},
 	textArea: {
 		height: 100,
-		textAlignVertical: "top",
+		textAlignVertical: 'top',
 	},
 	row: {
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 	},
 	inputContainer: {
 		flex: 1,
@@ -968,33 +968,33 @@ const styles = StyleSheet.create({
 		marginTop: 0,
 	},
 	amenitiesContainer: {
-		flexDirection: "row",
-		flexWrap: "wrap",
+		flexDirection: 'row',
+		flexWrap: 'wrap',
 		gap: 12,
 		marginVertical: 8,
 	},
 	amenityItem: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		marginRight: 16,
 		marginBottom: 8,
 	},
 	amenityLabel: {
 		marginLeft: 6,
 		fontSize: 12,
-		color: "#111827",
+		color: '#111827',
 	},
 	fixedButtonContainer: {
-		position: "absolute",
+		position: 'absolute',
 		bottom: 8,
 		left: 20,
 		right: 20,
-		backgroundColor: "transparent",
+		backgroundColor: 'transparent',
 	},
 	submitButton: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		backgroundColor: Colors.primary,
 		paddingVertical: 14,
 		borderRadius: 8,
@@ -1017,13 +1017,13 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 	error: {
-		color: "red",
+		color: 'red',
 		fontSize: 13,
 		marginTop: 4,
 	},
 	imageUploadButton: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		paddingVertical: 10,
 		paddingHorizontal: 12,
 		borderWidth: 1,
@@ -1036,11 +1036,11 @@ const styles = StyleSheet.create({
 		marginLeft: 8,
 		fontSize: 14,
 		color: Colors.primary,
-		fontWeight: "500",
+		fontWeight: '500',
 	},
 	imagePreviewContainer: {
-		flexDirection: "row",
-		flexWrap: "wrap",
+		flexDirection: 'row',
+		flexWrap: 'wrap',
 		gap: 10,
 	},
 	imagePreview: {
@@ -1050,7 +1050,7 @@ const styles = StyleSheet.create({
 		marginRight: 10,
 		marginBottom: 10,
 		borderWidth: 1,
-		borderColor: "#ccc",
+		borderColor: '#ccc',
 	},
 });
 

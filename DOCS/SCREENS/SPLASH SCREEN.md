@@ -33,7 +33,7 @@ Splash Screen
 
 app > settings.gradle
 
-> at last
+=> at last
 > include ':react-native-splash-screen'  
 > project(':react-native-splash-screen').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-splash-screen/android')
 

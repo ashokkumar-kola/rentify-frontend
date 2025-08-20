@@ -1,74 +1,114 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useRef, useState } from 'react';
 import {
-	View,
-	TextInput,
-	StyleSheet,
-	Pressable,
-	TouchableOpacity,
-} from "react-native";
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Animated,
+} from 'react-native';
+import { Colors, TextSizes, Spacing, Fonts } from '../../constants';
+import Icons from '../../constants/Icons';
+import LinearGradient from 'react-native-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import AppText from '../AppTheme/AppText';
 
-import { Colors, TextSizes, Spacing, Fonts } from "../../constants";
-import Icons from "../../constants/Icons";
-import LinearGradient from "react-native-linear-gradient";
-
-import { useNavigation } from "@react-navigation/native";
-
-import AppText from "../AppTheme/AppText";
+const placeholderTexts = [
+  'City or Location',
+  'Price Range',
+  'Features',
+  'Amenities',
+];
 
 const SearchBar = () => {
-	const [isPressed, setIsPressed] = useState(false);
-	const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const fadeAnim = useRef(new Animated.Value(0)).current; // Animation value for opacity
 
-	return (
-		<View style={styles.searchBar}>
-			<LinearGradient
-				colors={[Colors.blue100, Colors.blue300]}
-				style={styles.searchButton}
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-			>
-				<Icons.FA name="search" size={20} color={Colors.white100} />
-			</LinearGradient>
+  // Animation effect for text fade-in/fade-out
+  useEffect(() => {
+    const animateText = () => {
+      // Fade out
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        // Update text after fade-out
+        setCurrentTextIndex((prevIndex) => (prevIndex + 1) % placeholderTexts.length);
+        // Fade in
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 500,
+          useNativeDriver: true,
+        }).start();
+      });
+    };
 
-			<TextInput
-				placeholder="Search by City, Location, ..."
-				placeholderTextColor={Colors.textGrey}
-				style={styles.searchInput}
-			/>
+    // Start animation and set interval for text change
+    const interval = setInterval(animateText, 3000); // Change text every 3 seconds
 
-			{/* <LinearGradient
-                colors={[Colors.blue100, Colors.blue300]}
-                style={styles.searchButton}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-            >
-                <Icons.FA name="search" size={20} color={Colors.white100} />
-            </LinearGradient> */}
+    // Initial fade-in
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
 
-			<LinearGradient
-				colors={[Colors.blue100, Colors.blue300]}
-				style={styles.filterButton}
-				// style={styles.nextButton}
-				start={{ x: 0, y: 0 }}
-				end={{ x: 1, y: 1 }}
-			>
-				<TouchableOpacity
-					// style={styles.filterButton}
-					onPress={() => navigation.navigate("Filters")}
-				>
-					<Icons.FA name="sliders" size={20} color="#fff" />
-				</TouchableOpacity>
-			</LinearGradient>
-		</View>
-	);
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
+  }, [fadeAnim]);
+
+  return (
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => navigation.navigate('ExploreStack' as any, { screen: 'Filters' } as any)}
+    >
+      <View style={styles.searchBar}>
+        <LinearGradient
+          colors={[Colors.blue100, Colors.blue300]}
+          style={styles.searchButton}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <Icons.FA name="search" size={20} color={Colors.white100} />
+        </LinearGradient>
+
+		<Animated.View style={[styles.animatedView, { opacity: fadeAnim }]}>
+			<View style={styles.placeholderRow}>
+				<Icons.FA
+					name={
+						currentTextIndex === 0 ? 'map-marker' :
+						currentTextIndex === 1 ? 'rupee' :
+						currentTextIndex === 2 ? 'star' :
+						'th-list'
+					}
+					size={16}
+					color={Colors.primary}
+				/>
+				<AppText style={styles.searchText}>
+					Search by {placeholderTexts[currentTextIndex]}
+				</AppText>
+			</View>
+		</Animated.View>
+
+
+        <LinearGradient
+          colors={[Colors.blue100, Colors.blue300]}
+          style={styles.filterButton}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <Icons.FA name="sliders" size={20} color="#fff" />
+        </LinearGradient>
+      </View>
+    </TouchableOpacity>
+  );
 };
 
 export default SearchBar;
 
 const styles = StyleSheet.create({
 	searchBar: {
-		width: "90%",
+		width: '90%',
 		height: 56,
 		backgroundColor: Colors.white,
 		margin: Spacing.sm,
@@ -78,46 +118,46 @@ const styles = StyleSheet.create({
 		borderBottomRightRadius: 8,
 		borderWidth: 1.5,
 		borderColor: Colors.primary,
-		paddingLeft: 8,
-		paddingRight: 8,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
+		paddingHorizontal: 8,
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
-
-	searchContainer: {
-		flex: 1,
-	},
-
-	activeBackground: {
-		backgroundColor: Colors.white100,
-	},
-
-	searchInput: {
+	searchText: {
 		flex: 1,
 		fontFamily: Fonts.Regular,
 		fontSize: TextSizes.md,
 		color: Colors.textGrey,
+		marginLeft: 8,
 	},
-
 	searchButton: {
 		width: 40,
 		height: 40,
 		borderRadius: 20,
-		justifyContent: "center",
-		alignItems: "center",
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
-
 	filterButton: {
-		backgroundColor: Colors.primary,
-		padding: 10,
+		width: 40,
+		height: 40,
 		borderRadius: 8,
-		justifyContent: "center",
-		alignItems: "center",
-		shadowColor: "#000",
+		justifyContent: 'center',
+		alignItems: 'center',
+		shadowColor: '#000',
 		shadowOffset: { width: 0, height: 1 },
 		shadowOpacity: 0.2,
 		shadowRadius: 2,
 		elevation: 3,
+	},
+	animatedView: {
+		flex: 1,
+		// alignSelf: 'center',
+		// alignItems: 'center',
+		justifyContent: 'center',
+	},
+	placeholderRow: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		marginLeft: 8,
 	},
 });

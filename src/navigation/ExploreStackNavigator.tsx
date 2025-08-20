@@ -1,10 +1,12 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import PropertiesScreen from '../screens/explore/PropertiesScreen';
-import FilterScreen from '../screens/explore/FilterScreen';
-import PropertyDetailsScreen from '../screens/explore/PropertyDetailsScreen';
-import PropertyMapViewScreen from '../screens/explore/PropertyMapScreen';
+import { PropertiesScreen, FilterScreen, PropertyDetailsScreen, PropertyMapScreen } from '../screens';
+
+// import PropertiesScreen from '../screens/explore/PropertiesScreen';
+// import FilterScreen from '../screens/explore/FilterScreen';
+// import PropertyDetailsScreen from '../screens/explore/PropertyDetailsScreen';
+// import PropertyMapViewScreen from '../screens/explore/PropertyMapScreen';
 
 import { FilterProvider } from '../contexts/FilterContext';
 
@@ -23,16 +25,21 @@ const SearchStackNavigator = () => {
 				<Stack.Screen
 					name="Filters"
 					component={FilterScreen}
-					options={{ presentation: 'modal' }}
+					options={{
+						presentation: 'transparentModal',
+						animation: 'slide_from_bottom',
+						animationDuration: 400,
+						headerShown: false,
+					}}
 				/>
 				<Stack.Screen
 					name="PropertyDetails"
 					component={PropertyDetailsScreen}
-					options={{ headerShown: true }}
+					options={{ headerShown: true, title: 'Property Details' }}
 				/>
 				<Stack.Screen
 					name="PropertyMapView"
-					component={PropertyMapViewScreen}
+					component={PropertyMapScreen}
 				/>
 			</Stack.Navigator>
 		</FilterProvider>

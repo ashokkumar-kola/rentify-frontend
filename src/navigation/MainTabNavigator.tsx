@@ -37,6 +37,14 @@ const MainTabNavigator = () => {
 				name="ExploreStack"
 				component={ExploreStackNavigator}
 				options={{ title: 'Explore' }}
+				// listeners={({ navigation }) => ({
+				// 	blur: () => {
+				// 	navigation.reset({
+				// 		index: 0,
+				// 		routes: [{ name: 'ExploreStack' }],
+				// 	});
+				// 	},
+				// })}
 			/>
 			<Tab.Screen
 				name="MyPropertiesStack"

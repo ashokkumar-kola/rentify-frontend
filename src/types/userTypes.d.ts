@@ -34,4 +34,11 @@ export type TokenPayload = {
 	iat?: number;
 };
 
-
+interface Landlord {
+  id: string;
+  full_name: string;
+  email: string;
+  phone_no?: string;
+  profile_image?: string;
+  is_verified: boolean;
+}

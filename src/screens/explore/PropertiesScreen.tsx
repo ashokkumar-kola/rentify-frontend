@@ -24,6 +24,7 @@ import PropertySkeletonCard from '../../components/PropertyCards/PropertySkeleto
 import ErrorMessage from '../../components/Common/ErrorMessage';
 import ReloadView from '../../components/Common/ReloadView';
 import EmptyListView from '../../components/PropertyCards/EmptyListView';
+import ContactModal from '../../components/PropertyCards/ContactModal';
 
 // import SearchBar from '../../components/Common/SearchBar';
 
@@ -47,13 +48,19 @@ type Property = {
 	const loadingItems = Array.from({ length: 3 });
 
 	const [tempLoading, setLoading] = React.useState(true);
+	const [visible, setVisible] = useState(false);
+	const [selectedLandlord, setSelectedLandlord] = useState<any>(null);
 
 	const handleDetails = (id: string) => {
 		navigation.navigate('PropertyDetails', { propertyId: id });
 	};
 
-	const handleContact = (id: string) => {
-		Alert.alert('Property Contact Info:', id);
+	// const handleContact = (id: string) => {
+	// 	Alert.alert('Property Contact Info:', id, );
+	// };
+	const handleContact = (landlord: any) => {
+		setSelectedLandlord(landlord);
+		setVisible(true);
 	};
 
 	useEffect(() => {
@@ -145,7 +152,7 @@ type Property = {
 							<PropertyOverviewCard
 								property={{
 									...item,
-									onPrimaryAction: () => handleContact(item.id),
+									onPrimaryAction: () => handleContact(item.landlord_id),
 									onSecondaryAction: () => handleDetails(item.id),
 									primaryLabel: 'Edit',
 									secondaryLabel: 'View Details',
@@ -161,6 +168,11 @@ type Property = {
 				)}
 			</View>
 
+			<ContactModal
+				visible={visible}
+				landlord={selectedLandlord}
+				onClose={() => setVisible(false)}
+			/>
 		</SafeAreaView>
   );
 };
@@ -171,7 +183,7 @@ const styles = StyleSheet.create({
 	safeArea: {
 		flex: 1,
 		backgroundColor: Colors.white150,
-		paddingBottom: 110,
+		paddingBottom: 40,
 	},
 	activityIndicator: {
 		marginTop: 20,

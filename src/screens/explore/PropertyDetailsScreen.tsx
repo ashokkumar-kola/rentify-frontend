@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import {
 	View,
 	Text,
@@ -19,7 +19,7 @@ import { saveLastViewedProperty } from '../../utils/propertyUtils/lastViewed';
 import { usePropertyDetails } from '../../hooks/propertyHooks/usePropertyDetails';
 import { useAppNavigation } from '../../navigation/useAppNavigation';
 
-import { similarProperties } from '../../services/PropertyServices';
+import { getSimilarByLocation, getSimilarByFeatures  } from '../../services/PropertyServices';
 
 const { width } = Dimensions.get('window');
 
@@ -80,7 +80,11 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 	const [scaleAnim] = useState(new Animated.Value(0.95));
 	const scrollViewRef = useRef<ScrollView>(null);
 
-
+	useLayoutEffect(() => {
+		navigation.setOptions({
+			title: property?.title || 'Property Details',
+		});
+	}, [navigation, property?.title]);
 
 	// console.log('PropertyDetailsScreen rendered with propertyId:', route);
 
@@ -422,7 +426,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 
 export default PropertyDetailsScreen;
 
-// ✅ Reusable Feature component
+// Reusable Feature component
 const Feature = ({ icon, label }: { icon: string; label: string }) => (
 	<View style={styles.featureItem}>
 		<Icons.MI name={icon} size={28} color={Colors.primary} />
@@ -430,7 +434,7 @@ const Feature = ({ icon, label }: { icon: string; label: string }) => (
 	</View>
 );
 
-// ✅ Reusable Detail component
+// Reusable Detail component
 const Detail = ({
 	icon,
 	label,
