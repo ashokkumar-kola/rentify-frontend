@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.white,
 		borderRadius: 16,
 		// marginVertical: Spacing.md,
-		marginHorizontal: Spacing.base,
+		// marginHorizontal: Spacing.base,
 		marginRight: Spacing.md,
 		elevation: 5,
 		shadowColor: Colors.black,

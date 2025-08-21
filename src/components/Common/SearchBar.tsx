@@ -12,7 +12,7 @@ import { useNavigation } from '@react-navigation/native';
 import AppText from '../AppTheme/AppText';
 
 const placeholderTexts = [
-  'City or Location',
+  'Location',
   'Price Range',
   'Features',
   'Amenities',
@@ -81,8 +81,9 @@ const SearchBar = () => {
 						currentTextIndex === 2 ? 'star' :
 						'th-list'
 					}
-					size={16}
+					size={14}
 					color={Colors.primary}
+					style={styles.placeholderIcon}
 				/>
 				<AppText style={styles.searchText}>
 					Search by {placeholderTexts[currentTextIndex]}
@@ -110,7 +111,7 @@ const styles = StyleSheet.create({
 	searchBar: {
 		width: '90%',
 		height: 56,
-		backgroundColor: Colors.white,
+		backgroundColor: Colors.white150,
 		margin: Spacing.sm,
 		borderTopLeftRadius: 28,
 		borderTopRightRadius: 8,
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
 		fontFamily: Fonts.Regular,
 		fontSize: TextSizes.md,
 		color: Colors.textGrey,
-		marginLeft: 8,
+		marginLeft: 4,
 	},
 	searchButton: {
 		width: 40,
@@ -157,7 +158,11 @@ const styles = StyleSheet.create({
 	},
 	placeholderRow: {
 		flexDirection: 'row',
+		justifyContent: 'center',
 		alignItems: 'center',
 		marginLeft: 8,
+	},
+	placeholderIcon: {
+		top: -1,
 	},
 });

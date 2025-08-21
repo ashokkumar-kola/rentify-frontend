@@ -1,78 +1,110 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-	View,
-	Text,
-	StyleSheet,
-	Image,
-	SafeAreaView,
-	ScrollView,
-	StatusBar,
+  View,
+  StyleSheet,
+  SafeAreaView,
+  StatusBar,
+  Animated,
 } from 'react-native';
 
 import images from '../../assets/images';
 import { Colors } from '../../constants';
 
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigation/types';
 
-type NavigationProp = NativeStackNavigationProp<RootStackParamList, 'OnboardingStack'>;
-
-type Props = { navigation: NavigationProp; };
+// Props typed from RootStack
+type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 
 const SplashScreen: React.FC<Props> = ({ navigation }) => {
+  const logoOpacity = useRef(new Animated.Value(0)).current;
+  const logoScale = useRef(new Animated.Value(0.8)).current;
+  const taglineTranslateY = useRef(new Animated.Value(20)).current;
+  const taglineOpacity = useRef(new Animated.Value(0)).current;
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			navigation.navigate({ name: 'OnboardingStack', params: {} });
-		}, 2000);
+  useEffect(() => {
+    Animated.sequence([
+      Animated.parallel([
+        Animated.timing(logoOpacity, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+        Animated.spring(logoScale, {
+          toValue: 1,
+          friction: 4,
+          useNativeDriver: true,
+        }),
+      ]),
+      Animated.parallel([
+        Animated.timing(taglineOpacity, {
+          toValue: 1,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+        Animated.timing(taglineTranslateY, {
+          toValue: 0,
+          duration: 600,
+          useNativeDriver: true,
+        }),
+      ]),
+    ]).start();
 
-		return () => clearTimeout(timer);
-	}, [navigation]);
+    const timer = setTimeout(() => {
+		navigation.replace('OnboardingStack', { screen: 'Onboarding1' });
+    }, 2000);
 
-	return (
-		<SafeAreaView style={styles.safeArea}>
-			<StatusBar barStyle="dark-content" />
+    return () => clearTimeout(timer);
+  }, [navigation, logoOpacity, logoScale, taglineOpacity, taglineTranslateY]);
 
-			<ScrollView
-				contentContainerStyle={styles.container}
-				showsVerticalScrollIndicator={false}
-			>
-				<View style={styles.container}>
-					<Image
-						source={images.logo}
-						style={styles.logo}
-						resizeMode="contain"
-					/>
-					<Text style={styles.tagline}>LIVE YOUR DREAM HOME</Text>
-				</View>
-			</ScrollView>
-		</SafeAreaView>
-	);
+  return (
+    <SafeAreaView style={styles.safeArea}>
+      <StatusBar barStyle="dark-content" />
+      <View style={styles.container}>
+        <Animated.Image
+          source={images.logo}
+          style={[
+            styles.logo,
+            { opacity: logoOpacity, transform: [{ scale: logoScale }] },
+          ]}
+          resizeMode="contain"
+        />
+        <Animated.Text
+          style={[
+            styles.tagline,
+            { opacity: taglineOpacity, transform: [{ translateY: taglineTranslateY }] },
+          ]}
+        >
+          LIVE YOUR DREAM HOME
+        </Animated.Text>
+      </View>
+    </SafeAreaView>
+  );
 };
 
 export default SplashScreen;
 
 const styles = StyleSheet.create({
-	safeArea: {
-		flex: 1,
-		backgroundColor: Colors.backgroundLight,
-	},
-	container: {
-		flex: 1,
-		backgroundColor: Colors.white,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	logo: {
-		width: 180,
-		height: 60,
-	},
-	tagline: {
-		color: Colors.primary,
-		fontSize: 16,
-		fontWeight: '500',
-		marginTop: 12,
-		letterSpacing: 2,
-		fontFamily: 'Poppins-SemiBold',
-	},
+  safeArea: {
+    flex: 1,
+    backgroundColor: Colors.backgroundLight,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: Colors.white,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    width: 180,
+    height: 60,
+  },
+  tagline: {
+    color: Colors.primary,
+    fontSize: 16,
+    fontWeight: '500',
+    marginTop: 12,
+    letterSpacing: 2,
+    fontFamily: 'Poppins-SemiBold',
+  },
 });

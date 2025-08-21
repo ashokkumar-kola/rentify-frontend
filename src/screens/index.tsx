@@ -1,4 +1,5 @@
 const SCREENS = {
+	LOADING: 'Loading',
 	SPLASH: 'Splash',
 
 	ON_BOARDING1: 'OnBoarding1',
@@ -35,6 +36,7 @@ const SCREENS = {
 export default SCREENS;
 
 // Splash
+export { default as LoadingSplash } from './splash/LoadingSplash';
 export { default as SplashScreen } from './splash/SplashScreen';
 
 // Onboarding

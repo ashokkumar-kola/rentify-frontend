@@ -3,6 +3,7 @@ import React, {
 	useLayoutEffect,
 	useState,
 	useCallback,
+	useMemo,
 } from 'react';
 
 import {
@@ -13,9 +14,9 @@ import {
 	TouchableOpacity,
 	ActivityIndicator,
 	FlatList,
-	ScrollView,
 	StatusBar,
 	Alert,
+	Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -25,12 +26,9 @@ import Icons from '../../constants/Icons';
 import type { Property } from '../../types/Property';
 import AppText from '../../components/AppTheme/AppText';
 
-import TopNavBar from '../../components/CustomNavBars/TopNavBar';
-// import Banner from '../../components/CustomNavBars/Banner';
-// import Header from '../../components/CustomNavBars/Header';
-
 import { useAuth } from '../../contexts/AuthContext';
 
+import TopNavBar from '../../components/CustomNavBars/TopNavBar';
 import SearchBar from '../../components/Common/SearchBar';
 import PropertyLoadingCard from '../../components/PropertyCards/PropertyLoadingCard';
 import NewArrivalsCard from '../../components/PropertyCards/NewArrivalCard';
@@ -46,125 +44,387 @@ import { useFeaturedProperties } from '../../hooks/propertyHooks/useFeaturedProp
 import { getDecodedToken } from '../../utils/getDecodedToken';
 import { getLastViewedProperty } from '../../utils/propertyUtils/lastViewed';
 
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+// Section types for our main FlatList
+type SectionType = 'banner' | 'lastSearch' | 'newArrivals' | 'popular' | 'featured' | 'exploreMore';
+
+interface Section {
+	id: string;
+	type: SectionType;
+	data?: Property[];
+	loading?: boolean;
+	title?: string;
+}
+
 const HomeScreen = ({ navigation }: any) => {
 	const { user, isLoggedIn } = useAuth();
-	const [token, setToken] = useState<any>(null);
+	// const [token, setToken] = useState<any>(null);
 	const [lastViewed, setLastViewed] = useState<any>(null);
+	const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
+
+	// Property hooks
 	const { newArrivals, loading: newArrivalsLoading } = useNewArrivals();
 	const { popularProperties, loading: popularPropertiesLoading } = usePopularProperties();
 	const { featuredProperties, loading: featuredPropertiesLoading } = useFeaturedProperties();
 
+	// Initialize data
+	// useEffect(() => {
+	// 	const fetchToken = async () => {
+	// 		try {
+	// 			const decoded = await getDecodedToken();
+	// 			setToken(decoded);
+	// 		} catch (error) {
+	// 			console.error('Error fetching token:', error);
+	// 		}
+	// 	};
+	// 	fetchToken();
+	// }, []);
+
 	useEffect(() => {
-		const fetchToken = async () => {
-			const decoded = await getDecodedToken();
-			setToken(decoded);
-			// console.log(decoded);
+		const fetchLastViewed = async () => {
+			try {
+				const property = await getLastViewedProperty();
+				setLastViewed(property);
+			} catch (error) {
+				console.error('Error fetching last viewed property:', error);
+			}
 		};
-		fetchToken();
+		fetchLastViewed();
 	}, []);
 
-	useEffect(() => {
-		(async () => {
-			const property = await getLastViewedProperty();
-			setLastViewed(property);
-		})();
-	}, []);
+	// useEffect(() => {
+	// 	if (isLoggedIn && user) {
+	// 		// Initialize user-specific data
+	// 		console.log('User logged in:', user?.email);
+	// 	} else {
+	// 		console.log('User did not logged in');
+	// 	}
+	// }, [isLoggedIn, user]);
 
-	const [wishlist, setWishlist] = useState<Record<string, boolean>>({});
-
-	useEffect(() => {
-		if (isLoggedIn && user) {
-			// console.log('User:', user);
-		}
-	}, [isLoggedIn, user]);
-
-	const handlePress = () => {
+	// Navigation handlers
+	const handlePropertiesNavigation = useCallback(() => {
 		navigation.navigate('Properties');
-	};
+	}, [navigation]);
 
-	const toggleWishlist = async (propertyId: string) => {
+	const handlePropertyPress = useCallback((propertyId: string) => {
+		navigation.navigate('AppDrawer', {
+			screen: 'MainTabs',
+			params: {
+				screen: 'ExploreStack',
+				params: {
+					screen: 'PropertyDetails',
+					params: {
+						propertyId: propertyId,
+					},
+				},
+			},
+		});
+	}, [navigation]);
+
+	const handleLastViewedPress = useCallback(() => {
+		if (lastViewed) {
+			handlePropertyPress(lastViewed);
+		}
+	}, [lastViewed, handlePropertyPress]);
+
+	// Wishlist functionality
+	const toggleWishlist = useCallback(async (propertyId: string) => {
 		const isAlready = wishlist[propertyId];
 		try {
+			setWishlist((prev) => ({
+				...prev,
+				[propertyId]: !isAlready,
+			}));
+
 			if (isAlready) {
 				// await WishlistService.remove(propertyId);
 			} else {
 				// await WishlistService.add(propertyId);
 			}
-
+		} catch (err) {
 			setWishlist((prev) => ({
 				...prev,
-				[propertyId]: !isAlready,
+				[propertyId]: isAlready,
 			}));
-		} catch (err) {
-			Alert.alert('Error', 'Something went wrong.');
+			Alert.alert('Error', 'Something went wrong with wishlist update.');
 		}
-	};
+	}, [wishlist]);
 
-	const renderNewArrivalItem = ({ item }: { item: Property }) => (
+	// Memoized sections data
+	const sections = useMemo((): Section[] => {
+		const sectionsData: Section[] = [
+			{
+				id: 'banner',
+				type: 'banner',
+			},
+		];
+
+		// Add last search if user is logged in and has last viewed
+		if (isLoggedIn && lastViewed) {
+			sectionsData.push({
+				id: 'lastSearch',
+				type: 'lastSearch',
+			});
+		}
+
+		// Add property sections
+		sectionsData.push(
+			{
+				id: 'newArrivals',
+				type: 'newArrivals',
+				data: newArrivals,
+				loading: newArrivalsLoading,
+				title: 'New Arrivals',
+			},
+			{
+				id: 'popular',
+				type: 'popular',
+				data: popularProperties,
+				loading: popularPropertiesLoading,
+				title: 'Popular Properties',
+			},
+			{
+				id: 'featured',
+				type: 'featured',
+				data: featuredProperties,
+				loading: featuredPropertiesLoading,
+				title: 'Featured Properties',
+			},
+			{
+				id: 'exploreMore',
+				type: 'exploreMore',
+			}
+		);
+
+		return sectionsData;
+	}, [
+		isLoggedIn,
+		lastViewed,
+		newArrivals,
+		newArrivalsLoading,
+		popularProperties,
+		popularPropertiesLoading,
+		featuredProperties,
+		featuredPropertiesLoading,
+	]);
+
+	// Render functions for different property types
+	const renderNewArrivalItem = useCallback(({ item }: { item: Property }) => (
 		<NewArrivalsCard
 			property={item}
 			isWishlisted={wishlist[item.id]}
 			onWishlistToggle={() => toggleWishlist(item.id)}
-			onPress={() =>
-				navigation.navigate('AppDrawer', {
-					screen: 'MainTabs',
-					params: {
-						screen: 'ExploreStack',
-						params: {
-							screen: 'PropertyDetails',
-							params: {
-								propertyId: item.id,
-							},
-						},
-					},
-				})
-			}
+			onPress={() => handlePropertyPress(item.id)}
 		/>
-	);
+	), [wishlist, toggleWishlist, handlePropertyPress]);
 
-	const renderPopularItem = ({ item }: { item: Property }) => (
+	const renderPopularItem = useCallback(({ item }: { item: Property }) => (
 		<PopularCard
 			property={item}
 			isWishlisted={wishlist[item.id]}
 			onWishlistToggle={() => toggleWishlist(item.id)}
-			onPress={() =>
-				navigation.navigate('AppDrawer', {
-					screen: 'MainTabs',
-					params: {
-						screen: 'ExploreStack',
-						params: {
-							screen: 'PropertyDetails',
-							params: {
-								propertyId: item.id,
-							},
-						},
-					},
-				})
-			}
+			onPress={() => handlePropertyPress(item.id)}
 		/>
-	);
+	), [wishlist, toggleWishlist, handlePropertyPress]);
 
-	const renderFeaturedItem = ({ item }: { item: Property }) => (
+	const renderFeaturedItem = useCallback(({ item }: { item: Property }) => (
 		<FeaturedCard
 			property={item}
 			isWishlisted={wishlist[item.id]}
 			onWishlistToggle={() => toggleWishlist(item.id)}
-			onPress={() =>
-				navigation.navigate('AppDrawer', {
-					screen: 'MainTabs',
-					params: {
-						screen: 'ExploreStack',
-						params: {
-							screen: 'PropertyDetails',
-							params: {
-								propertyId: item.id,
-							},
-						},
-					},
-				})
-			}
+			onPress={() => handlePropertyPress(item.id)}
 		/>
-	);
+	), [wishlist, toggleWishlist, handlePropertyPress]);
+
+	// Loading card renderer
+	const renderLoadingCard = useCallback(() => <PropertyLoadingCard />, []);
+
+	// Property list renderer
+	const renderPropertyList = useCallback((
+		data: Property[],
+		loading: boolean,
+		renderItem: ({ item }: { item: Property }) => React.ReactElement
+	) => {
+		if (loading) {
+			return (
+				<FlatList
+					data={[1, 2]}
+					horizontal
+					keyExtractor={(item, index) => `loading-${index}`}
+					renderItem={renderLoadingCard}
+					contentContainerStyle={styles.flatListContainer}
+					showsHorizontalScrollIndicator={false}
+					removeClippedSubviews={true}
+					initialNumToRender={2}
+					maxToRenderPerBatch={2}
+					windowSize={3}
+				/>
+			);
+		}
+
+		if (!data || data.length === 0) {
+			return (
+				<View style={styles.emptySection}>
+					<AppText style={styles.emptyText}>No properties available</AppText>
+				</View>
+			);
+		}
+
+		return (
+			<FlatList
+				data={data}
+				horizontal
+				keyExtractor={(item, index) => item.id ?? `property-${index}`}
+				renderItem={renderItem}
+				contentContainerStyle={styles.flatListContainer}
+				showsHorizontalScrollIndicator={false}
+				removeClippedSubviews={true}
+				initialNumToRender={2}
+				maxToRenderPerBatch={3}
+				windowSize={5}
+				getItemLayout={(data, index) => ({
+					length: 280, // Approximate card width + margin
+					offset: 280 * index,
+					index,
+				})}
+			/>
+		);
+	}, [renderLoadingCard]);
+
+	// Banner component
+	const BannerSection = useCallback(() => (
+		<View style={styles.bannerContainer}>
+			<View style={styles.sloganWrapper}>
+				<Icons.FA
+					name="quote-left"
+					size={16}
+					color={Colors.white}
+				/>
+				<AppText weight="SemiBold" style={styles.sloganText}>
+					Find Your Space. Live Your Dream.
+				</AppText>
+				<Icons.FA
+					name="quote-right"
+					size={16}
+					color={Colors.white}
+				/>
+			</View>
+			<SearchBar />
+		</View>
+	), []);
+
+	// Last search component
+	const LastSearchSection = useCallback(() => (
+		<ContinueLastSearchCard
+			userEmail={user?.email}
+			onPress={handleLastViewedPress}
+		/>
+	), [user?.email, handleLastViewedPress]);
+
+	// Explore more component
+	const ExploreMoreSection = useCallback(() => (
+		<ExploreMorePropertiesCard
+			onPress={handlePropertiesNavigation}
+		/>
+	), [handlePropertiesNavigation]);
+
+	// Main render item function
+	const renderMainItem = useCallback(({ item }: { item: Section }) => {
+		switch (item.type) {
+			case 'banner':
+				return <BannerSection />;
+
+			case 'lastSearch':
+				return <LastSearchSection />;
+
+			case 'newArrivals':
+				return (
+					<View style={styles.propertySection}>
+						<Text style={styles.sectionTitle}>{item.title}</Text>
+						{renderPropertyList(item.data || [], item.loading || false, renderNewArrivalItem)}
+					</View>
+				);
+
+			case 'popular':
+				return (
+					<View style={styles.propertySection}>
+						<Text style={styles.sectionTitle}>{item.title}</Text>
+						{renderPropertyList(item.data || [], item.loading || false, renderPopularItem)}
+					</View>
+				);
+
+			case 'featured':
+				return (
+					<View style={styles.propertySection}>
+						<Text style={styles.sectionTitle}>{item.title}</Text>
+						{renderPropertyList(item.data || [], item.loading || false, renderFeaturedItem)}
+					</View>
+				);
+
+			case 'exploreMore':
+				return <ExploreMoreSection />;
+
+			default:
+				return null;
+		}
+	}, [
+		BannerSection,
+		LastSearchSection,
+		renderPropertyList,
+		renderNewArrivalItem,
+		renderPopularItem,
+		renderFeaturedItem,
+		ExploreMoreSection,
+	]);
+
+	// Get item layout for main FlatList optimization
+	const getMainItemLayout = useCallback((data: Section[] | null | undefined, index: number) => {
+		const item = data?.[index];
+		let height = 0;
+
+		switch (item?.type) {
+			case 'banner':
+				height = 160; // Approximate banner height
+				break;
+			case 'lastSearch':
+				height = 120; // Approximate last search card height
+				break;
+			case 'newArrivals':
+			case 'popular':
+			case 'featured':
+				height = 300; // Section title + property cards height
+				break;
+			case 'exploreMore':
+				height = 100; // Explore more card height
+				break;
+			default:
+				height = 50;
+		}
+
+		return {
+			length: height,
+			offset: height * index,
+			index,
+		};
+	}, []);
+
+	// Loading state
+	if (newArrivalsLoading && popularPropertiesLoading && featuredPropertiesLoading) {
+		return (
+			<SafeAreaView style={styles.safeArea}>
+				<StatusBar
+					barStyle="light-content"
+					backgroundColor={Colors.primary}
+				/>
+				<TopNavBar />
+				<View style={styles.loadingContainer}>
+					<ActivityIndicator size="large" color={Colors.primary} />
+					<AppText style={styles.loadingText}>Loading amazing properties...</AppText>
+				</View>
+			</SafeAreaView>
+		);
+	}
 
 	return (
 		<SafeAreaView style={styles.safeArea}>
@@ -177,196 +437,24 @@ const HomeScreen = ({ navigation }: any) => {
 			{/* Top Navigation Bar */}
 			<TopNavBar />
 
-			{/* Scroll View */}
-			<ScrollView
-				contentContainerStyle={styles.scrollContainer}
+			{/* Main Content - Single FlatList */}
+			<FlatList
+				data={sections}
+				keyExtractor={(item) => item.id}
+				renderItem={renderMainItem}
+				contentContainerStyle={styles.mainContainer}
 				showsVerticalScrollIndicator={false}
-			>
-				{/* Banner */}
-				{/* <Banner /> */}
-				<View style={styles.bannerContainer}>
-					<View style={styles.sloganWrapper}>
-						<Icons.FA
-							name="quote-left"
-							size={16}
-							color={Colors.primary}
-						/>
-						<AppText weight="SemiBold" style={styles.sloganText}>
-							Find Your Space. Live Your Dream.
-						</AppText>
-						<Icons.FA
-							name="quote-right"
-							size={16}
-							color={Colors.primary}
-						/>
-					</View>
-					<SearchBar />
-				</View>
-
-				<View style={styles.main}>
-					{/* Last Search  lastSearch */}
-					{isLoggedIn && lastViewed && (
-						<ContinueLastSearchCard
-							userEmail={user?.email}
-							// lastSearch={lastSearch}
-							onPress={() =>
-								navigation.navigate('AppDrawer', {
-									screen: 'MainTabs',
-									params: {
-										screen: 'ExploreStack',
-										params: {
-											screen: 'PropertyDetails',
-											params: {
-												propertyId: lastViewed,
-											},
-										},
-									},
-								})
-								// () => navigation.navigate('PropertyDetails', { propertyId: lastViewed })
-							}
-						/>
-					)}
-
-					{/* New Arrivals Properties */}
-					<Text style={styles.sectionTitle}>New Arrivals</Text>
-					{newArrivalsLoading ? (
-						<View style={styles.propertySection}>
-							<FlatList
-								data={[1, 2]}
-								horizontal
-								keyExtractor={(item) => item.toString()}
-								renderItem={() => <PropertyLoadingCard />}
-								contentContainerStyle={styles.flatListContainer}
-								showsHorizontalScrollIndicator={false}
-							/>
-						</View>
-					) : (
-						<>
-							{newArrivals.length > 0 && (
-								<View style={styles.propertySection}>
-									<FlatList
-										data={newArrivals}
-										horizontal
-										keyExtractor={(item, index) =>
-											item.id ?? `property-${index}`
-										}
-										renderItem={renderNewArrivalItem}
-										contentContainerStyle={
-											styles.flatListContainer
-										}
-										showsHorizontalScrollIndicator={false}
-									/>
-								</View>
-							)}
-						</>
-					)}
-
-					{/* Popular Properties */}
-					<Text style={styles.sectionTitle}>Popular Properties</Text>
-					{popularPropertiesLoading ? (
-						<View style={styles.propertySection}>
-							<FlatList
-								data={[1, 2]}
-								horizontal
-								keyExtractor={(item) => item.toString()}
-								renderItem={() => <PropertyLoadingCard />}
-								contentContainerStyle={styles.flatListContainer}
-								showsHorizontalScrollIndicator={false}
-							/>
-						</View>
-					) : (
-						<>
-							{popularProperties.length > 0 && (
-								<View style={styles.propertySection}>
-									<FlatList
-										data={popularProperties}
-										horizontal
-										keyExtractor={(item, index) =>
-											item.id ?? `property-${index}`
-										}
-										renderItem={renderPopularItem}
-										contentContainerStyle={
-											styles.flatListContainer
-										}
-										showsHorizontalScrollIndicator={false}
-									/>
-								</View>
-							)}
-						</>
-					)}
-
-					{/* Featured Properties */}
-					<Text style={styles.sectionTitle}>Featured Properties</Text>
-					{featuredPropertiesLoading ? (
-						<View style={styles.propertySection}>
-							<FlatList
-								data={[1, 2]}
-								horizontal
-								keyExtractor={(item) => item.toString()}
-								renderItem={() => <PropertyLoadingCard />}
-								contentContainerStyle={styles.flatListContainer}
-								showsHorizontalScrollIndicator={false}
-							/>
-						</View>
-					) : (
-						<>
-							{featuredProperties.length > 0 && (
-								<View style={styles.propertySection}>
-									<FlatList
-										data={featuredProperties}
-										horizontal
-										keyExtractor={(item, index) =>
-											item.id ?? `property-${index}`
-										}
-										renderItem={renderFeaturedItem}
-										contentContainerStyle={
-											styles.flatListContainer
-										}
-										showsHorizontalScrollIndicator={false}
-									/>
-								</View>
-							)}
-						</>
-					)}
-
-					<ExploreMorePropertiesCard
-						onPress={() => {
-							handlePress;
-						}}
-					/>
-				</View>
-			</ScrollView>
+				removeClippedSubviews={true}
+				initialNumToRender={3}
+				maxToRenderPerBatch={2}
+				windowSize={10}
+				getItemLayout={getMainItemLayout}
+				onEndReachedThreshold={0.5}
+				bounces={true}
+				overScrollMode="auto"
+			/>
 		</SafeAreaView>
 	);
 };
 
 export default HomeScreen;
-
-// const HeaderLeft: React.FC<{ onPress: () => void }> = ({ onPress }) => (
-//   <TouchableOpacity onPress={onPress} style={styles.headerLeft}>
-//     <Icon name="menu" size={24} color="#000" />
-//   </TouchableOpacity>
-// );
-
-// const handleOpenDrawer = useCallback(() => {
-//   navigation.openDrawer();
-// }, [navigation]);
-
-// const HeaderLeftComponent = useCallback(() => {
-//   return <HeaderLeft onPress={handleOpenDrawer} />;
-// }, [handleOpenDrawer]);
-
-// useLayoutEffect(() => {
-//   navigation.setOptions({ headerLeft: HeaderLeftComponent });
-// }, [navigation, HeaderLeftComponent]);
-
-// const [user, setUser] = useState<User | null>(null);
-
-// const getAuthUser = useCallback(async () => {
-//   const decoded = await getDecodedToken();
-//   setUser(decoded);
-// }, []);
-
-// useEffect(() => {
-//   getAuthUser();
-// }, [getAuthUser]);

@@ -152,6 +152,14 @@ const styles = StyleSheet.create({
 	picker: {
 		height: 52,
 		color: Colors.grey900,
+		backgroundColor: Colors.white150,
+	},
+
+	pickerItem: {
+		backgroundColor: Colors.white150,
+		fontFamily: Fonts.Regular,
+		borderWidth: 1,
+		borderBottomColor: Colors.grey200,
 	},
 
 	// Price Container

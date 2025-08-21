@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 import {
 	View,
 	StyleSheet,
 	TouchableOpacity,
 	Dimensions,
 	TextInput,
-} from "react-native";
+} from 'react-native';
 
-import Icons from "../../constants/Icons";
-import { Colors, Fonts, TextSizes } from "../../constants";
-import images from "../../assets/images";
-import AppText from "../../components/AppTheme/AppText";
-import PropertyImageSlider from "../../components/PropertyUtils/PropertyImageSlider";
-import { SCREEN_WIDTH } from "../../utils/appUtils/dimensions";
+import Icons from '../../constants/Icons';
+import { Colors, Fonts, TextSizes } from '../../constants';
+import images from '../../assets/images';
+import AppText from '../../components/AppTheme/AppText';
+import PropertyImageSlider from '../../components/PropertyUtils/PropertyImageSlider';
+import { SCREEN_WIDTH } from '../../utils/appUtils/dimensions';
 
 interface Tag {
 	label: string;
@@ -21,13 +21,13 @@ interface Tag {
 }
 
 const formatAddress = (location: any): string => {
-	if (!location || typeof location !== "object") {
-		return "";
+	if (!location || typeof location !== 'object') {
+		return '';
 	}
 	const { street, locality, nearby, city, district, state, zip } = location;
 	return [street, locality, nearby, city, district, state, zip]
 		.filter(Boolean)
-		.join(", ");
+		.join(', ');
 };
 
 interface PropertyCardProps {
@@ -44,7 +44,7 @@ interface PropertyCardProps {
 		area: number;
 		furnishing?: string;
 		amenities?: string[];
-		status?: "available" | "sold" | "rented";
+		status?: 'available' | 'sold' | 'rented';
 		is_verified?: boolean;
 		description?: string;
 		onPrimaryAction: () => void;
@@ -68,18 +68,18 @@ const MyPropertyCard: React.FC<PropertyCardProps> = ({
 	const {
 		title,
 		location,
-		priceType = "₹",
+		priceType = '₹',
 		price,
 		deposit,
 		property_type,
 		bedrooms,
 		bathrooms,
 		area,
-		furnishing = "Unfurnished",
+		furnishing = 'Unfurnished',
 		amenities = [],
-		status = "available",
+		status = 'available',
 		is_verified = false,
-		description = "",
+		description = '',
 		onPrimaryAction,
 		onSecondaryAction,
 		primaryLabel,
@@ -99,10 +99,10 @@ const MyPropertyCard: React.FC<PropertyCardProps> = ({
 	const imageList = hasImages ? property_images : [images.defaultHome];
 
 	const locationText =
-		typeof location === "string" ? location : formatAddress(location);
+		typeof location === 'string' ? location : formatAddress(location);
 
 	const formatPrice = (value: number) => {
-		return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 	};
 
 	return (
@@ -208,7 +208,7 @@ const MyPropertyCard: React.FC<PropertyCardProps> = ({
 				<View style={styles.featuresContainer}>
 					<View style={[styles.featureItem, styles.highlightFeature]}>
 						<Icons.FA
-							name="building"
+							name="home"
 							size={16}
 							color={Colors.primary}
 						/>
@@ -357,33 +357,33 @@ export default MyPropertyCard;
 const styles = StyleSheet.create({
 	card: {
 		width: SCREEN_WIDTH * 0.9,
-		backgroundColor: "#fff", // Colors.white100
+		backgroundColor: '#fff', // Colors.white100
 		borderRadius: 20,
 		// marginHorizontal: 8,
 		marginVertical: 12,
-		shadowColor: "#000",
+		shadowColor: '#000',
 		shadowOpacity: 0.08,
 		shadowOffset: { width: 0, height: 6 },
 		shadowRadius: 12,
 		elevation: 4,
-		overflow: "hidden",
+		overflow: 'hidden',
 	},
 	row: {
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		gap: 12,
-		alignItems: "flex-start",
+		alignItems: 'flex-start',
 		// marginBottom: 10,
 	},
 	section: {
 		paddingHorizontal: 8,
 		paddingVertical: 8,
 		borderBottomWidth: 1,
-		borderBottomColor: "#f3f4f6",
+		borderBottomColor: '#f3f4f6',
 	},
 	sectionHeader: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		marginBottom: 8,
 	},
 	sectionTitle: {
@@ -392,9 +392,9 @@ const styles = StyleSheet.create({
 		marginLeft: 8,
 	},
 	searchContainer: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#f3f4f6",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#f3f4f6',
 		borderRadius: 12,
 		paddingHorizontal: 12,
 		paddingVertical: 10,
@@ -403,20 +403,20 @@ const styles = StyleSheet.create({
 	searchInput: {
 		flex: 1,
 		fontSize: 14,
-		color: "#1f2937",
+		color: '#1f2937',
 		marginLeft: 8,
 	},
 	coverImage: {
 		height: 180,
-		position: "relative",
+		position: 'relative',
 	},
 	verifiedBadge: {
-		position: "absolute",
+		position: 'absolute',
 		top: 12,
 		left: 12,
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#fff",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#fff',
 		borderRadius: 12,
 		paddingHorizontal: 8,
 		paddingVertical: 4,
@@ -424,31 +424,31 @@ const styles = StyleSheet.create({
 	verifiedText: {
 		marginLeft: 4,
 		fontSize: 12,
-		fontWeight: "600",
+		fontWeight: '600',
 		color: Colors.primary,
 	},
 	heart: {
-		position: "absolute",
+		position: 'absolute',
 		top: 12,
 		right: 12,
 		width: 36,
 		height: 36,
-		backgroundColor: "rgba(0,0,0,0.4)",
-		justifyContent: "center",
-		alignItems: "center",
+		backgroundColor: 'rgba(0,0,0,0.4)',
+		justifyContent: 'center',
+		alignItems: 'center',
 		borderRadius: 18,
 	},
 	titleLocation: {
-		width: "63%",
+		width: '63%',
 		fontSize: TextSizes.md,
 	},
 	priceBadge: {
 		// width: '40%',
-		backgroundColor: "#fff",
+		backgroundColor: '#fff',
 		borderRadius: 12,
 		paddingVertical: 8,
 		paddingHorizontal: 8,
-		alignItems: "flex-start",
+		alignItems: 'flex-start',
 		borderWidth: 1,
 		borderColor: Colors.primary,
 	},
@@ -459,54 +459,54 @@ const styles = StyleSheet.create({
 		fontSize: TextSizes.sm,
 	},
 	depositText: {
-		color: "#6b7280",
+		color: '#6b7280',
 		fontSize: 12,
 		marginTop: 4,
 	},
 	title: {
 		fontSize: TextSizes.sm,
 		// fontWeight: '700',
-		color: "#1f2937",
+		color: '#1f2937',
 		marginBottom: 8,
 	},
 	location: {
-		flexDirection: "row",
-		alignItems: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
 		marginBottom: 8,
 	},
 	locationText: {
 		fontSize: TextSizes.sm,
-		color: "#6b7280",
+		color: '#6b7280',
 		marginLeft: 8,
 		flex: 1,
 	},
 	featuresContainer: {
-		flexDirection: "row",
-		flexWrap: "wrap",
-		justifyContent: "flex-start",
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: 'flex-start',
 		gap: 8,
 	},
 	featureItem: {
-		flexDirection: "row",
-		alignItems: "center",
-		backgroundColor: "#f3f4f6",
+		flexDirection: 'row',
+		alignItems: 'center',
+		backgroundColor: '#f3f4f6',
 		paddingHorizontal: 8,
 		paddingVertical: 8,
 		borderRadius: 8,
 	},
 	highlightFeature: {
-		backgroundColor: Colors.primary + "20",
+		backgroundColor: Colors.primary + '20',
 	},
 	featureText: {
 		fontSize: TextSizes.xs,
-		color: "#4b5563",
+		color: '#4b5563',
 		marginLeft: 6,
 	},
 
 	// Amenities styles
 	amenitiesContainer: {
-		flexDirection: "row",
-		flexWrap: "wrap",
+		flexDirection: 'row',
+		flexWrap: 'wrap',
 		gap: 8,
 	},
 	amenityItem: {
@@ -517,26 +517,26 @@ const styles = StyleSheet.create({
 	},
 	amenityText: {
 		fontSize: 10,
-		color: "#4b5563",
-		textTransform: "capitalize",
+		color: '#4b5563',
+		textTransform: 'capitalize',
 	},
 	description: {
 		fontSize: 14,
-		color: "#6b7280",
+		color: '#6b7280',
 		lineHeight: 20,
 	},
 
 	// Button styles
 	buttonRow: {
-		flexDirection: "row",
-		justifyContent: "space-between",
+		flexDirection: 'row',
+		justifyContent: 'space-between',
 		gap: 12,
 	},
 	primaryButton: {
 		flex: 1,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		backgroundColor: Colors.primary,
 		paddingVertical: 12,
 		borderRadius: 12,
@@ -548,9 +548,9 @@ const styles = StyleSheet.create({
 	},
 	secondaryButton: {
 		flex: 1,
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
+		flexDirection: 'row',
+		alignItems: 'center',
+		justifyContent: 'center',
 		borderColor: Colors.primary,
 		borderWidth: 1.5,
 		paddingVertical: 12,

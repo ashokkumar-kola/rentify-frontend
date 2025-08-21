@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
-import { getMyProperties } from "../../services/PropertyServices";
-import { getDecodedToken } from "../../utils/getDecodedToken";
+import { useState, useEffect, useCallback } from 'react';
+import { getMyProperties } from '../../services/PropertyServices';
+import { getDecodedToken } from '../../utils/getDecodedToken';
 
 export interface Property {
 	_id: string;
@@ -20,15 +20,16 @@ const useMyProperties = () => {
 			const tokenData = await getDecodedToken();
 
 			if (!tokenData || !tokenData.id) {
-				throw new Error("User ID not found in token.");
+				return;
+				// throw new Error('User ID not found in token.');
 			}
 
-			console.log(tokenData.id);
+			// console.log(tokenData.id);
 			const response = await getMyProperties(tokenData.id);
-			setProperties(response || []);
+			setProperties(response.data || []);
 		} catch (err: any) {
-			console.error("Error fetching properties:", err);
-			setError(err.message || "Failed to fetch properties.");
+			console.error('Error fetching properties:', err);
+			setError(err.message || 'Failed to fetch properties.');
 		} finally {
 			setLoading(false);
 		}

@@ -7,12 +7,16 @@ import MyPropertiesStackNavigator from './MyPropertiesStackNavigator';
 import MyRentalsStackNavigator from './MyRentalsStackNavigator';
 import PaymentsStackNavigator from './PaymentsStackNavigator';
 
+import { useAuth } from '../contexts/AuthContext';
+
 import { ProfileStackParamList } from './types';
 import { Colors } from '../constants';
 
 const Stack = createNativeStackNavigator<ProfileStackParamList>();
 
 const ProfileStackNavigator = () => {
+	const { isLoggedIn } = useAuth();
+
 	return (
 		<Stack.Navigator
 			initialRouteName="Profile"

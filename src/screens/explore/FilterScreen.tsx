@@ -166,13 +166,15 @@ const FilterScreen: React.FC = ({ navigation }: any) => {
 									label="All Property Types"
 									value=""
 									color={Colors.grey500}
+									style={styles.pickerItem}
 								/>
 								{propertyTypes.map((type) => (
 									<Picker.Item
 										key={type}
 										label={type}
-										value={type}
+										value={type.toLowerCase()}
 										color={Colors.grey900}
+										style={styles.pickerItem}
 									/>
 								))}
 							</Picker>
@@ -207,7 +209,7 @@ const FilterScreen: React.FC = ({ navigation }: any) => {
 							<Slider
 								minimumValue={0}
 								maximumValue={100000}
-								step={100}
+								step={1000}
 								value={[filters.min_price, filters.max_price]}
 								onValueChange={([min, max]) => setFilters({ min_price: min, max_price: max })}
 								minimumTrackTintColor={Colors.primary}

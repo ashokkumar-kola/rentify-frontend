@@ -54,8 +54,8 @@ export type Location = {
 };
 
 export type Property = {
-	id?: string;
-	landlord_id?: string | null;
+	id: string;
+	landlord_id: string | null;
 
 	title: string;
 	price: string | number;

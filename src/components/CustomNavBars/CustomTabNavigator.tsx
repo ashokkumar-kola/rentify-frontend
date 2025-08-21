@@ -6,6 +6,7 @@ import {
 	StyleSheet,
 	Platform,
 } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 
 import { Colors, Fonts } from '../../constants';
 import Icons from '../../constants/Icons';
@@ -35,9 +36,19 @@ const ActiveTabIcons: Record<string, string> = {
 };
 
 export default function CustomTabBar({ state, descriptors, navigation }: any) {
-	const hiddenRoutes: string | any[] = ['ExploreStack']; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack']; 'ExploreStack', 'MyProperties'
-	const currentRouteName = state.routes[state.index].name;
+	const hiddenRoutes: string[] = [
+		'ExploreStack',
+		'Filters',
+		'PropertyDetails',
+		'Login',
+		'Register',
+		'ProfileStack',
+		'MyPropertiesStack',
+	];
 
+	// const hiddenRoutes: string | any[] = ['ExploreStack']; // ['ExploreStack', 'AddProperty', 'Wishlist', 'ProfileStack']; 'ExploreStack', 'MyProperties'
+	const currentRouteName = state.routes[state.index].name;
+	console.log(currentRouteName);
 	if (hiddenRoutes.includes(currentRouteName)) {
 		return null;
 	}
@@ -57,6 +68,12 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
 					});
 					if (!isFocused && !event.defaultPrevented) {
 						navigation.navigate(route.name);
+						// navigation.dispatch(
+						// 	CommonActions.reset({
+						// 		index: 0,
+						// 		routes: [{ name: route.name }],
+						// 	})
+						// );
 					}
 				};
 

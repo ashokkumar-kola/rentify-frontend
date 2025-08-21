@@ -84,10 +84,11 @@ export const fetchPropertyDetails = async (id: string) => {
 
 export const getMyProperties = async (userId: any) => {
 	const response = await api.get(`/properties/${userId}/my-properties`);
-	return response.data?.data;
+	return response.data;
 };
 
 export const addProperty = async (propertyData: Property) => {
+	console.log(propertyData);
 	const response = await api.post('/properties', propertyData, {
 		headers: {
 			'Content-Type': 'application/json',

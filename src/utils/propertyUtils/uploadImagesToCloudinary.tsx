@@ -1,5 +1,5 @@
-import { Asset } from "react-native-image-picker";
-import uuid from "react-native-uuid";
+import { Asset } from 'react-native-image-picker';
+import uuid from 'react-native-uuid';
 
 export const uploadToCloudinary = async (
 	image: Asset,
@@ -10,28 +10,29 @@ export const uploadToCloudinary = async (
 	public_id: string;
 	format: string;
 } | null> => {
-	const CLOUD_NAME = "dlrnlsds4";
+	const CLOUD_NAME = 'dlrnlsds4';
+	const UPLOAD_PRESET = 'rentify_mobile';
 
 	try {
 		const formData = new FormData();
 
-		formData.append("file", {
+		formData.append('file', {
 			uri: image.uri,
 			type: image.type,
 			name: image.fileName ?? `image_${Date.now()}.jpg`,
 		});
 
-		formData.append("folder", `user_${userId}/property_${propertyId}`);
+		formData.append('folder', `user_${userId}/property_${propertyId}`);
 
 		const uniqueName = `img_${uuid.v4()}`;
-		formData.append("public_id", uniqueName);
+		formData.append('public_id', uniqueName);
 
-		formData.append("upload_preset", "rentify_mobile");
+		formData.append('upload_preset', UPLOAD_PRESET);
 
 		const res = await fetch(
 			`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`,
 			{
-				method: "POST",
+				method: 'POST',
 				body: formData,
 			}
 		);
@@ -39,7 +40,7 @@ export const uploadToCloudinary = async (
 		const data = await res.json();
 
 		if (!res.ok || !data.secure_url) {
-			console.error("Cloudinary Upload Failed:", data);
+			console.error('Cloudinary Upload Failed:', data);
 			return null;
 		}
 
@@ -49,7 +50,7 @@ export const uploadToCloudinary = async (
 			format: data.format, // Optional: jpg, png, etc.
 		};
 	} catch (error) {
-		console.error("Upload to Cloudinary Error:", error);
+		console.error('Upload to Cloudinary Error:', error);
 		return null;
 	}
 };

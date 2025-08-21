@@ -46,7 +46,7 @@ const AddPropertyScreen = ({ navigation }: any) => {
 			Alert.alert('Success', result.message, [
 				{
 					text: 'OK',
-					onPress: () => navigation.navigate('MyProperties'),
+					onPress: () => navigation.replace('MyProperties'),
 				},
 			]);
 		} else {

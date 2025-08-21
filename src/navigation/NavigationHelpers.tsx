@@ -3,12 +3,12 @@ export function goToPropertyDetails(propertyId: string) {
 		return;
 	}
 
-	navigationRef.navigate("AppDrawer", {
-		screen: "MainTabs",
+	navigationRef.navigate('AppDrawer', {
+		screen: 'MainTabs',
 		params: {
-			screen: "ExploreStack",
+			screen: 'ExploreStack',
 			params: {
-				screen: "PropertyDetails",
+				screen: 'PropertyDetails',
 				params: {
 					propertyId,
 				},
