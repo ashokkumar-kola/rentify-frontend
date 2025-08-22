@@ -1,5 +1,5 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import {
 	LoginScreen,
@@ -7,9 +7,9 @@ import {
 	ForgotPasswordScreen,
 	ConfirmEmailScreen,
 	ResetPasswordScreen,
-} from "../screens";
+} from '../screens';
 
-import { AuthStackParamList } from "./types";
+import { AuthStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
@@ -30,12 +30,12 @@ const AuthStackNavigator = () => {
 			<Stack.Screen
 				name="Login"
 				component={LoginScreen}
-				options={{ presentation: "transparentModal" }}
+				options={{ presentation: 'transparentModal' }}
 			/>
 			<Stack.Screen
 				name="Register"
 				component={RegisterScreen}
-				options={{ presentation: "transparentModal" }}
+				options={{ presentation: 'transparentModal' }}
 			/>
 			<Stack.Screen
 				name="ForgotPassword"

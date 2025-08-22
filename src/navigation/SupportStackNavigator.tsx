@@ -1,10 +1,10 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import SupportScreen from "../screens/support/SupportScreen";
-import FAQScreen from "../screens/support/FAQScreen";
-import TermsAndConditionsScreen from "../screens/support/TermsAndConditionsScreen";
-import PrivacyPolicyScreen from "../screens/support/PrivacyPolicyScreen";
+import SupportScreen from '../screens/support/SupportScreen';
+import FAQScreen from '../screens/support/FAQScreen';
+import TermsAndConditionsScreen from '../screens/support/TermsAndConditionsScreen';
+import PrivacyPolicyScreen from '../screens/support/PrivacyPolicyScreen';
 
 export type SupportStackParamList = {
 	SupportScreen: undefined;

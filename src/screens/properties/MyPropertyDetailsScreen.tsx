@@ -18,7 +18,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Colors, Fonts, Spacing, TextSizes } from '../../constants';
 import images from '../../assets/images';
 import { usePropertyDetails } from '../../hooks/propertyHooks/usePropertyDetails';
-import { useAppNavigation } from '../../navigation/useAppNavigation';
+// import { useAppNavigation } from '../../navigation/useAppNavigation';
 import { deleteProperty } from '../../services/PropertyServices';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MyPropertiesStackParamList } from '../../navigation/types';
@@ -134,7 +134,7 @@ const useAnimations = () => {
 
 const usePropertyActions = (navigation: any) => {
 	const [loading, setLoading] = useState(false);
-	const { navigateTo } = useAppNavigation();
+	// const { navigateTo } = useAppNavigation();
 
 	const handleDeleteProperty = useCallback((propertyId: string) => {
 		Alert.alert(
@@ -181,8 +181,9 @@ const usePropertyActions = (navigation: any) => {
 	}, [navigation]);
 
 	const handleContactOwner = useCallback(() => {
-		navigateTo('SupportStack');
-	}, [navigateTo]);
+		// navigateTo('SupportStack');
+		navigation.navigate('Properties');
+	}, [navigation]);
 
 	return { loading, handleDeleteProperty, handleContactOwner };
 };

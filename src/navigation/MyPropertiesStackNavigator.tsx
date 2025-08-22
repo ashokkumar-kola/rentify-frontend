@@ -1,13 +1,13 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import MyPropertiesScreen from "../screens/properties/MyPropertiesScreen";
-import MyPropertyDetailsScreen from "../screens/properties/MyPropertyDetailsScreen";
-import EditPropertyScreen from "../screens/properties/EditPropertyScreen";
-import AddPropertyScreen from "../screens/properties/AddPropertyScreen";
-import PropertyApplicationsScreen from "../screens/properties/PropertyApplicationsScreen";
+import MyPropertiesScreen from '../screens/properties/MyPropertiesScreen';
+import MyPropertyDetailsScreen from '../screens/properties/MyPropertyDetailsScreen';
+import EditPropertyScreen from '../screens/properties/EditPropertyScreen';
+import AddPropertyScreen from '../screens/properties/AddPropertyScreen';
+import PropertyApplicationsScreen from '../screens/properties/PropertyApplicationsScreen';
 
-import { MyPropertiesStackParamList } from "./types";
+import { MyPropertiesStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<MyPropertiesStackParamList>();
 

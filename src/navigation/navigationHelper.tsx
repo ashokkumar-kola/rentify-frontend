@@ -1,92 +1,84 @@
-import { NavigationProp, CommonActions } from '@react-navigation/native';
+import { useNavigation, CommonActions } from '@react-navigation/native';
+import type { NavigationProp } from '@react-navigation/native';
 import {
   RootStackParamList,
-  AppDrawerParamList,
+//   AppDrawerParamList,
   MainTabParamList,
-  HomeStackParamList,
-  ExploreStackParamList,
-  ProfileStackParamList,
-  MyPropertiesStackParamList,
-  MyRentalsStackParamList,
-  PaymentsStackParamList,
+//   HomeStackParamList,
+//   ExploreStackParamList,
+//   ProfileStackParamList,
+//   MyPropertiesStackParamList,
+//   MyRentalsStackParamList,
+//   PaymentsStackParamList,
   AuthStackParamList,
   OnboardingStackParamList,
   AdminStackParamList,
 } from './types';
 
-// Type for the main navigation prop used throughout the app
+// Main navigation type
 export type AppNavigationProp = NavigationProp<RootStackParamList>;
 
-export class NavigationHelper {
-  private navigation: AppNavigationProp;
-
-  constructor(navigation: AppNavigationProp) {
-    this.navigation = navigation;
-  }
+// Modern Navigation Helper Hook
+export const useNavigationHelper = () => {
+  const navigation = useNavigation<AppNavigationProp>();
 
   // Root Level Navigation
-  navigateToSplash = () => {
-    this.navigation.navigate('Splash');
+  const navigateToSplash = () => {
+    navigation.navigate('Splash');
   };
 
-  navigateToOnboarding = (screen?: keyof OnboardingStackParamList) => {
-    this.navigation.navigate('OnboardingStack', { screen });
+  const navigateToOnboarding = (screen?: keyof OnboardingStackParamList) => {
+    navigation.navigate('OnboardingStack', { screen });
   };
 
-  navigateToAuth = (screen?: keyof AuthStackParamList, params?: any) => {
-    this.navigation.navigate('AuthStack', { screen, params });
+  const navigateToAuth = (screen?: keyof AuthStackParamList, params?: any) => {
+    navigation.navigate('AuthStack', { screen, params });
   };
 
-  navigateToAdmin = (screen?: keyof AdminStackParamList, params?: any) => {
-    this.navigation.navigate('AdminStack', { screen, params });
+  const navigateToAdmin = (screen?: keyof AdminStackParamList, params?: any) => {
+    navigation.navigate('AdminStack', { screen, params });
   };
 
   // Auth Stack Navigation
-  navigateToLogin = () => {
-    this.navigation.navigate('AuthStack', { screen: 'Login' });
+  const navigateToLogin = () => {
+    navigation.navigate('AuthStack', { screen: 'Login' });
   };
 
-  navigateToRegister = () => {
-    this.navigation.navigate('AuthStack', { screen: 'Register' });
+  const navigateToRegister = () => {
+    navigation.navigate('AuthStack', { screen: 'Register' });
   };
 
-  navigateToForgotPassword = () => {
-    this.navigation.navigate('AuthStack', { screen: 'ForgotPassword' });
+  const navigateToForgotPassword = () => {
+    navigation.navigate('AuthStack', { screen: 'ForgotPassword' });
   };
 
-  navigateToConfirmEmail = (email: string) => {
-    this.navigation.navigate('AuthStack', {
-      screen: 'ConfirmEmail',
-      params: { email },
-    });
+  const navigateToConfirmEmail = (email: string) => {
+    navigation.navigate('AuthStack', { screen: 'ConfirmEmail', params: { email } });
   };
 
-  navigateToResetPassword = (email: string) => {
-    this.navigation.navigate('AuthStack', {
-      screen: 'ResetPassword',
-      params: { email },
-    });
+  const navigateToResetPassword = (email: string) => {
+    navigation.navigate('AuthStack', { screen: 'ResetPassword', params: { email } });
   };
 
   // Main App Navigation (Drawer Level)
-  navigateToMainTabs = (screen?: keyof MainTabParamList) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToMainTabs = (screen?: keyof MainTabParamList) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: screen ? { screen } : undefined,
     });
   };
 
-  navigateToSettings = () => {
-    this.navigation.navigate('AppDrawer', { screen: 'Settings' });
+  const navigateToSettings = () => {
+    navigation.navigate('AppDrawer', { screen: 'Settings' });
   };
 
-  navigateToSupport = () => {
-    this.navigation.navigate('AppDrawer', { screen: 'SupportStack' });
+  const navigateToSupport = () => {
+    navigation.navigate('AppDrawer', { screen: 'SupportStack' });
   };
 
   // Home Stack Navigation
-  navigateToHome = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToHome = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'HomeStack',
@@ -95,8 +87,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToNotifications = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToNotifications = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'HomeStack',
@@ -106,8 +98,8 @@ export class NavigationHelper {
   };
 
   // Explore Stack Navigation
-  navigateToProperties = (properties: any) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToProperties = (properties?: any) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ExploreStack',
@@ -119,8 +111,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToPropertyDetails = (propertyId: string) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToPropertyDetails = (propertyId: string) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ExploreStack',
@@ -132,8 +124,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToFilters = (filters: any) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToFilters = (filters?: any) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ExploreStack',
@@ -145,8 +137,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToPropertyMapView = (coordinates?: { lat: number; lng: number }) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToPropertyMapView = (coordinates?: { lat: number; lng: number }) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ExploreStack',
@@ -158,10 +150,9 @@ export class NavigationHelper {
     });
   };
 
-  // SIMPLIFIED: Direct navigation to main property screens (RECOMMENDED APPROACH)
-  // Instead of deeply nesting, these should be direct tabs or drawer items
-  navigateToMyProperties = () => {
-    this.navigation.navigate('AppDrawer', {
+  // My Properties Navigation
+  const navigateToMyProperties = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'MyPropertiesStack',
@@ -170,8 +161,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToMyPropertyDetails = (propertyId: string) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToMyPropertyDetails = (propertyId: string) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'MyPropertiesStack',
@@ -183,8 +174,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToAddProperty = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToAddProperty = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'MyPropertiesStack',
@@ -193,8 +184,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToEditProperty = (propertyId: string) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToEditProperty = (propertyId: string) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'MyPropertiesStack',
@@ -206,8 +197,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToPropertyApplications = (propertyId: string) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToPropertyApplications = (propertyId: string) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'MyPropertiesStack',
@@ -220,8 +211,8 @@ export class NavigationHelper {
   };
 
   // Profile Stack Navigation
-  navigateToProfile = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToProfile = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -230,8 +221,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToEditProfile = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToEditProfile = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -240,8 +231,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToChangePassword = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToChangePassword = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -250,8 +241,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToKYCVerification = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToKYCVerification = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -260,9 +251,9 @@ export class NavigationHelper {
     });
   };
 
-  // DEEPLY NESTED (CURRENT STRUCTURE) - Consider flattening these
-  navigateToMyRentals = () => {
-    this.navigation.navigate('AppDrawer', {
+  // Rentals Navigation (Consider flattening in production)
+  const navigateToMyRentals = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -274,8 +265,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToMyRentalApplications = () => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToMyRentalApplications = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -287,8 +278,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToApplicationDetails = (applicationId: string) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToApplicationDetails = (applicationId: string) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -303,9 +294,9 @@ export class NavigationHelper {
     });
   };
 
-  // Payments Navigation (Also deeply nested)
-  navigateToMyPayments = () => {
-    this.navigation.navigate('AppDrawer', {
+  // Payments Navigation (Consider flattening in production)
+  const navigateToMyPayments = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -317,8 +308,8 @@ export class NavigationHelper {
     });
   };
 
-  navigateToPaymentDetails = (paymentId: string) => {
-    this.navigation.navigate('AppDrawer', {
+  const navigateToPaymentDetails = (paymentId: string) => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: {
         screen: 'ProfileStack',
@@ -333,46 +324,46 @@ export class NavigationHelper {
     });
   };
 
-  // Wishlist (Simple navigation)
-  navigateToWishlist = () => {
-    this.navigation.navigate('AppDrawer', {
+  // Wishlist Navigation
+  const navigateToWishlist = () => {
+    navigation.navigate('AppDrawer', {
       screen: 'MainTabs',
       params: { screen: 'Wishlist' },
     });
   };
 
   // Admin Navigation
-  navigateToAdminDashboard = () => {
-    this.navigation.navigate('AdminStack', { screen: 'AdminDashboard' });
+  const navigateToAdminDashboard = () => {
+    navigation.navigate('AdminStack', { screen: 'AdminDashboard' });
   };
 
-  navigateToUserManagement = () => {
-    this.navigation.navigate('AdminStack', { screen: 'UserManagement' });
+  const navigateToUserManagement = () => {
+    navigation.navigate('AdminStack', { screen: 'UserManagement' });
   };
 
-  navigateToUserDetail = (userId: string) => {
-    this.navigation.navigate('AdminStack', {
+  const navigateToUserDetail = (userId: string) => {
+    navigation.navigate('AdminStack', {
       screen: 'UserDetail',
       params: { userId },
     });
   };
 
-  navigateToReportedProperties = () => {
-    this.navigation.navigate('AdminStack', { screen: 'ReportedProperties' });
+  const navigateToReportedProperties = () => {
+    navigation.navigate('AdminStack', { screen: 'ReportedProperties' });
   };
 
   // Utility Methods
-  resetToAuth = () => {
-    this.navigation.dispatch(
+  const resetToAuth = () => {
+    navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: 'AuthStack' }],
+        routes: [{ name: 'AuthStack', params: { screen: 'Login' } }],
       })
     );
   };
 
-  resetToApp = () => {
-    this.navigation.dispatch(
+  const resetToApp = () => {
+    navigation.dispatch(
       CommonActions.reset({
         index: 0,
         routes: [{ name: 'AppDrawer' }],
@@ -380,17 +371,488 @@ export class NavigationHelper {
     );
   };
 
-  goBack = () => {
-    if (this.navigation.canGoBack()) {
-      this.navigation.goBack();
+  const resetToHome = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'AppDrawer',
+            params: {
+              screen: 'MainTabs',
+              params: {
+                screen: 'HomeStack',
+                params: { screen: 'Home' },
+              },
+            },
+          },
+        ],
+      })
+    );
+  };
+
+  const goBack = () => {
+    if (navigation.canGoBack()) {
+      navigation.goBack();
+    } else {
+      // Fallback to home if no back history
+      navigateToHome();
     }
   };
-}
 
-// Hook to use navigation helper
-import { useNavigation } from '@react-navigation/native';
+  const canGoBack = () => navigation.canGoBack();
 
-export const useNavigationHelper = () => {
-  const navigation = useNavigation<AppNavigationProp>();
-  return new NavigationHelper(navigation);
+  // Return all navigation functions
+  return {
+    // Root navigation
+    navigateToSplash,
+    navigateToOnboarding,
+    navigateToAuth,
+    navigateToAdmin,
+
+    // Auth navigation
+    navigateToLogin,
+    navigateToRegister,
+    navigateToForgotPassword,
+    navigateToConfirmEmail,
+    navigateToResetPassword,
+
+    // Main app navigation
+    navigateToMainTabs,
+    navigateToSettings,
+    navigateToSupport,
+
+    // Home navigation
+    navigateToHome,
+    navigateToNotifications,
+
+    // Explore navigation
+    navigateToProperties,
+    navigateToPropertyDetails,
+    navigateToFilters,
+    navigateToPropertyMapView,
+
+    // My Properties navigation
+    navigateToMyProperties,
+    navigateToMyPropertyDetails,
+    navigateToAddProperty,
+    navigateToEditProperty,
+    navigateToPropertyApplications,
+
+    // Profile navigation
+    navigateToProfile,
+    navigateToEditProfile,
+    navigateToChangePassword,
+    navigateToKYCVerification,
+
+    // Rentals navigation
+    navigateToMyRentals,
+    navigateToMyRentalApplications,
+    navigateToApplicationDetails,
+
+    // Payments navigation
+    navigateToMyPayments,
+    navigateToPaymentDetails,
+
+    // Wishlist navigation
+    navigateToWishlist,
+
+    // Admin navigation
+    navigateToAdminDashboard,
+    navigateToUserManagement,
+    navigateToUserDetail,
+    navigateToReportedProperties,
+
+    // Utilities
+    resetToAuth,
+    resetToApp,
+    resetToHome,
+    goBack,
+    canGoBack,
+
+    // Access to original navigation object if needed
+    navigation,
+  };
 };
+
+// Specialized hooks for specific navigation areas
+export const useAuthNavigation = () => {
+  const {
+    navigateToLogin,
+    navigateToRegister,
+    navigateToForgotPassword,
+    navigateToConfirmEmail,
+    navigateToResetPassword,
+    resetToAuth,
+  } = useNavigationHelper();
+
+  return {
+    navigateToLogin,
+    navigateToRegister,
+    navigateToForgotPassword,
+    navigateToConfirmEmail,
+    navigateToResetPassword,
+    resetToAuth,
+  };
+};
+
+export const usePropertyNavigation = () => {
+  const {
+    navigateToProperties,
+    navigateToPropertyDetails,
+    navigateToFilters,
+    navigateToPropertyMapView,
+    navigateToMyProperties,
+    navigateToMyPropertyDetails,
+    navigateToAddProperty,
+    navigateToEditProperty,
+    navigateToPropertyApplications,
+  } = useNavigationHelper();
+
+  return {
+    navigateToProperties,
+    navigateToPropertyDetails,
+    navigateToFilters,
+    navigateToPropertyMapView,
+    navigateToMyProperties,
+    navigateToMyPropertyDetails,
+    navigateToAddProperty,
+    navigateToEditProperty,
+    navigateToPropertyApplications,
+  };
+};
+
+export const useProfileNavigation = () => {
+  const {
+    navigateToProfile,
+    navigateToEditProfile,
+    navigateToChangePassword,
+    navigateToKYCVerification,
+    navigateToMyRentals,
+    navigateToMyRentalApplications,
+    navigateToApplicationDetails,
+    navigateToMyPayments,
+    navigateToPaymentDetails,
+  } = useNavigationHelper();
+
+  return {
+    navigateToProfile,
+    navigateToEditProfile,
+    navigateToChangePassword,
+    navigateToKYCVerification,
+    navigateToMyRentals,
+    navigateToMyRentalApplications,
+    navigateToApplicationDetails,
+    navigateToMyPayments,
+    navigateToPaymentDetails,
+  };
+};
+
+// Context-aware navigation helper
+// export const useContextualNavigation = () => {
+//   const { navigation } = useNavigationHelper();
+//   const navigationHelper = useNavigationHelper();
+
+//   const navigateBasedOnContext = (screenName: string, params?: any) => {
+//     const currentRoute = navigation.getState()?.routes?.[navigation.getState()?.index || 0];
+
+//     // Add contextual logic here
+//     switch (currentRoute?.name) {
+//       case 'AuthStack':
+//         // If in auth flow, ensure proper auth navigation
+//         break;
+//       case 'AdminStack':
+//         // If in admin area, handle admin-specific navigation
+//         break;
+//       default:
+//         // Default navigation logic
+//         break;
+//     }
+//   };
+
+//   return {
+//     ...navigationHelper,
+//     navigateBasedOnContext,
+//   };
+// };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// export function goToPropertyDetails(propertyId: string) {
+// 	if (!navigationRef.isReady()) {
+// 		return;
+// 	}
+
+// 	navigationRef.navigate('AppDrawer', {
+// 		screen: 'MainTabs',
+// 		params: {
+// 			screen: 'ExploreStack',
+// 			params: {
+// 				screen: 'PropertyDetails',
+// 				params: {
+// 					propertyId,
+// 				},
+// 			},
+// 		},
+// 	});
+// }
+
+// import { goToPropertyDetails } from '../navigation/NavigationHelpers';
+
+// goToPropertyDetails('abc123');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import { useNavigation } from '@react-navigation/native';
+// import { NavigationProp } from '@react-navigation/native';
+// import { AllRoutes, NavigateToParams, RootStackParamList } from './types';
+
+// type AppNavigationProp = NavigationProp<RootStackParamList>;
+
+// const stackHierarchy: Record<string, string[]> = {
+// 	OnboardingStack: ['Onboarding1', 'Onboarding2', 'Onboarding3'],
+// 	AuthStack: [
+// 		'Login',
+// 		'Register',
+// 		'ForgotPassword',
+// 		'ConfirmEmail',
+// 		'ResetPassword',
+// 	],
+// 	AppDrawer: ['MainTabs', 'Settings', 'SupportStack'],
+// 	MainTabs: [
+// 		'HomeStack',
+// 		'ExploreStack',
+// 		'MyProperties',
+// 		'Wishlist',
+// 		'ProfileStack',
+// 	],
+// 	HomeStack: ['Home', 'Notifications'],
+// 	ExploreStack: [
+// 		'Properties',
+// 		'Filters',
+// 		'PropertyDetails',
+// 		'PropertyMapView',
+// 	],
+// 	ProfileStack: [
+// 		'Profile',
+// 		'EditProfile',
+// 		'ChangePassword',
+// 		'KYCVerification',
+// 		'MyPropertiesStack',
+// 		'MyRentalsStack',
+// 		'PaymentsStack',
+// 	],
+// 	AdminStack: [
+// 		'AdminDashboard',
+// 		'UserManagement',
+// 		'UserDetail',
+// 		'ReportedProperties',
+// 	],
+// 	MyPropertiesStack: [
+// 		'MyProperties',
+// 		'AddProperty',
+// 		'EditProperty',
+// 		'PropertyApplications',
+// 	],
+// 	MyRentalsStack: ['MyRentals', 'MyRentalApplications', 'ApplicationDetails'],
+// 	PaymentsStack: ['MyPayments', 'PaymentDetails'],
+// };
+
+// export const useAppNavigation = () => {
+// 	const navigation = useNavigation<AppNavigationProp>();
+
+// 	const navigateTo = <T extends AllRoutes>(
+// 		screen: T,
+// 		params?: NavigateToParams<T>
+// 	) => {
+// 		const findStack = (targetScreen: string): string | null => {
+// 			for (const [stack, screens] of Object.entries(stackHierarchy)) {
+// 				if (screens.includes(targetScreen)) {
+// 					return stack;
+// 				}
+// 			}
+// 			return null;
+// 		};
+
+// 		const targetStack = findStack(screen);
+
+// 		if (!targetStack) {
+// 			navigation.navigate(
+// 				screen as keyof RootStackParamList,
+// 				params as any
+// 			);
+// 			return;
+// 		}
+
+// 		switch (targetStack) {
+// 			case 'OnboardingStack':
+// 				navigation.navigate('OnboardingStack', { screen, params });
+// 				break;
+// 			case 'AuthStack':
+// 				navigation.navigate('AuthStack', { screen, params });
+// 				break;
+// 			case 'AdminStack':
+// 				navigation.navigate('AdminStack', { screen, params });
+// 				break;
+// 			case 'AppDrawer':
+// 				if (screen === 'Settings' || screen === 'SupportStack') {
+// 					navigation.navigate('AppDrawer', { screen, params });
+// 				} else if (stackHierarchy.MainTabs.includes(screen)) {
+// 					navigation.navigate('AppDrawer', {
+// 						screen: 'MainTabs',
+// 						params: { screen, params },
+// 					});
+// 				} else if (stackHierarchy.HomeStack.includes(screen)) {
+// 					navigation.navigate('AppDrawer', {
+// 						screen: 'MainTabs',
+// 						params: {
+// 							screen: 'HomeStack',
+// 							params: { screen, params },
+// 						},
+// 					});
+// 				} else if (stackHierarchy.ExploreStack.includes(screen)) {
+// 					navigation.navigate('AppDrawer', {
+// 						screen: 'MainTabs',
+// 						params: {
+// 							screen: 'ExploreStack',
+// 							params: { screen, params },
+// 						},
+// 					});
+// 				} else if (stackHierarchy.ProfileStack.includes(screen)) {
+// 					navigation.navigate('AppDrawer', {
+// 						screen: 'MainTabs',
+// 						params: {
+// 							screen: 'ProfileStack',
+// 							params: { screen, params },
+// 						},
+// 					});
+// 				} else if (
+// 					stackHierarchy.MyPropertiesStack.includes(screen) ||
+// 					stackHierarchy.MyRentalsStack.includes(screen) ||
+// 					stackHierarchy.PaymentsStack.includes(screen)
+// 				) {
+// 					const subStack = stackHierarchy.MyPropertiesStack.includes(
+// 						screen
+// 					)
+// 						? 'MyPropertiesStack'
+// 						: stackHierarchy.MyRentalsStack.includes(screen)
+// 						? 'MyRentalsStack'
+// 						: 'PaymentsStack';
+// 					navigation.navigate('AppDrawer', {
+// 						screen: 'MainTabs',
+// 						params: {
+// 							screen: 'ProfileStack',
+// 							params: {
+// 								screen: subStack,
+// 								params: { screen, params },
+// 							},
+// 						},
+// 					});
+// 				}
+// 				break;
+// 			default:
+// 				navigation.navigate(
+// 					screen as keyof RootStackParamList,
+// 					params as any
+// 				);
+// 		}
+// 	};
+
+// 	return { navigateTo };
+// };
+
+// ### Usage Examples
+// With the `useAppNavigation` hook, you can navigate to any screen like this:
+
+// ```typescript
+// const { navigateTo } = useAppNavigation();
+
+// // Navigate to a top-level screen
+// navigateTo('Splash');
+
+// // Navigate to a nested screen in AuthStack
+// navigateTo('Login');
+
+// // Navigate to a deeply nested screen with params
+// navigateTo('PropertyDetails', { propertyId: '123' });
+
+// // Navigate to a deeply nested screen in ProfileStack > MyPropertiesStack
+// navigateTo('EditProperty', { propertyId: '456' });
+// ```
+
+// #### Benefits
+// 1. **Type Safety**: The `navigateTo` function is fully typed, so TypeScript will ensure you pass the correct screen names and parameters.
+// 2. **Simplified Navigation**: No need to manually construct nested navigation calls or use `as never`.
+// 3. **Centralized Logic**: The `stackHierarchy` object defines the navigation structure, making it easy to update if your app’s navigation changes.
+// 4. **Scalability**: Easily extendable to support additional stacks or screens by updating `stackHierarchy` and the type definitions.
+
+// #### Notes
+// - Ensure all your stack navigators (e.g., `OnboardingStackNavigator`, `AuthStackNavigator`, etc.) use the updated `navigationTypes.ts` for their param lists.
+// - If you need to reset the navigation stack or perform other navigation actions, you can extend the `useAppNavigation` hook with additional methods (e.g., `resetTo`, `goBack`).
+// - Test thoroughly to ensure the navigation paths work as expected, especially for deeply nested screens.
+
+// This solution should make navigation across your complex stack structure much simpler and maintainable. Let me know if you need help integrating this into specific components or other navigators!

@@ -17,7 +17,7 @@ import Icons from '../../constants/Icons';
 import images from '../../assets/images';
 import { saveLastViewedProperty } from '../../utils/propertyUtils/lastViewed';
 import { usePropertyDetails } from '../../hooks/propertyHooks/usePropertyDetails';
-import { useAppNavigation } from '../../navigation/useAppNavigation';
+// import { useAppNavigation } from '../../navigation/navigationHelper';
 
 import { getSimilarByLocation, getSimilarByFeatures  } from '../../services/PropertyServices';
 
@@ -72,7 +72,7 @@ type Props = NativeStackScreenProps<ExploreStackParamList, 'PropertyDetails'>;
 
 const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 	const { propertyId } = route.params;
-	const { navigateTo } = useAppNavigation();
+	// const { navigateTo } = useAppNavigation();
 	const { property, loading } = usePropertyDetails(propertyId);
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -384,7 +384,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 			<View style={styles.contactInfoContainer}>
 				<TouchableOpacity
 					style={styles.visitButton}
-					onPress={() => navigateTo('SupportStack')}
+					onPress={() => navigation.navigate('Properties')}
 				>
 					<Icons.MI name="event" size={18} color={Colors.primary} />
 					<Text style={styles.visitButtonText}>
@@ -393,7 +393,7 @@ const PropertyDetailsScreen: React.FC<Props> = ({ navigation, route }) => {
 				</TouchableOpacity>
 				<TouchableOpacity
 					style={styles.contactButton}
-					onPress={() => navigateTo('SupportStack')}
+					onPress={() => navigation.navigate('Properties')}
 				>
 					<Icons.MI name="phone" size={18} color={Colors.white} />
 					<Text style={styles.contactButtonText}>

@@ -1,4 +1,4 @@
-import api from "../api/apiClient";
+import api from '../api/apiClient';
 
 // import { handleApiError } from './errorHandler';
 
@@ -22,11 +22,11 @@ export const getMyProperties = async (userId: any) => {
 
 // Notifications
 export const getNotifications = async () => {
-	const response = await api.get("/notifications");
+	const response = await api.get('/notifications');
 	return response.data?.data || {};
 };
 
 export const getMyProfile = async () => {
-	const response = await api.get("/users/profile");
+	const response = await api.get('/users/profile');
 	return response.data || {};
 };

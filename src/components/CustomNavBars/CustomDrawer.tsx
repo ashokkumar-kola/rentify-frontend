@@ -27,7 +27,7 @@ type CustomDrawerNavigationProp = CompositeNavigationProp<
 >;
 
 const CustomDrawer = (props: DrawerContentComponentProps) => {
-	const { user, logout } = useAuth();
+	const { isLoggedIn, user, logout } = useAuth();
 	const navigation = useNavigation<CustomDrawerNavigationProp>();
 	const [notificationCount] = useState(0);
 	const [fadeAnim] = useState(new Animated.Value(0));
@@ -59,6 +59,13 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
 				},
 			},
 		]);
+	};
+
+	const handleLogin = () => {
+		navigation.reset({
+			index: 0,
+			routes: [{ name: 'AuthStack' }],
+		});
 	};
 
 	const navigateToScreen = (screenName: keyof DrawerParamList | keyof RootStackParamList) => {
@@ -163,9 +170,16 @@ const CustomDrawer = (props: DrawerContentComponentProps) => {
 					<AppText style={styles.bottomText}>Privacy Policy</AppText>
 				</TouchableOpacity>
 
-				<TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
-					<AppText style={styles.logoutText}>Log out</AppText>
-				</TouchableOpacity>
+				{ isLoggedIn ? (
+						<TouchableOpacity onPress={handleLogout} style={styles.logoutBtn}>
+							<AppText style={styles.logoutText}>Log out</AppText>
+						</TouchableOpacity>
+					) : (
+						<TouchableOpacity onPress={handleLogin} style={styles.logoutBtn}>
+							<AppText style={styles.logoutText}>Log In</AppText>
+						</TouchableOpacity>
+					)
+				}
 			</View>
 		</Animated.View>
 	);
@@ -273,6 +287,80 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 	},
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, { useEffect, useState } from 'react';
 // import {

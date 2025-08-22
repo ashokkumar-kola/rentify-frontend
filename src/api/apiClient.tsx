@@ -4,10 +4,10 @@ import Toast from 'react-native-toast-message';
 import { navigationRef } from '../navigation/NavigationService';
 // import { API_BASE_URL } from '@env';
 
-const API_BASE_URL = 'http://localhost:3000/api';
+// const API_BASE_URL = 'http://localhost:3000/api';
 // const API_BASE_URL = 'http://10.0.2.2:3000/api'; // Emulator
 // const API_BASE_URL = 'http://192.168.1.229:3000/api'; // YTP
-// const API_BASE_URL = 'http://192.168.0.105:3000/api'; // PG
+const API_BASE_URL = 'http://192.168.0.105:3000/api'; // PG
 // const API_BASE_URL = 'http://192.168.1.9:3000/api'; // GP
 // const API_BASE_URL = 'http://192.168.1.5:3000/api'; // MP
 
